@@ -1,1 +1,48 @@
-apply plugin: 'java'
+// Setup gradle and its plugins
+plugins {
+	// Setup gradle for java library builds
+	id 'java-library'
+}
+
+// Setup java compilation version
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// The Project version
+version = '0.1.0'
+
+// JAR build settings
+jar {
+	baseName = project.name
+	version  = project.version
+
+	manifest {
+		attributes(
+			'Implementation-Title': project.name,
+			'Implementation-Version': project.version
+		)
+	}
+}
+
+// Dependencies used in the build
+dependencies {
+	// This dependency is exported to consumers, that is to say found on their compile classpath.
+	api "org.apache.commons:commons-lang3:3.7"
+
+	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+	implementation 'com.google.guava:guava:23.0'
+
+	// Use JUnit test framework
+	testImplementation 'junit:junit:4.12'
+}
+
+// Dependency providers to fetch from
+repositories {
+	// Use jcenter for resolving your dependencies.
+	jcenter()
+
+	// Alterantively maven central could be used instead
+	mavenCentral()
+
+	// You can declare any other Maven/Ivy/file repository here.
+}
