@@ -13,7 +13,7 @@ version = '0.1.0'
 
 // JAR build settings
 jar {
-	baseName = project.name
+	baseName = project.name+"-noDeps"
 	version  = project.version
 
 	manifest {
@@ -30,7 +30,7 @@ dependencies {
 	api "org.apache.commons:commons-lang3:3.7"
 
 	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
-	implementation 'com.google.guava:guava:23.0'
+	// implementation 'com.google.guava:guava:23.0'
 
 	// Use JUnit test framework
 	testImplementation 'junit:junit:4.12'
