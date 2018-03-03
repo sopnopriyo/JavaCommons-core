@@ -1,8 +1,8 @@
-package picoded.core.conv;
+package picoded.core.common;
 
 import org.junit.Test;
 
-public class ArrayConv_test {
+public class ExceptionMessage_test {
 	
 	//
 	// Expected exception testing
@@ -11,7 +11,7 @@ public class ArrayConv_test {
 	/// Invalid constructor test
 	@Test(expected = IllegalAccessError.class)
 	public void invalidConstructor() throws Exception {
-		new ArrayConv();
+		new ExceptionMessage();
 	}
 	
 }

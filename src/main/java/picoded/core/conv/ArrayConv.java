@@ -2,6 +2,8 @@ package picoded.core.conv;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import picoded.core.common.ExceptionMessage;
+
 /**
  *
  * Utility class to help slice out arrays out of arrays without cloning them in memory.
@@ -17,7 +19,7 @@ public class ArrayConv extends ArrayUtils {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected ArrayConv() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	/**
