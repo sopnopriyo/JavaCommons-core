@@ -29,3 +29,4 @@ build/*
 # Include back .gitignore
 #
 !.gitignore
+!.travis.yml
