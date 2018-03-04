@@ -1,4 +1,4 @@
-package picoded.core.common;
+package picoded.core.exception;
 
 import org.junit.Test;
 

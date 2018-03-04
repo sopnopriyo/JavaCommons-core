@@ -1,38 +1,36 @@
 package picoded.core.conv;
 
-/**
- * Java libs
- **/
+// Java libs
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Jackson library used
- **/
+// Jackson library used
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
 
+// Picoded libraries used
+import picoded.core.exception.ExceptionMessage;
+
 /**
  * json simplification helpers. When you do not need custom object / array structures.
  *
+ * Which is frankly speaking should be 99.99% of the time. Seriously just use Map,
+ * instead of custom classes. It will save you alot of headache in the future.
+ * 
  * ---------------------------------------------------------------------------------------------------
  *
  * Technical notes: Jackson is used internally.
  **/
-
-/// Which is frankly speaking should be 99.99% of the time. Seriously just use Map,
-/// instead of custom classes. It will save you alot of headache in the future.
-
 public class ConvertJSON {
 	
 	/**
 	 * Invalid constructor (throws exception)
 	 **/
 	protected ConvertJSON() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	/**

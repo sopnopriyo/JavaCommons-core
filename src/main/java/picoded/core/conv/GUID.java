@@ -1,15 +1,14 @@
 package picoded.core.conv;
 
-/**
- * Java includes
- **/
+// Java includes
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
-/**
- * Apache includes
- **/
+// Apache includes
 import org.apache.commons.codec.binary.Base64;
+
+// Picoded libraries used
+import picoded.core.exception.ExceptionMessage;
 
 /**
  * Provides several core GUID functionalities.
@@ -20,7 +19,7 @@ public class GUID {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected GUID() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	/**

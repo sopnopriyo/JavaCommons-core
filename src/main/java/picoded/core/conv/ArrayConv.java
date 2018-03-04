@@ -2,7 +2,7 @@ package picoded.core.conv;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import picoded.core.common.ExceptionMessage;
+import picoded.core.exception.ExceptionMessage;
 
 /**
  *

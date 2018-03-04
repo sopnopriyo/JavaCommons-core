@@ -1,4 +1,4 @@
-package picoded.core.common;
+package picoded.core.exception;
 
 /**
  * Utility static class of common reusable exception messages, or its message builders. You know those that happen all too often.
