@@ -8,12 +8,12 @@ import picoded.core.exception.ExceptionMessage;
  *
  * This is not a public class
  **/
-class UnsupportedDefaultUtils {
+class UnsupportedDefaultUtil {
 	
 	/**
 	 * Invalid constructor (throws exception)
 	 **/
-	protected UnsupportedDefaultUtils() {
+	protected UnsupportedDefaultUtil() {
 		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	

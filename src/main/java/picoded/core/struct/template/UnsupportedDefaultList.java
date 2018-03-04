@@ -126,7 +126,7 @@ public interface UnsupportedDefaultList<E> extends List<E> {
 	 * @return  Previous element that was stored
 	 **/
 	default E set(int index, E value) {
-		UnsupportedDefaultUtils.checkIndexRange(index, size());
+		UnsupportedDefaultUtil.checkIndexRange(index, size());
 		E oldVal = remove(index);
 		add(index, value);
 		return oldVal;
@@ -195,7 +195,7 @@ public interface UnsupportedDefaultList<E> extends List<E> {
 	 * @return  true, if any insertion occurs
 	 **/
 	default boolean addAll(int index, Collection<? extends E> c) {
-		UnsupportedDefaultUtils.checkInsertRange(index, size());
+		UnsupportedDefaultUtil.checkInsertRange(index, size());
 		// Iterate collection, and add items
 		int idx = index;
 		for (E item : c) {

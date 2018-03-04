@@ -66,7 +66,7 @@ class ArbitraryListSubList<E> extends ArbitraryListAccessorWithConcurrentModific
 	 **/
 	public E set(int index, E element) {
 		checkForChange();
-		UnsupportedDefaultUtils.checkIndexRange(index, size);
+		UnsupportedDefaultUtil.checkIndexRange(index, size);
 		return base.set(index + offset, element);
 	}
 	
@@ -75,7 +75,7 @@ class ArbitraryListSubList<E> extends ArbitraryListAccessorWithConcurrentModific
 	 * See: [UnsupportedDefaultList.get]
 	 **/
 	public E get(int index) {
-		UnsupportedDefaultUtils.checkIndexRange(index, size);
+		UnsupportedDefaultUtil.checkIndexRange(index, size);
 		checkForChange();
 		return base.get(index + offset);
 	}
@@ -85,7 +85,7 @@ class ArbitraryListSubList<E> extends ArbitraryListAccessorWithConcurrentModific
 	 * See: [UnsupportedDefaultList.add]
 	 **/
 	public void add(int index, E element) {
-		UnsupportedDefaultUtils.checkInsertRange(index, size);
+		UnsupportedDefaultUtil.checkInsertRange(index, size);
 		checkForChange();
 		base.add(index + offset, element);
 		resetSizeState();
@@ -97,7 +97,7 @@ class ArbitraryListSubList<E> extends ArbitraryListAccessorWithConcurrentModific
 	 * See: [UnsupportedDefaultList.remove]
 	 **/
 	public E remove(int index) {
-		UnsupportedDefaultUtils.checkIndexRange(index, size());
+		UnsupportedDefaultUtil.checkIndexRange(index, size());
 		checkForChange();
 		E result = base.remove(index + offset);
 		resetSizeState();
