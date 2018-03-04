@@ -9,11 +9,14 @@ plugins {
 	// Setup gradle for java library builds
 	id 'java-library'
 
-	// The one fat jar with dependencies (without shade)
-	id "com.github.onslip.gradle-one-jar" version "1.0.5"
+	// // The one fat jar with dependencies (without shade)
+	// id "com.github.onslip.gradle-one-jar" version "1.0.5"
 
 	// Shadow plugin used to build the shade jar
 	id 'com.github.johnrengelman.plugin-shadow' version '2.0.2'
+
+	// jacoco code coverage for test
+	id 'jacoco'
 }
 
 // Dependency providers to fetch from
@@ -85,7 +88,7 @@ dependencies {
 jar {
 	// Archive name overwrite
 	archiveName = project.name+"-"+project.version+""+".jar"
-	description = archiveName
+	description = "Build - "+archiveName
 
 	// Inherit the main jar manifest
 	manifest {
@@ -104,7 +107,7 @@ jar {
 shadowJar {
 	// Archive name overwrite
 	archiveName = project.name+"-"+project.version+"-shade"+".jar"
-	description = archiveName
+	description = "Build - "+archiveName
 
 	// Inherit the main jar manifest
 	manifest {
@@ -124,7 +127,7 @@ shadowJar {
 task fatJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
 	// Archive name overwrite
 	archiveName = project.name+"-"+project.version+"-all"+".jar"
-	description = archiveName
+	description = "Build - "+archiveName
 
 	//
 	// Note that the following is extended heavily from the default setup of shadowJar task
@@ -166,3 +169,20 @@ task fatJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
 //     archives shadowJar
 //     archives jar
 // }
+
+//----------------------------------------------------------------
+//
+//  Jacoco test coverage
+//
+//----------------------------------------------------------------
+
+jacoco {
+	toolVersion = "0.8.0"
+}
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+		csv.enabled true
+	}
+}
