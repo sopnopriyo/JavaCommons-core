@@ -1,4 +1,4 @@
-package picoded.core.struct;
+package picoded.core.struct.template;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
