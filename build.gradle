@@ -184,5 +184,9 @@ jacocoTestReport {
 	reports {
 		xml.enabled true
 		csv.enabled true
+
+		// Report format compatible with codeconv.io
+		xml.destination "${buildDir}/reports/jacoco/report.xml"
+		csv.destination "${buildDir}/reports/jacoco/report.csv"
 	}
 }
