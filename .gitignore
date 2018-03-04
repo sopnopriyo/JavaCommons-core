@@ -20,6 +20,8 @@ debug.txt
 #
 # Build folder
 #
+bin
+build
 bin/*
 build/*
 
