@@ -48,14 +48,25 @@ targetCompatibility = 1.8
 
 // Dependencies used in the build
 dependencies {
-	// This dependency is exported to consumers, that is to say found on their compile classpath.
+	
+	// This dependencies is exported to consumers, that is to say found on their compile classpath.
+	//-------------------------------------------------------------------------------------------------------------------
+
+	// Apache-commons
 	api "org.apache.commons:commons-lang3:3.7"
 	api "commons-codec:commons-codec:1.11"
 
-	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+	// JSON / XML processing
+	api "com.fasterxml.jackson.core:jackson-core:2.9.4"
+	api "com.fasterxml.jackson.core:jackson-databind:2.9.4"
+	
+
+	// This dependencies is used internally, and not exposed to consumers on their own compile classpath.
+	//-------------------------------------------------------------------------------------------------------------------
 	// implementation 'com.google.guava:guava:23.0'
 
-	// Use JUnit test framework
+	// Testing dependencies
+	//-------------------------------------------------------------------------------------------------------------------
 	testImplementation 'junit:junit:4.12'
 }
 
