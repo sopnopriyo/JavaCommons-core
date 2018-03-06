@@ -5,6 +5,8 @@ import java.util.Calendar;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import picoded.core.exception.ExceptionMessage;
+
 /**
  * Convenience class to convert between date types.
  * [NOTE: This is not vetted for general usage]
@@ -18,7 +20,7 @@ public class DateConv {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected DateConv() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	public enum ISODateFormat {

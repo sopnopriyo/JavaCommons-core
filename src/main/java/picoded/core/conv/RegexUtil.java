@@ -1,5 +1,7 @@
 package picoded.core.conv;
 
+import picoded.core.exception.ExceptionMessage;
+
 /**
  * Simple utility function, that does common regex search and replace.
  **/
@@ -8,7 +10,7 @@ public class RegexUtil {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected RegexUtil() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	/**

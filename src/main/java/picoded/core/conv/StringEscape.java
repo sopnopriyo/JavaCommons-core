@@ -2,6 +2,8 @@ package picoded.core.conv;
 
 import java.util.*;
 
+import picoded.core.exception.ExceptionMessage;
+
 /**
  * Proxy to apache.commons.lang3.StringEscapeUtils. See its full documentation
  * <a href="http://commons.apache.org/proper/commons-lang/javadocs/api-3.1/org/apache/+commons/lang3/StringEscapeUtils.html">here</a>
@@ -33,7 +35,7 @@ public class StringEscape extends org.apache.commons.text.StringEscapeUtils {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected StringEscape() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	/**
