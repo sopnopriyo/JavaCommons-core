@@ -59,11 +59,16 @@ dependencies {
 	api "org.apache.commons:commons-lang3:3.7"
 	api "org.apache.commons:commons-text:1.2"
 	api "commons-codec:commons-codec:1.11"
+	api "org.apache.commons:commons-collections4:4.1"
 
 	// JSON / XML processing
 	api "com.fasterxml.jackson.core:jackson-core:2.9.4"
 	api "com.fasterxml.jackson.core:jackson-databind:2.9.4"
-	
+
+
+// 	// https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+// compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
+
 
 	// This dependencies is used internally, and not exposed to consumers on their own compile classpath.
 	//-------------------------------------------------------------------------------------------------------------------
