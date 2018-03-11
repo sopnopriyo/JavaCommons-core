@@ -22,7 +22,7 @@ import static org.junit.Assert.*;
 public class StandardArrayList_test {
 	
 	// Test list 
-	List<Object> list = null;
+	public List<Object> list = null;
 	
 	@Before
 	public void setUp() {

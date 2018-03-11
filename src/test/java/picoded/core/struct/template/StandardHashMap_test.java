@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
 public class StandardHashMap_test {
 	
 	// Test list 
-	Map<String, Object> map = null;
+	public Map<String, Object> map = null;
 	
 	@Before
 	public void setUp() {
