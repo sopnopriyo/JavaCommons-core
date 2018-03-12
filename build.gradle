@@ -90,7 +90,7 @@ dependencies {
 jar {
 	// Archive name overwrite
 	archiveName = project.name+"-"+project.version+""+".jar"
-	description = "Build - "+archiveName
+	description = "Build the "+archiveName+" with no dependencies"
 
 	// Inherit the main jar manifest
 	manifest {
@@ -109,7 +109,7 @@ jar {
 shadowJar {
 	// Archive name overwrite
 	archiveName = project.name+"-"+project.version+"-shade"+".jar"
-	description = "Build - "+archiveName
+	description = "Build the "+archiveName+" with all dependencies shaded"
 
 	// Inherit the main jar manifest
 	manifest {
@@ -129,7 +129,7 @@ shadowJar {
 task fatJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
 	// Archive name overwrite
 	archiveName = project.name+"-"+project.version+"-all"+".jar"
-	description = "Build - "+archiveName
+	description = "Build the "+archiveName+" with all dependencies"
 
 	//
 	// Note that the following is extended heavily from the default setup of shadowJar task
@@ -183,6 +183,7 @@ jacoco {
 }
 
 jacocoTestReport {
+	// Build the report
 	reports {
 		xml.enabled true
 		csv.enabled true
@@ -191,4 +192,27 @@ jacocoTestReport {
 		xml.destination "${buildDir}/reports/jacoco/report.xml"
 		csv.destination "${buildDir}/reports/jacoco/report.csv"
 	}
+}
+
+//----------------------------------------------------------------
+//
+//  Quick multibuild steps
+//
+//----------------------------------------------------------------
+
+task buildAll {
+	description = "Build all 3 jars: jar, shadowJar, fatJar"
+
+	dependsOn jar
+	dependsOn shadowJar
+	dependsOn fatJar
+}
+
+task testAndBuildAll {
+	description = "Performs the full test suite, then build all 3 jars: jar, shadowJar, fatJar"
+
+	dependsOn jacocoTestReport
+	dependsOn jar
+	dependsOn shadowJar
+	dependsOn fatJar
 }
