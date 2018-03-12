@@ -30,8 +30,10 @@ public class Aggregation {
 	
 	// this variable is here temporarily to make the avg function not crash 
 	// if the result has a repeating non terminating decimal portion
-	// will limit the result to ~ 16 significant figures
-	public static int AVG_RESULT_MAX_SCALE = 16;
+	// will limit the result to ~ 24 decimal places
+	//
+	// Note : precision vs scale terminology - https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale
+	public static int AVG_RESULT_MAX_SCALE = 24;
 	
 	/**
 	 *
