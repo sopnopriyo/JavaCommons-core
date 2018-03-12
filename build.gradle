@@ -212,7 +212,5 @@ task testAndBuildAll {
 	description = "Performs the full test suite, then build all 3 jars: jar, shadowJar, fatJar"
 
 	dependsOn jacocoTestReport
-	dependsOn jar
-	dependsOn shadowJar
-	dependsOn fatJar
+	dependsOn buildAll
 }
