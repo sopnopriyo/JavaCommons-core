@@ -17,8 +17,8 @@ before_script:
 # Build / Test scripts
 #
 script:
-  - ./gradlew check
   - ./gradlew testAndBuildAll
+  # - ./gradlew check
   # - ./gradlew jacocoTestReport
   # - ./gradlew jar
   # - ./gradlew shadowJar
