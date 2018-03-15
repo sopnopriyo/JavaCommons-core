@@ -2,16 +2,24 @@
 # Setup travis for java, it auto detects gradle for most parts
 #
 language: java
-sudo: false # faster builds
+sudo: false # use false for faster builds?
 
+#
+# Ensure haveged is installed, and env is properly setup
+#
+addons:
+  apt:
+    packages:
+    - haveged
+before_script:
+  - chmod +x gradlew
 #
 # Build / Test scripts
 #
-before_script:
-  - chmod +x gradlew
 script:
   - ./gradlew check
-  - ./gradlew jacocoTestReport
+  - ./gradlew testAndBuildAll
+  # - ./gradlew jacocoTestReport
   # - ./gradlew jar
   # - ./gradlew shadowJar
   # - ./gradlew fatJar
