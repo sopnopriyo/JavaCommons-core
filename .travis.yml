@@ -19,9 +19,9 @@ before_script:
 # Build / Test scripts
 #
 script:
-  - ./gradlew testAndBuildAll
-  # - ./gradlew check
-  # - ./gradlew jacocoTestReport
+  - ./gradlew check
+  - ./gradlew jacocoTestReport
+  - ./gradlew buildAll
   # - ./gradlew jar
   # - ./gradlew shadowJar
   # - ./gradlew fatJar
