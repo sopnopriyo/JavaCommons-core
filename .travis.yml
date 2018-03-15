@@ -12,6 +12,8 @@ addons:
     packages:
     - haveged
 before_script:
+  #- sudo apt-get install haveged
+  - service haveged start
   - chmod +x gradlew
 #
 # Build / Test scripts
