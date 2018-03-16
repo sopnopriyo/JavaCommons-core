@@ -1,0 +1,9 @@
+{
+  "name" : "John",
+  "age"  : 55,
+  "salary" : 50000.50,
+  "handsome" : true,
+  "attributes" : [
+    "Intelligent", "Team Player", "Quick Learner"
+  ]
+}
