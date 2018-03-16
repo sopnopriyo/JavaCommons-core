@@ -10,43 +10,53 @@ import org.apache.commons.lang3.RandomUtils;
 
 /// Extension of baseX test case, that does not apply to other base specific test
 public class BaseXPlus_test extends BaseX_test {
-	
-	///
-	/// Test bit to string length converters in base8 mode
-	///
+
+	/**
+	 * Test bit to string length converters in base8 mode
+	 */
 	@Test
 	public void base8_specific() {
+		// Create a variable for easy reference
 		BaseX b = null;
-		
+
+		// Create a custom base with specific charsets
 		assertNotNull(b = new BaseX("01234567"));
-		
+
+		// a letter to represent up to 3 bits of data
 		assertEquals(1, b.bitToStringLength(1));
 		assertEquals(1, b.bitToStringLength(2));
 		assertEquals(1, b.bitToStringLength(3));
-		
+
+		// 2 letters to represent up to 6 bits of data
 		assertEquals(2, b.bitToStringLength(4));
 		assertEquals(2, b.bitToStringLength(5));
 		assertEquals(2, b.bitToStringLength(6));
-		
+
+		// 3 letters to represent up to 9 bits of data
 		assertEquals(3, b.bitToStringLength(7));
 		assertEquals(3, b.bitToStringLength(8));
 		assertEquals(3, b.bitToStringLength(9));
-		
+
+		// One byte should return 3 letters with each letter ranging from the charset defined
 		assertEquals("000", b.encode(new byte[] { 0 }));
 		assertEquals("007", b.encode(new byte[] { 7 }));
 		assertEquals("010", b.encode(new byte[] { 8 }));
 		assertEquals("040", b.encode(new byte[] { 32 }));
 		assertEquals("100", b.encode(new byte[] { 64 }));
-		
+
+		// A valid encoded string should return back the intended byte array
 		assertArrayEquals(new byte[] { 0 }, b.decode("000"));
 		assertArrayEquals(new byte[] { 7 }, b.decode("007"));
 		assertArrayEquals(new byte[] { 8 }, b.decode("010"));
 		assertArrayEquals(new byte[] { 32 }, b.decode("040"));
 		assertArrayEquals(new byte[] { 64 }, b.decode("100"));
-		
+
+		// multiple bytes should return the correct encoded value respectively
 		assertEquals("000000", b.encode(new byte[] { 0, 0 }));
 		assertEquals("003400", b.encode(new byte[] { 7, 0 }));
 		assertEquals("000007", b.encode(new byte[] { 0, 7 }));
+
+		// A valid encoded string should return back the intended byte array
 		assertArrayEquals(new byte[] { 0, 0 }, b.decode("000000", 2));
 		assertArrayEquals(new byte[] { 7, 0 }, b.decode("003400", 2));
 		assertArrayEquals(new byte[] { 0, 7 }, b.decode("000007", 2));
