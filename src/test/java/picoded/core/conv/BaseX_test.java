@@ -35,18 +35,18 @@ public class BaseX_test {
 		baseObj = null;
 	}
 	
-	///
-	/// Charset fetch / length
-	///
+	/**
+	 * Charset fetch / length
+	 */
 	@Test
 	public void charsetFetch() {
 		assertNotNull(baseObj.charset());
 		assertEquals(baseObj.charset().length(), baseObj.inCharsetLength.intValue());
 	}
 	
-	///
-	/// random string length conversion test
-	///
+	/**
+	 * Random string length conversion test
+	 */
 	@Test
 	public void stringToBitLengthAndBack() {
 		// min, max
@@ -67,9 +67,9 @@ public class BaseX_test {
 		}
 	}
 	
-	///
-	/// random base conversion charset
-	///
+	/**
+	 * random base conversion charset
+	 */
 	@Test
 	public void encodeAndDecodeOnce() {
 		// min, max
@@ -92,7 +92,10 @@ public class BaseX_test {
 		assertArrayEquals(byteArr, baseObj.decode(encodedString, byteLen));
 		
 	}
-	
+
+	/**
+	 * perform multiple calls of encoding and decoding
+	 */
 	@Test
 	public void encodeAndDecodeMultiple() {
 		for (int a = 0; a < testRunMultiplier; ++a) {
@@ -100,9 +103,9 @@ public class BaseX_test {
 		}
 	}
 	
-	///
-	/// random base conversion charset
-	///
+	/**
+	 * random base conversion charset
+	 */
 	@Test
 	public void encodeAndDecodeOnce_strict() {
 		// min, max
@@ -133,13 +136,13 @@ public class BaseX_test {
 		}
 	}
 	
-	///
-	/// random hash test
-	///
-	/// WARNING NOTE : This seems to fail using the inbuilt VSCode test debugger.
-	///                However running it directly via "gradle test" seems to alright.
-	///                So..... yoloz =/
-	///
+	/**
+	 * random hash test
+	 *
+	 * WARNING NOTE : This seems to fail using the inbuilt VSCode test debugger.
+	 *                However running it directly via "gradle test" seems to alright.
+	 *                So..... yoloz =/
+	 */
 	@Test
 	public void hashAllTheStuff() {
 		// min, max
@@ -186,35 +189,38 @@ public class BaseX_test {
 	///
 	///-----------------------------------------------
 	
-	///
-	/// Intentionally recreates the class object with a single char string - which is always invalid
-	///
-	/// Note: (expected=IllegalArgumentException.class), was recasted as InvocationTargetException
+	/**
+	 * Intentionally recreates the class object with a single char string - which is always invalid
+	 *
+	 * Note: (expected=IllegalArgumentException.class), was recasted as InvocationTargetException
+	 *
+	 */
 	@Test(expected = InvocationTargetException.class)
 	public void invalidCharsetLength() throws Exception {
 		baseObj.getClass().getDeclaredConstructor(String.class).newInstance("i");
 	}
 	
-	///
-	/// Intentionally recreates the class object with a null char string - which is always invalid
-	///
-	/// Note: (expected=IllegalArgumentException.class), was recasted as InvocationTargetException
+	 /**
+	 * Intentionally recreates the class object with a null char string - which is always invalid
+	 *
+	 * Note: (expected=IllegalArgumentException.class), was recasted as InvocationTargetException
+	 */
 	@Test(expected = InvocationTargetException.class)
 	public void nullCharset() throws Exception {
 		baseObj.getClass().getDeclaredConstructor(String.class).newInstance(new Object[] { null });
 	}
 	
-	///
-	/// Intentionally calls with special characters, to induce error
-	///
+	/**
+	 * Intentionally calls with special characters, to induce error
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void invalidDecodeChar() throws Exception {
 		baseObj.decode("invalidChars->~!@#$%^&*()_+[]\\;',./<>");
 	}
 	
-	///
-	/// Intentionally induce encoding error
-	///
+	/**
+	 * Intentionally induce encoding error
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void decodingLossError() throws Exception {
 		
@@ -227,9 +233,9 @@ public class BaseX_test {
 		baseObj.decode(encoded, lotsOfBits.length - 1, false);
 	}
 	
-	///
-	/// Intentionally induce encoding error
-	///
+	/**
+	 * Intentionally induce encoding error
+	 */
 	@Test(expected = IllegalArgumentException.class)
 	public void decodingLossErrorWithZero() throws Exception {
 		
@@ -241,8 +247,10 @@ public class BaseX_test {
 		// Decode with strict check, and insufficent bytes (throws an error)
 		baseObj.decode(encoded, lotsOfBits.length - 5, false);
 	}
-	
-	/// Safely decoding
+
+	/**
+	 * Safely decoding
+	 */
 	@Test
 	public void safeDecoding() throws Exception {
 		
@@ -255,8 +263,10 @@ public class BaseX_test {
 		// Decode with strict check, and insufficent bytes (throws an error)
 		baseObj.decode(encoded, lotsOfBits.length - 5, false);
 	}
-	
-	/// Safely decoding blanks
+
+	/**
+	 * Safely decoding blanks
+	 */
 	@Test
 	public void blankDecoding() throws Exception {
 		
