@@ -128,14 +128,19 @@ public class ConvertJSON_test {
 		tMap.put("Hello", "WORLD");
 		tMap.put("WORLD", "Hello");
 
-		// Ensure multi line comment syntax work in conversion
+		// Case 1: Ensure multi line comment syntax work in conversion
 		assertEquals(
 			tMap,
 			ConvertJSON
 				.toMap("{ /* Hello folks. comment here is to break things */ \"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}"));
 
-		// @TODO: Test single comment syntax
 		assertEquals("{\"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}", (tStr = ConvertJSON.fromMap(tMap)));
+
+		// Case 2: Test single comment syntax
+		assertEquals(
+			tMap,
+			ConvertJSON
+				.toMap("{ //Hello folks. comment here is to break things\n \"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}"));
 		
 	}
 	
@@ -270,7 +275,9 @@ public class ConvertJSON_test {
 		objectArray = ConvertJSON.toObjectArray("[\"Hello\"]");
 		assertEquals("[Hello]", Arrays.deepToString(objectArray));
 
-		// Case 4: @TODO: Mixture of objects
+		// Case 4: Mixture of objects
+		objectArray = ConvertJSON.toObjectArray("[\"Hello\", 23, -2, 0.9, \'a\']");
+		assertEquals("[Hello, 23, -2, 0.9, a]", Arrays.deepToString(objectArray));
 	}
 
 	/**
