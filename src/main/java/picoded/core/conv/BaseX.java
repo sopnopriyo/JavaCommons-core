@@ -205,7 +205,7 @@ public class BaseX {
 	public String encode(byte[] bArr) {
 		
 		/**
-		 * String length needed
+		 * String length needed as 1 byte is 8 bits
 		 **/
 		int stringlength = bitToStringLength(bArr.length * 8);
 		
