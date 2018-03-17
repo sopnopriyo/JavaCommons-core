@@ -18,7 +18,7 @@ before_script:
   # enterprise security for unit testing
   # See : https://github.com/travis-ci/travis-ci/issues/1494
   # See : https://github.com/travis-ci/travis-ci/issues/8408
-  - _JAVA_OPTS="-Xmx2048m -Djava.security.egd=file:/dev/./urandom"
+  - _JAVA_OPTIONS="-Xmx2048m -Djava.security.egd=file:/dev/./urandom"
   # Ensure build permission for various files
   - chmod +x gradlew
 #
