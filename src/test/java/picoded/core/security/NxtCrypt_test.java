@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class NxtCrypt_test {
-	/*
+	
 	@Before
 	public void setUp() {
 		
@@ -262,5 +262,5 @@ public class NxtCrypt_test {
 		NxtCrypt.setupReuseObjects_generic();
 		NxtCrypt.randomBytes(10);
 	}
-	*/
+	
 }
