@@ -69,7 +69,19 @@ public class DateConv_test {
 			ISODateFormat.YYYYMMDD, "-");
 		assertEquals(isoDate, isoDateReconstructed);
 	}
-	
+
+	@Test
+	public void convISOtoSeconds(){
+		String isoDate = "1990-05-20";
+
+		String millisecondsDate = DateConv.toMillisecondsFormat(isoDate, ISODateFormat.YYYYMMDD, "-");
+        long longDate = Long.parseLong(millisecondsDate);
+
+        String isoDateReconstructedToSeconds = DateConv.toSecondsFormat(isoDate, ISODateFormat.YYYYMMDD, "-");
+
+        assertEquals(String.valueOf(longDate/1000L), isoDateReconstructedToSeconds);
+	}
+
 	@Test
 	public void changeISOFormat() {
 		

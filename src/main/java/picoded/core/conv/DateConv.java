@@ -1,6 +1,7 @@
 package picoded.core.conv;
 
 import java.util.Calendar;
+import java.util.IllegalFormatException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,12 +23,18 @@ public class DateConv {
 	protected DateConv() {
 		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
-	
+
+	// List of common ISO date format
 	public enum ISODateFormat {
 		DDMMYYYY, MMDDYYYY, YYYYMMDD, YYYYDDMM
 	}
-	
-	public static ISODateFormat toISODateFormat(String format) {
+
+	/**
+	 * Helper method to format a given date format to ISO date format
+	 * @param format
+	 * @return
+	 */
+	public static ISODateFormat toISODateFormat(String format) throws IllegalFormatException{
 		if (format == null || format.isEmpty()) {
 			return ISODateFormat.DDMMYYYY;
 		}
@@ -41,10 +48,18 @@ public class DateConv {
 		} else if ("yyyyddmm".equalsIgnoreCase(format_cleaned)) {
 			return ISODateFormat.YYYYDDMM;
 		} else {
+			// Default date format is DDMMYYYY
 			return ISODateFormat.DDMMYYYY;
 		}
 	}
-	
+
+	/**
+	 * Convert Unix timestamp to ISO date
+	 * @param inDate
+	 * @param dateFormat
+	 * @param separator
+	 * @return
+	 */
 	public static String toISOFormat(long inDate, ISODateFormat dateFormat, String separator) {
 		if (separator == null) {
 			separator = "-";
@@ -71,10 +86,14 @@ public class DateConv {
 		
 		return isoDate;
 	}
-	
+
 	/**
 	 * I return a string; to that I can return null if an error happened during conversion.
-	 **/
+	 * @param inDate
+	 * @param currentDateFormat
+	 * @param separator
+	 * @return
+	 */
 	public static String toMillisecondsFormat(String inDate, ISODateFormat currentDateFormat,
 		String separator) {
 		if (inDate == null || StringUtils.isEmpty(inDate)) {
@@ -97,10 +116,35 @@ public class DateConv {
 		return String.valueOf(cal.getTimeInMillis());
 		
 	}
-	
+
 	/**
-	 * Util functions
-	 **/
+	 * Date to Seconds conversion function
+	 * @param inDate
+	 * @param currentDateFormat
+	 * @param separator
+	 * @return
+	 */
+	public static String toSecondsFormat(String inDate, ISODateFormat currentDateFormat,
+											  String separator) {
+		// Code reusing : toMillisecondsFormat
+		String dateInMiliSeconds = toMillisecondsFormat(inDate, currentDateFormat, separator);
+		if (dateInMiliSeconds == null) {
+			return null;
+		}
+		long longDate = Long.parseLong(dateInMiliSeconds);
+
+		return String.valueOf(longDate/1000L);
+	}
+
+
+	
+	//Util functions
+
+	/**
+	 * check if the ISO date format is correct or not
+	 * @param inDateString
+	 * @return
+	 */
 	public static boolean isInISOFormat(String inDateString) {
 		if (inDateString.indexOf('-') != inDateString.lastIndexOf('-')) {
 			return true;
