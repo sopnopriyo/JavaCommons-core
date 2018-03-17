@@ -17,7 +17,7 @@ public class ConfigFile_test {
 
     @Test
     public void positiveCases () {
-        ConfigFile configFile = new ConfigFile(new File(testDirStr,"sampleJson1.json"));
+        ConfigFile configFile = new ConfigFile(new File(testDirStr,"sample.json"));
         assertEquals("John", configFile.getString("name"));
         assertEquals(55, configFile.getInt("age"));
     }

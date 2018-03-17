@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.*;
 
 import picoded.core.conv.GenericConvert;
-import picoded.core.struct.GenericConvertMap;
+import picoded.core.struct.GenericConvertHashMap;
 
 /**
  * Config file loader
@@ -31,7 +31,7 @@ import picoded.core.struct.GenericConvertMap;
  * + Case insensitive key names?
  * + File write????
  **/
-public class ConfigFile implements GenericConvertMap<String, Object> {
+public class ConfigFile extends GenericConvertHashMap<String, Object> {
 	
 	/**
 	 * The actual inner map storage
