@@ -262,4 +262,5 @@ public class NxtCrypt_test {
 		NxtCrypt.setupReuseObjects_generic();
 		NxtCrypt.randomBytes(10);
 	}
+	
 }
