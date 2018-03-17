@@ -19,9 +19,9 @@ import org.junit.Test;
 
 import picoded.core.conv.GUID;
 
-///
-/// Test Case for picoded.util.fileUtil.ConfigFileSet
-///
+/**
+ * Test Case for picoded.core.file.FileUtil
+ */
 public class FileUtil_test {
 	
 	// Test directories and setup
