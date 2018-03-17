@@ -13,7 +13,7 @@ addons:
     - haveged
 before_script:
   #- sudo apt-get install haveged
-  # - service haveged start
+  - service haveged start
   # Trick java into using urandom, I do not need
   # enterprise security for unit testing
   # See : https://github.com/travis-ci/travis-ci/issues/1494
