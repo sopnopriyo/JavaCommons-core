@@ -167,10 +167,13 @@ task fatJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
 	relocate "com", "com"
 }
 
-// artifacts {
-//     archives shadowJar
-//     archives jar
-// }
+// Define the equivalent of buildAll
+// for the build process done by "gradle build"
+artifacts {
+	archives fatJar
+	archives shadowJar
+	archives jar
+}
 
 //----------------------------------------------------------------
 //
