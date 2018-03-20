@@ -1,7 +1,7 @@
 package picoded.core.conv;
 
 /**
- * Test cases for DateTime Converter Apart from testing the happy cases ,
+ * Test cases for Date Converter. Apart from testing the happy cases ,
  * This class would also test the exceptional cases as well
  */
 
@@ -84,7 +84,7 @@ public class DateConv_test {
      * Test for converting unix timestamp to Date String
      */
     @Test
-    public void fromUnixTimestampTest(){
+    public void fromUnixTimestampTest() {
         String pattern = "dd-MMM-yyyy";
         long unixTimestamp = 1372339860;
         String actualDate = DateConv.fromUnixTimestamp(unixTimestamp, pattern);
@@ -96,7 +96,7 @@ public class DateConv_test {
      * Test for formatting a date from one pattern to another
      */
     @Test
-    public void reformatCode(){
+    public void reformatCode() {
         String inputPattern = "dd-MMM-yyyy";
         String outputPattern = "dd-MM-yyyy";
         String actualDate = DateConv.reformatDate("27-Jun-2013", inputPattern, outputPattern);
