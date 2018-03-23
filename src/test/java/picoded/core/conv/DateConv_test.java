@@ -87,7 +87,7 @@ public class DateConv_test {
     public void fromUnixTimestampTest() {
         String pattern = "dd-MMM-yyyy";
         long unixTimestamp = 1372339860;
-        String actualDate = DateConv.fromUnixTimestamp(unixTimestamp, pattern);
+        String actualDate = DateConv.toDateString(unixTimestamp, pattern);
         String expectedDate = "27-Jun-2013";
         assertEquals(expectedDate, actualDate);
     }

@@ -74,7 +74,7 @@ public class DateConv extends DateUtils {
      * @param outputPattern
      * @return
      */
-    public static String fromUnixTimestamp(final long timestamp, final String outputPattern) {
+    public static String toDateString(final long timestamp, final String outputPattern) {
         return toDateString(new Date((long) timestamp * 1000), outputPattern);
     }
 
