@@ -1,157 +1,106 @@
 package picoded.core.conv;
 
-// Target test class
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+/**
+ * Test cases for Date Converter. Apart from testing the happy cases ,
+ * This class would also test the exceptional cases as well
+ */
 
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.junit.After;
-// Test Case include
 import org.junit.Before;
 import org.junit.Test;
 
-import picoded.core.conv.DateConv.ISODateFormat;
+
+import static org.junit.Assert.*;
 
 public class DateConv_test {
-	
-	@Before
-	public void setUp() {
-	}
-	
-	@After
-	public void tearDown() {
-		
-	}
-	
-	//
-	// Expected exception testing
-	//
-	
-	/// Invalid constructor test
-	@Test(expected = IllegalAccessError.class)
-	public void invalidConstructor() throws Exception {
-		new DateConv();
-		
-	}
-	
-	@Test
-	public void convMilliSecondsToISO() {
-		long millisecondsDate = Long.parseLong("1441756800000");
-		
-		//check case
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(millisecondsDate);
-		String calISODate = "0" + cal.get(Calendar.DATE) + "-0" + (cal.get(Calendar.MONTH) + 1) + "-"
-			+ cal.get(Calendar.YEAR);
-		
-		String isoDate = DateConv.toISOFormat(millisecondsDate, ISODateFormat.DDMMYYYY, "-");
-		
-		assertEquals(calISODate, isoDate);
-	}
-	
-	@Test
-	public void convISOToMilliseconds() {
-		String isoDate = "1990-05-20";
-		
-		String millisecondsDate = DateConv.toMillisecondsFormat(isoDate, ISODateFormat.YYYYMMDD, "-");
-		
-		String isoDateReconstructed = DateConv.toISOFormat(Long.parseLong(millisecondsDate),
-			ISODateFormat.YYYYMMDD, "-");
-		
-		assertEquals(isoDate, isoDateReconstructed);
-		isoDate = "2016-10-25";
-		millisecondsDate = DateConv.toMillisecondsFormat(isoDate, ISODateFormat.YYYYMMDD, "-");
-		isoDateReconstructed = DateConv.toISOFormat(Long.parseLong(millisecondsDate),
-			ISODateFormat.YYYYMMDD, "-");
-		assertEquals(isoDate, isoDateReconstructed);
-	}
 
-	@Test
-	public void convISOtoSeconds(){
-		String isoDate = "1990-05-20";
+    @Before
+    public void setUp() {
+    }
 
-		String millisecondsDate = DateConv.toMillisecondsFormat(isoDate, ISODateFormat.YYYYMMDD, "-");
-        long longDate = Long.parseLong(millisecondsDate);
+    @After
+    public void tearDown() {
 
-        String isoDateReconstructedToSeconds = DateConv.toSecondsFormat(isoDate, ISODateFormat.YYYYMMDD, "-");
+    }
 
-        assertEquals(String.valueOf(longDate/1000L), isoDateReconstructedToSeconds);
-	}
+    /**
+     * Invalid constructor test
+     * Expected exception
+     *
+     * @throws Exception
+     */
+    @Test(expected = IllegalAccessError.class)
+    public void invalidConstructor() throws Exception {
+        new DateConv();
 
-	@Test
-	public void changeISOFormat() {
-		
-		long millisecondsDate = Long.parseLong("1431756800000"); //16-5-2015
-		String isoDate_dmy = DateConv.toISOFormat(millisecondsDate, ISODateFormat.DDMMYYYY, "-");
-		
-		assertNull(DateConv.changeISODateFormat(null, null, null, null));
-		assertNull(DateConv.changeISODateFormat("", ISODateFormat.DDMMYYYY, ISODateFormat.YYYYMMDD,
-			null));
-		
-		isoDate_dmy = DateConv.toISOFormat(millisecondsDate, ISODateFormat.DDMMYYYY, "-");
-		assertEquals("16-05-2015", isoDate_dmy);
-		
-		isoDate_dmy = DateConv.toISOFormat(millisecondsDate, ISODateFormat.DDMMYYYY, null);
-		assertEquals("16-05-2015", isoDate_dmy);
-		
-		String isoDate_ymd = DateConv.changeISODateFormat(isoDate_dmy, ISODateFormat.DDMMYYYY,
-			ISODateFormat.YYYYMMDD, "-");
-		assertEquals("2015-05-16", isoDate_ymd);
-		
-		String isoDate_mdy = DateConv.changeISODateFormat(isoDate_ymd, ISODateFormat.YYYYMMDD,
-			ISODateFormat.MMDDYYYY, "-");
-		assertEquals("05-16-2015", isoDate_mdy);
-		
-		String isoDate_ydm = DateConv.changeISODateFormat(isoDate_mdy, ISODateFormat.MMDDYYYY,
-			ISODateFormat.YYYYDDMM, "-");
-		assertEquals("2015-16-05", isoDate_ydm);
-		
-	}
-	
-	@Test
-	public void toISODateFormat() {
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat(null));
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat(""));
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat("ddmmyyyy"));
-		assertEquals(ISODateFormat.MMDDYYYY, DateConv.toISODateFormat("mmddyyyy"));
-		assertEquals(ISODateFormat.YYYYMMDD, DateConv.toISODateFormat("yyyymmdd"));
-		assertEquals(ISODateFormat.YYYYDDMM, DateConv.toISODateFormat("yyyyddmm"));
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat("abc"));
-	}
-	
-	@Test
-	public void toMillisecondsFormat() {
-		assertNull(DateConv.toMillisecondsFormat(null, null, null));
-		assertNull(DateConv.toMillisecondsFormat("", null, null));
-		assertNull(DateConv.toMillisecondsFormat("2016-10-25-12", null, "-"));
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat(""));
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat("ddmmyyyy"));
-		assertEquals(ISODateFormat.MMDDYYYY, DateConv.toISODateFormat("mmddyyyy"));
-		assertEquals(ISODateFormat.YYYYMMDD, DateConv.toISODateFormat("yyyymmdd"));
-		assertEquals(ISODateFormat.YYYYDDMM, DateConv.toISODateFormat("yyyyddmm"));
-		assertEquals(ISODateFormat.DDMMYYYY, DateConv.toISODateFormat("abc"));
-	}
-	
-	@Test
-	public void isInISOFormat() {
-		assertTrue(DateConv.isInISOFormat("-str-"));
-		assertFalse(DateConv.isInISOFormat("str"));
-	}
-	
-	@Test
-	public void isInMillisecondsFormat() {
-		assertTrue(DateConv.isInMillisecondsFormat("-str"));
-		assertFalse(DateConv.isInMillisecondsFormat("str-"));
-		assertTrue(DateConv.isInMillisecondsFormat("str"));
-	}
-	
-	@Test
-	public void getCurrentDateISO() {
-		assertNotNull(DateConv.getCurrentDateISO(ISODateFormat.DDMMYYYY, null));
-		assertNotNull(DateConv.getCurrentDateISO(ISODateFormat.DDMMYYYY, "-"));
-	}
+    }
+
+    /**
+     * Test for happy cases to convert String to java.util.Date
+     */
+    @Test
+    public void fromDateStringHappyCase() {
+        String dateFormat = "dd-MMM-yyyy";
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+        String dateInString = "7-Jun-2013";
+        Date exceptedDate = null;
+        Date actualDate = null;
+        try {
+            actualDate = DateConv.fromDateString(dateInString, dateFormat);
+            exceptedDate = formatter.parse(dateInString);
+        } catch (ParseException parseException) {
+            assertEquals(null, parseException);
+        }
+        assertEquals(exceptedDate, actualDate);
+    }
+
+    /**
+     * Test for exceptional cases to convert Date from String to java.util.Date
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void fromDateStringExceptionCase() {
+        String dateFormat = "dd-MMM-yyfyy";
+        Date actualDate = DateConv.fromDateString("32-Jun-2013", dateFormat);
+    }
+
+    /**
+     * Test for happy cases to convert java.util.Date to String
+     */
+    @Test
+    public void toDateStringHappyCase() {
+        String pattern = "dd-MMM-yyyy";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        Date date = new Date();
+        String actualDateString = DateConv.toDateString(date, pattern);
+        assertEquals(actualDateString, formatter.format(date));
+        assertNotEquals(actualDateString, "dd-MMM-yysyy");
+    }
+
+    /**
+     * Test for converting unix timestamp to Date String
+     */
+    @Test
+    public void fromUnixTimestampTest() {
+        String pattern = "dd-MMM-yyyy";
+        long unixTimestamp = 1372339860;
+        String actualDate = DateConv.toDateString(unixTimestamp, pattern);
+        String expectedDate = "27-Jun-2013";
+        assertEquals(expectedDate, actualDate);
+    }
+
+    /**
+     * Test for formatting a date from one pattern to another
+     */
+    @Test
+    public void reformatCode() {
+        String inputPattern = "dd-MMM-yyyy";
+        String outputPattern = "dd-MM-yyyy";
+        String actualDate = DateConv.reformatDate("27-Jun-2013", inputPattern, outputPattern);
+        String expectedDate = "27-06-2013";
+        assertEquals(expectedDate, actualDate);
+    }
 }

@@ -1,237 +1,92 @@
 package picoded.core.conv;
 
-import java.util.Calendar;
-import java.util.IllegalFormatException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
-
+import org.apache.commons.lang3.time.DateUtils;
 import picoded.core.exception.ExceptionMessage;
 
 /**
- * Convenience class to convert between date types.
+ * Convenience class to convert between Date types.
  * [NOTE: This is not vetted for general usage]
- *
- * Month is 1-indexed.
- * Default dateformat is DD-MM-YYYY.
+ * ---------------------------------------------------------------------------------
+ * Common Date Pattern                    |   Example Date
+ * ---------------------------------------------------------------------------------
+ * dd-MM-yy                                 31-01-12
+ * dd-MM-yyyy	                            31-01-2012
+ * MM-dd-yyyy	                            01-31-2012
+ * yyyy-MM-dd	                            2012-01-31
+ * yyyy-MM-dd HH:mm:ss	                    2012-01-31 23:59:59
+ * yyyy-MM-dd HH:mm:ss.SSS a	            2012-01-31 10:59:59.999 PM
+ * yyyy-MM-dd HH:mm:ss.SSSZ	                2012-01-31 23:59:59.999+0100
+ * EEEEE MMMMM yyyy HH:mm:ss.SSSZ	        Saturday November 2012 10:45:42.720+0100
+ * ----------------------------------------------------------------------------------
  **/
-public class DateConv {
-	
-	/**
-	 * Invalid constructor (throws exception)
-	 **/
-	protected DateConv() {
-		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
-	}
+public class DateConv extends DateUtils {
 
-	// List of common ISO date format
-	public enum ISODateFormat {
-		DDMMYYYY, MMDDYYYY, YYYYMMDD, YYYYDDMM
-	}
+    /**
+     * Invalid constructor (throws exception)
+     **/
+    protected DateConv() {
+        throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
+    }
 
-	/**
-	 * Helper method to format a given date format to ISO date format
-	 * @param format
-	 * @return
-	 */
-	public static ISODateFormat toISODateFormat(String format) throws IllegalFormatException{
-		if (format == null || format.isEmpty()) {
-			return ISODateFormat.DDMMYYYY;
-		}
-		
-		String format_cleaned = RegexUtil.removeAllNonAlphaNumeric(format);
-		
-		if ("mmddyyyy".equalsIgnoreCase(format_cleaned)) {
-			return ISODateFormat.MMDDYYYY;
-		} else if ("yyyymmdd".equalsIgnoreCase(format_cleaned)) {
-			return ISODateFormat.YYYYMMDD;
-		} else if ("yyyyddmm".equalsIgnoreCase(format_cleaned)) {
-			return ISODateFormat.YYYYDDMM;
-		} else {
-			// Default date format is DDMMYYYY
-			return ISODateFormat.DDMMYYYY;
-		}
-	}
+    /**
+     * Convert a Date from String to java.util.Date Class
+     * Given a Date as a String and its pattern
+     * Then, this function will build the Java Date object out of that  DateString and pattern
+     *
+     * @param dateStr
+     * @param pattern
+     * @return
+     */
+    public static Date fromDateString(final String dateStr, final String pattern) {
+        try {
+            return DateUtils.parseDate(dateStr, new String[]{pattern});
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	/**
-	 * Convert Unix timestamp to ISO date
-	 * @param inDate
-	 * @param dateFormat
-	 * @param separator
-	 * @return
-	 */
-	public static String toISOFormat(long inDate, ISODateFormat dateFormat, String separator) {
-		if (separator == null) {
-			separator = "-";
-		} else {
-			//TODO sanitise separator string?
-		}
-		
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(inDate);
-		
-		String date = String.valueOf(cal.get(Calendar.DATE));
-		if (date.length() == 1) {
-			date = "0" + date;
-		}
-		
-		String month = String.valueOf(cal.get(Calendar.MONTH) + 1);
-		if (month.length() == 1) {
-			month = "0" + month;
-		}
-		
-		String isoDate = String
-			.valueOf(date + separator + month + separator + cal.get(Calendar.YEAR));
-		isoDate = changeISODateFormat(isoDate, ISODateFormat.DDMMYYYY, dateFormat, separator);
-		
-		return isoDate;
-	}
+    /**
+     * Convert a java.util.Date Object to String
+     * Specify the Date format and provide java.util.Date Object in the parameter
+     * This function would constructs Date String according to the format given
+     * ```
+     * // Conversion to a date string, from milliseconds timestamp
+     * DateConv.toDateString( new Date(timestamp), "YYYY-MM-DD" );
+     * ```
+     *
+     * @param date
+     * @param outputPattern
+     * @return
+     */
+    public static String toDateString(final Date date, final String outputPattern) {
+        SimpleDateFormat formatter = new SimpleDateFormat(outputPattern);
+        return formatter.format(date);
+    }
 
-	/**
-	 * I return a string; to that I can return null if an error happened during conversion.
-	 * @param inDate
-	 * @param currentDateFormat
-	 * @param separator
-	 * @return
-	 */
-	public static String toMillisecondsFormat(String inDate, ISODateFormat currentDateFormat,
-		String separator) {
-		if (inDate == null || StringUtils.isEmpty(inDate)) {
-			return null;
-		}
-		
-		String newDate = changeISODateFormat(inDate, currentDateFormat, ISODateFormat.YYYYMMDD,
-			separator);
-		String[] newDateSplit = null;
-		if (newDate != null) {
-			newDateSplit = newDate.split(separator);
-		}
-		if (newDateSplit == null) {
-			return null;
-		}
-		
-		Calendar cal = Calendar.getInstance();
-		cal.set(Integer.parseInt(newDateSplit[0]), Integer.parseInt(newDateSplit[1]) - 1,
-			Integer.parseInt(newDateSplit[2]));
-		return String.valueOf(cal.getTimeInMillis());
-		
-	}
+    /**
+     * Convert Unix timestamp to Date in String according to the output pattern
+     *
+     * @param timestamp
+     * @param outputPattern
+     * @return
+     */
+    public static String toDateString(final long timestamp, final String outputPattern) {
+        return toDateString(new Date((long) timestamp * 1000), outputPattern);
+    }
 
-	/**
-	 * Date to Seconds conversion function
-	 * @param inDate
-	 * @param currentDateFormat
-	 * @param separator
-	 * @return
-	 */
-	public static String toSecondsFormat(String inDate, ISODateFormat currentDateFormat,
-											  String separator) {
-		// Code reusing : toMillisecondsFormat
-		String dateInMiliSeconds = toMillisecondsFormat(inDate, currentDateFormat, separator);
-		if (dateInMiliSeconds == null) {
-			return null;
-		}
-		long longDate = Long.parseLong(dateInMiliSeconds);
-
-		return String.valueOf(longDate/1000L);
-	}
-
-
-	
-	//Util functions
-
-	/**
-	 * check if the ISO date format is correct or not
-	 * @param inDateString
-	 * @return
-	 */
-	public static boolean isInISOFormat(String inDateString) {
-		if (inDateString.indexOf('-') != inDateString.lastIndexOf('-')) {
-			return true;
-		}
-		return false;
-	}
-	
-	public static boolean isInMillisecondsFormat(String inDateString) {
-		if (inDateString.startsWith("-") || !inDateString.contains("-")) {
-			return true;
-		}
-		return false;
-	}
-	
-	public static String getCurrentDateISO(ISODateFormat dateFormat, String separator) {
-		if (separator == null) {
-			separator = "-";
-		}
-		
-		Calendar cal = Calendar.getInstance();
-		int date = cal.get(Calendar.DATE);
-		int month = cal.get(Calendar.MONTH) + 1;
-		int year = cal.get(Calendar.YEAR);
-		
-		String newDate = String.valueOf(date + separator + month + separator + year); //ddmmyyyy
-		newDate = changeISODateFormat(newDate, ISODateFormat.DDMMYYYY, dateFormat, separator);
-		
-		return newDate;
-	}
-	
-	/**
-	 * Convert from one ISO date format to another format
-	 **/
-	public static String changeISODateFormat(String inDateISO, ISODateFormat currentDateFormat,
-		ISODateFormat newDateFormat, String separator) {
-		if (inDateISO == null || (currentDateFormat == null && newDateFormat == null)) {
-			return null;
-		}
-		
-		if (separator == null) {
-			separator = "-";
-		} else {
-			//TODO sanitise separator string?
-		}
-		
-		String[] dateSplit = inDateISO.split(separator);
-		if (dateSplit.length != 3) {
-			return null;
-		}
-		
-		dateSplit = resortDateArray(dateSplit, currentDateFormat, newDateFormat);
-		StringBuilder sb = new StringBuilder();
-		for (byte i = 0; i < dateSplit.length; ++i) {
-			sb.append(dateSplit[i]);
-			
-			if (i < dateSplit.length - 1) {
-				sb.append(separator);
-			}
-		}
-		
-		return sb.toString();
-	}
-	
-	private static String[] resortDateArray(String[] inDateSplit, ISODateFormat currentDateFormat,
-		ISODateFormat newDateFormat) {
-		byte[] currentDateSorting = getISODateSorting(currentDateFormat);
-		byte[] newDateSorting = getISODateSorting(newDateFormat);
-		String[] dateSplit = new String[3];
-		for (byte i = 0; i < dateSplit.length; ++i) {
-			dateSplit[i] = inDateSplit[ArrayUtils.indexOf(currentDateSorting, newDateSorting[i])];
-		}
-		
-		return dateSplit;
-	}
-	
-	private static byte[] getISODateSorting(ISODateFormat dateFormat) {
-		switch (dateFormat) {
-		case DDMMYYYY:
-			return new byte[] { 0, 1, 2 };
-		case MMDDYYYY:
-			return new byte[] { 1, 0, 2 };
-		case YYYYMMDD:
-			return new byte[] { 2, 1, 0 };
-		case YYYYDDMM:
-			return new byte[] { 2, 0, 1 };
-		default:
-			return null;
-		}
-	}
+    /**
+     * Format a date String from one pattern to another
+     *
+     * @param dateStr
+     * @param inputPattern
+     * @param outputPattern
+     * @return
+     */
+    public static String reformatDate(String dateStr, String inputPattern, String outputPattern) {
+        return toDateString(fromDateString(dateStr, inputPattern), outputPattern);
+    }
 }
