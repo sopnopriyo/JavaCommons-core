@@ -177,6 +177,29 @@ artifacts {
 
 //----------------------------------------------------------------
 //
+//  Concurent test threads
+//
+//----------------------------------------------------------------
+
+test {
+
+	// Setup test to run on parllel threads = to number of processors by default
+	if (project.hasProperty('maxParallelForks')) {
+		maxParallelForks = project.maxParallelForks as int
+	} else {
+		// As our test tends to be io-blocked rather then cpu
+		// we will run more tests in parallels
+		maxParallelForks = (Runtime.runtime.availableProcessors() * 2) as int
+	}
+	
+	// Set up the number of tests per fork
+	if (project.hasProperty('forkEvery')) {
+		forkEvery = project.forkEvery as int
+	}
+}
+
+//----------------------------------------------------------------
+//
 //  Jacoco test coverage
 //
 //----------------------------------------------------------------
