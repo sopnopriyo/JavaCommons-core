@@ -19,7 +19,7 @@ import picoded.core.struct.template.UnsupportedDefaultMap;
  **/
 public interface GenericConvertValue<V> {
 	
-	// Put / remove value options
+	// Put / get / remove value options to overwrite
 	//---------------------------------------------------------------------------------------------------
 	
 	/**
@@ -42,9 +42,6 @@ public interface GenericConvertValue<V> {
 		throw new UnsupportedOperationException(ExceptionMessage.functionNotImplemented);
 	}
 	
-	// Fallback if null, for native format
-	//---------------------------------------------------------------------------------------------------
-	
 	/**
 	 * [Needs to be overriden, currently throws UnsupportedOperationException]
 	 * 
@@ -55,6 +52,9 @@ public interface GenericConvertValue<V> {
 	default V getValue() {
 		throw new UnsupportedOperationException(ExceptionMessage.functionNotImplemented);
 	}
+	
+	// Get value call with fallback
+	//---------------------------------------------------------------------------------------------------
 	
 	/**
 	 * Get and return its stored value
