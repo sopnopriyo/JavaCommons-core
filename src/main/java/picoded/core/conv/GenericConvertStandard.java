@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import picoded.core.struct.GenericConvertValue;
+
 /**
  * Contains conversions to Java standard objects types.
  *
@@ -113,7 +115,6 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 	 *
 	 * - No conversion
 	 * - Object to JSON string
-	 * - Object.toString()
 	 * - Fallback (only possible for non-null values)
 	 *
 	 * @param input     The input value to convert
@@ -128,7 +129,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 			}
 			return toString(fallbck, null);
 		}
+
+		// GenericConvertValue optimization
+		if( input instanceof GenericConvertValue ) {
+			return toString( ((GenericConvertValue)input).getString(), fallbck );
+		}
 		
+		// Output as string directly
 		if (input instanceof String) {
 			return input.toString();
 		}

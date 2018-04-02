@@ -86,7 +86,7 @@ public interface GenericConvertValue<V> {
 	}
 	
 	/**
-	 * Default null fallback, To String conversion of generic object
+	 * Default null fallback, To String conversion of generic value
 	 *
 	 * @return The converted string, always possible unless null
 	 **/
