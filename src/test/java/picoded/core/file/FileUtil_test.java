@@ -293,19 +293,19 @@ public class FileUtil_test {
 	
 	/// Test for Newest File Timestamp
 	@Test
-	public void testNewestFileTimestamp() throws IOException {
-		assertEquals(0L, FileUtil.newestFileTimestamp(null));
-		assertEquals(0L, FileUtil.newestFileTimestamp(new File("")));
-		assertNotNull(FileUtil.newestFileTimestamp(new File(testDirStr + "jsRegex.js")));
-		assertNotNull(FileUtil.newestFileTimestamp(new File(testDirStr + "doubleSlash.txt")));
-		assertNotNull(FileUtil.newestFileTimestamp(new File("./test/files/file/")));
+	public void testgetLatestFileTimestamp() throws IOException {
+		assertEquals(0L, FileUtil.getLatestFileTimestamp(null));
+		assertEquals(0L, FileUtil.getLatestFileTimestamp(new File("")));
+		assertNotNull(FileUtil.getLatestFileTimestamp(new File(testDirStr + "jsRegex.js")));
+		assertNotNull(FileUtil.getLatestFileTimestamp(new File(testDirStr + "doubleSlash.txt")));
+		assertNotNull(FileUtil.getLatestFileTimestamp(new File("./test/files/file/")));
 		List<String> excludeNames = new ArrayList<String>();
 		excludeNames.add("jsRegex.js");
 		excludeNames.add("doubleSlash.txt");
-		assertEquals(0L, FileUtil.newestFileTimestamp(null, null));
-		assertEquals(0L, FileUtil.newestFileTimestamp(new File(""), new ArrayList<String>()));
-		assertNotNull(FileUtil.newestFileTimestamp(new File("./test/files/file/"), excludeNames));
-		assertNotNull(FileUtil.newestFileTimestamp(new File("./test/files/file/ConfigFile"), null));
+		assertEquals(0L, FileUtil.getLatestFileTimestamp(null, null));
+		assertEquals(0L, FileUtil.getLatestFileTimestamp(new File(""), new ArrayList<String>()));
+		assertNotNull(FileUtil.getLatestFileTimestamp(new File("./test/files/file/"), excludeNames));
+		assertNotNull(FileUtil.getLatestFileTimestamp(new File("./test/files/file/ConfigFile"), null));
 		
 	}
 	
