@@ -113,7 +113,7 @@ public class ConditionBase implements Query {
 		
 		// Allow operation across all key / val mappings, wildcard search
 		if (t instanceof Map) {
-			if ("key".equalsIgnoreCase(_fieldName)) {
+			if ("_key".equalsIgnoreCase(_fieldName)) {
 				
 				// Test against all the key values
 				for (Map.Entry<Object, Object> e : ((Map<Object, Object>) t).entrySet()) {
@@ -124,7 +124,7 @@ public class ConditionBase implements Query {
 				
 				// Failed to find any key
 				return false;
-			} else if ("val".equalsIgnoreCase(_fieldName)) {
+			} else if ("_val".equalsIgnoreCase(_fieldName)) {
 				
 				// Test against all the stored values
 				for (Map.Entry<Object, Object> e : ((Map<Object, Object>) t).entrySet()) {
