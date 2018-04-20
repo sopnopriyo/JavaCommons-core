@@ -23,7 +23,7 @@ public abstract class MapReduceBase {
 	/**
 	 * Result variable to return computation on (by default)
 	 */
-	protected BigDecimal res = new BigDecimal(0);
+	protected BigDecimal res = null;
 
 	/**
 	 * mapping function used to process a single value as it comes in
@@ -39,9 +39,16 @@ public abstract class MapReduceBase {
 	 * @param  key   to extract value from
 	 */
 	public void map(Object inmap, String key) {
+		// Val object extraction
 		Object valObj = NestedObject.fetchNestedObject(inmap, key);
-		BigDecimal val = GenericConvert.toBigDecimal(valObj, null);
-		map(val);
+
+		// Null mapping
+		if( valObj == null ) {
+			map(null);
+		}
+
+		// Non null mapping - assumes a value
+		map( GenericConvert.toBigDecimal(valObj, BigDecimal.ZERO) );
 	}
 
 	//------------------------------------------------------
@@ -82,16 +89,14 @@ public abstract class MapReduceBase {
 	 * @return  BigDecimal representing the current result
 	 */
 	public BigDecimal reduce() {
-		BigDecimal ret = new BigDecimal(0);
-		ret.add(res);
-		return ret;
+		return res;
 	}
 
 	/**
 	 * Reset any running calculation, used to reset existing map operations 
 	 */
 	public void reset() {
-		res = new BigDecimal(0);
+		res = null;
 	}
 
 	/**
