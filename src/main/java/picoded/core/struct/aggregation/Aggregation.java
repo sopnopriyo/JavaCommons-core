@@ -1,16 +1,19 @@
 package picoded.core.struct.aggregation;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.lang.Math;
 import java.math.BigDecimal;
 
 import picoded.core.conv.GenericConvert;
+import picoded.core.struct.MutablePair;
+import picoded.core.struct.query.mapreduce.*;
 
 /**
- * Aggregation library that build on top of query library.
+ * Aggregation library to be used with the query library.
  * To extract aggregation metrics across larger dataset.
  *
- * As such filtering of data similarly uses the SQL where clause
+ * As such filtering of data is similar to the SQL where clause
  *
  * Aggregation to include
  * + count(fieldname)
@@ -22,19 +25,104 @@ import picoded.core.conv.GenericConvert;
  **/
 public class Aggregation {
 	
-	public static String COUNT = "count";
-	public static String MAX = "max";
-	public static String MIN = "min";
-	public static String AVG = "avg";
-	public static String SUM = "sum";
-	
-	// this variable is here temporarily to make the avg function not crash 
-	// if the result has a repeating non terminating decimal portion
-	// will limit the result to ~ 24 decimal places
+	//-------------------
 	//
-	// Note : precision vs scale terminology - https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale
-	public static int AVG_RESULT_MAX_SCALE = 24;
+	// MapReduceBase class implementation
+	//
+	//-------------------
+
+	// Cached memoizer of the MapReduceBase implementation
+	protected static Map<String, MapReduceBase> _mapReduceBaseImplementation = null;
 	
+	/**
+	 * MapReduceBase implementation map, used to perform the needed aggregation
+	 * 
+	 * @return  map, of aggregation function, and MapReduceBase impementation
+	 **/
+	protected static Map<String, MapReduceBase> mapReduceBaseImplementation() {
+		if (_mapReduceBaseImplementation != null) {
+			return _mapReduceBaseImplementation;
+		}
+		
+		// Initialize the mapreduce classes
+		Map<String, MapReduceBase> map = new ConcurrentHashMap<String, MapReduceBase>();
+		map.put("count", new Count());
+		map.put("max",   new Max());
+		map.put("min",   new Min());
+		map.put("sum",   new Sum());
+		map.put("avg",   new Avg());
+		
+		// Save the implementation map for reuse
+		_mapReduceBaseImplementation = map;
+		return _mapReduceBaseImplementation;
+	}
+	
+	//-------------------
+	//
+	// Utility functions
+	//
+	//-------------------
+
+	/**
+	 * Process in an array of aggregation func and field string, and split information up respectively
+	 * 
+	 * @param aggregationArray  of function and field terms to compute on
+	 * 
+	 * @return  pair of the function names, and field names to perform aggegation on
+	 */
+	protected static MutablePair<String[], String[]> extractAggregrationInfo(String[] aggregationArray) {
+		// Return the func and field name array
+		String[] funcNames  = new String[ aggregationArray.length ];
+		String[] fieldNames = new String[ aggregationArray.length ];
+
+		// Iterate each aggregation term
+		for( int i = 0; i < aggregationArray.length; ++i ) {
+			// Quick cleanup
+			String funcNameAndField = aggregationArray[i].trim();
+
+			// Get left and right bracket
+			int leftBracket  = funcNameAndField.indexOf('(');
+			int rightBracket = funcNameAndField.lastIndexOf(')');
+
+			// Validate the bracket
+			if( leftBracket <= 0 || rightBracket != (funcNameAndField.length()-1) ) {
+				throw new RuntimeException("Invalid aggregation function/parameter format : "+funcNameAndField);
+			}
+	
+			// Store the aggregation info
+			funcNames[i]  = funcNameAndField.substring(0, leftBracket);
+			fieldNames[i] = funcNameAndField.substring(leftBracket, rightBracket);
+		}
+
+		// Return the full func name / field names split
+		return new MutablePair<String[],String[]>(funcNames, fieldNames);
+	}
+
+	//-------------------
+	//
+	// Aggregration constructor
+	//
+	//-------------------
+
+	/**
+	 * Taking in a a set of aggregation terms, and compute them against a collection
+	 * 
+	 * @param  aggregationArray to aggregate using
+	 * @param  dataSet to compute on
+	 * 
+	 * @return  BigDecimal array of the corresponding aggregation result
+	 **/
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 *
 	 * Terms [ "count(*)", "max(investment_total)", "sum(investment_count)" ]
@@ -108,6 +196,20 @@ public class Aggregation {
 	// Aggregation Implementations
 	//
 	//-------------------
+
+	public static String COUNT = "count";
+	public static String MAX = "max";
+	public static String MIN = "min";
+	public static String AVG = "avg";
+	public static String SUM = "sum";
+	
+	// this variable is here temporarily to make the avg function not crash 
+	// if the result has a repeating non terminating decimal portion
+	// will limit the result to ~ 24 decimal places
+	//
+	// Note : precision vs scale terminology - https://stackoverflow.com/questions/35435691/bigdecimal-precision-and-scale
+	public static int AVG_RESULT_MAX_SCALE = 24;
+	
 	private static Map<String, AggregationFunction> aggFuncDefinitions = null;
 	
 	public synchronized static Map<String, AggregationFunction> defaultAggFunctionDefinitions() {

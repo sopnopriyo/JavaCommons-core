@@ -1,4 +1,4 @@
-package picoded.core.struct.aggregation.mapreduce;
+package picoded.core.struct.query.mapreduce;
 
 import java.math.BigDecimal;
 import java.util.Map;
