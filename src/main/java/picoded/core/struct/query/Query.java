@@ -1,5 +1,6 @@
 package picoded.core.struct.query;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -309,7 +310,7 @@ public interface Query extends Predicate<Object> {
 	}
 	
 	//--------------------------------------------------------------------
-	// Map based search
+	// Query searching
 	//--------------------------------------------------------------------
 
 	/**
@@ -332,6 +333,13 @@ public interface Query extends Predicate<Object> {
 		List<V> ret = search(list);
 		Collections.sort(ret, compareFunc);
 		return ret;
+	}
+	
+	/**
+	 * Searches using the query, and sorted by the comparator
+	 **/
+	default <V> List<V> search(List<V> list, String orderBy) {
+		return search(list, new OrderBy<V>(orderBy));
 	}
 	
 	/**
@@ -363,6 +371,38 @@ public interface Query extends Predicate<Object> {
 	 **/
 	default <K, V> List<V> search(Map<K, V> set, String orderBy) {
 		return search(set, new OrderBy<V>(orderBy));
+	}
+	
+	//--------------------------------------------------------------------
+	// Aggregation on search
+	//--------------------------------------------------------------------
+
+	/**
+	 * Searches using the query, and perform the stated aggregatoin
+	 **/
+	default BigDecimal[] aggregation(List<Object> list, Aggregation aggregationObj) {
+		return aggregationObj.compute( search(list) );
+	}
+	
+	/**
+	 * Searches using the query, and perform the stated aggregatoin
+	 **/
+	default BigDecimal[] aggregation(Map<String,Object> set, Aggregation aggregationObj) {
+		return aggregationObj.compute( search(set) );
+	}
+	
+	/**
+	 * Searches using the query, and perform the stated aggregatoin
+	 **/
+	default BigDecimal[] aggregation(List<Object> list, String[] aggregationTerms) {
+		return aggregation(list, Aggregation.build(aggregationTerms));
+	}
+	
+	/**
+	 * Searches using the query, and perform the stated aggregatoin
+	 **/
+	default BigDecimal[] aggregation(Map<String,Object> set, String[] aggregationTerms) {
+		return aggregation(set, Aggregation.build(aggregationTerms));
 	}
 	
 	//--------------------------------------------------------------------

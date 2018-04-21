@@ -39,6 +39,11 @@ public abstract class MapReduceBase {
 	 * @param  key   to extract value from
 	 */
 	public void map(Object inmap, String key) {
+		// Null check
+		if( inmap == null ) {
+			map(null);
+		}
+
 		// Val object extraction
 		Object valObj = NestedObject.fetchNestedObject(inmap, key);
 
