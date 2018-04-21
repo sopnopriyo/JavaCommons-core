@@ -22,4 +22,20 @@ public class Count extends MapReduceBase {
 			res = res.add( BigDecimal.ONE );
 		}
 	}
+
+	/**
+	 * mapping function used to process a parameter in a map
+	 * 
+	 * @param  inmap map object, to extract the value from
+	 * @param  key   to extract value from
+	 */
+	public void map(Object inmap, String key) {
+		// Wildcard matching
+		if( key.equalsIgnoreCase("*") ) {
+			map(BigDecimal.ONE);
+		} else {
+			super.map(inmap,key);
+		}
+	}
+
 }
