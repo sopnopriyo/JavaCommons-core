@@ -24,7 +24,7 @@ public class Avg extends MapReduceBase {
 	 * 
 	 * @param   value used in mapping, this value is possible null if the parameter does not exist
 	 */
-	public void map(BigDecimal val) {
+	public void map(BigDecimal val, Object rawVal) {
 		// Add up those value if its provided
 		if( val != null ) {
 

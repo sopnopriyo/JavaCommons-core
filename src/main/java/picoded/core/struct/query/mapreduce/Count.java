@@ -11,15 +11,16 @@ public class Count extends MapReduceBase {
 	 * 
 	 * @param   value used in mapping, this value is possible null if the parameter does not exist
 	 */
-	public void map(BigDecimal val) {
-		// Initialize the res variable (if needed)
-		if( res == null ) {
-			res = BigDecimal.ZERO;
-		}
-
+	public void map(BigDecimal val, Object rawVal) {
 		// Increment the count when called
-		if( val != null ) {
-			res = res.add( BigDecimal.ONE );
+		// only if a value is passed
+		if( rawVal != null ) {
+			// Initialize the res variable (if needed)
+			if( res == null ) {
+				res = BigDecimal.ONE;
+			} else {
+				res = res.add( BigDecimal.ONE );
+			}
 		}
 	}
 
@@ -32,7 +33,7 @@ public class Count extends MapReduceBase {
 	public void map(Object inmap, String key) {
 		// Wildcard matching
 		if( key.equalsIgnoreCase("*") ) {
-			map(BigDecimal.ONE);
+			map(BigDecimal.ONE, BigDecimal.ONE);
 		} else {
 			super.map(inmap,key);
 		}

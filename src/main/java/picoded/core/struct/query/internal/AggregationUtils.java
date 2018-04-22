@@ -80,7 +80,7 @@ public class AggregationUtils {
 	
 			// 4. Store the aggregation info
 			funcNames[i]  = funcNameAndField.substring(0, leftBracket);
-			fieldNames[i] = funcNameAndField.substring(leftBracket, rightBracket);
+			fieldNames[i] = funcNameAndField.substring(leftBracket+1, rightBracket);
 		}
 
 		// 5. Return the full func name / field names split

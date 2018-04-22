@@ -11,15 +11,15 @@ public class Sum extends MapReduceBase {
 	 * 
 	 * @param   value used in mapping, this value is possible null if the parameter does not exist
 	 */
-	public void map(BigDecimal val) {
-		// Initialize the res variable (if needed)
-		if( res == null ) {
-			res = BigDecimal.ZERO;
-		}
-
+	public void map(BigDecimal val, Object rawVal) {
 		// Add up those value if its provided
 		if( val != null ) {
-			res = res.add(val);
+			// Initialize the res variable (if needed)
+			if( res == null ) {
+				res = val;
+			} else {
+				res = res.add(val);
+			}
 		}
 	}
 }

@@ -123,6 +123,41 @@ public class QueryAggregation_test {
 	
 	//------------------------------------------
 	//
+	// SUM
+	//
+	//------------------------------------------
+
+	@Test
+	public void testSumInt() {
+		// Aggregation counting
+		BigDecimal res = queryAll.singleAggregation(fullDataSet, "sum(intVal)");
+		assertNotNull(res);
+		assertEquals(45, res.intValue());
+	}
+	
+	/*
+	@Test
+	public void testSumDouble() {
+		String aggTermAndArg = Aggregation.SUM + "(doubleVal)";
+		Map<String, Object> res = Aggregation
+			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
+		
+		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
+		assertEquals(49.5, val.doubleValue(), 0);
+	}
+	
+	@Test
+	public void testSumString() {
+		// Aggregation counting
+		BigDecimal res = queryTom.singleAggregation(fullDataSet, "count(stringVal)");
+		assertNotNull(res);
+		assertEquals(5, res.doubleValue(), 0.0);
+	}
+	*/
+
+	/*
+	//------------------------------------------
+	//
 	// MIN
 	//
 	//------------------------------------------
@@ -147,8 +182,6 @@ public class QueryAggregation_test {
 		assertEquals(0.0, res.doubleValue(), 0);
 	}
 	
-
-	/*
 	//------------------------------------------
 	//
 	// MULTIPLE
@@ -245,40 +278,5 @@ public class QueryAggregation_test {
 		assertEquals(4.5, val.doubleValue(), 0);
 	}
 	
-	//------------------------------------------
-	//
-	// SUM
-	//
-	//------------------------------------------
-	@Test
-	public void testSumInt() {
-		String aggTermAndArg = Aggregation.SUM + "(intVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(45, val.intValue());
-	}
-	
-	@Test
-	public void testSumDouble() {
-		String aggTermAndArg = Aggregation.SUM + "(doubleVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(49.5, val.doubleValue(), 0);
-	}
-	
-	@Test
-	public void testSumString() {
-		String aggTermAndArg = Aggregation.SUM + "(stringVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(45, val.intValue());
-		assertEquals(45.0, val.doubleValue(), 0);
-	}
 	*/
 }

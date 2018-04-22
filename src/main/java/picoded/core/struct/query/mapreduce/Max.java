@@ -11,13 +11,16 @@ public class Max extends MapReduceBase {
 	 * 
 	 * @param   value used in mapping, this value is possible null if the parameter does not exist
 	 */
-	public void map(BigDecimal val) {
-		// Initialize the res variable (if needed)
-		if( res == null ) {
-			res = val;
-		} else if( val != null ) {
-			// Return the max of the res / value
-			res = res.max(val);
+	public void map(BigDecimal val, Object rawVal) {
+		// Only perform an action if a valid value was passed
+		if( val != null ) {
+			if( res == null ) {
+				// Initialize the res variable (if needed)
+				res = val;
+			} else {
+				// Process and compare the res variable
+				res = res.max(val);
+			}
 		}
 	}
 }

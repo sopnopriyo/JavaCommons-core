@@ -28,9 +28,10 @@ public abstract class MapReduceBase {
 	/**
 	 * mapping function used to process a single value as it comes in
 	 * 
-	 * @param   value used in mapping, this value is possible null if the parameter does not exist
+	 * @param   value  value converted from rawVal, null if the field name does not exist
+	 * @param   rawVal extracted from the data map, null if the field name does not exist
 	 */
-	public abstract void map(BigDecimal val);
+	public abstract void map(BigDecimal val, Object rawVal);
 
 	/**
 	 * mapping function used to process a parameter in a map
@@ -39,21 +40,18 @@ public abstract class MapReduceBase {
 	 * @param  key   to extract value from
 	 */
 	public void map(Object inmap, String key) {
-		// Null check
-		if( inmap == null ) {
-			map(null);
-		}
-
+		
 		// Val object extraction
 		Object valObj = NestedObject.fetchNestedObject(inmap, key);
 
 		// Null mapping
 		if( valObj == null ) {
-			map(null);
+			map((BigDecimal)null, (Object)null);
+			return;
 		}
 
 		// Non null mapping - assumes a value
-		map( GenericConvert.toBigDecimal(valObj, BigDecimal.ZERO) );
+		map( (BigDecimal)GenericConvert.toBigDecimal(valObj, null), (Object)valObj );
 	}
 
 	//------------------------------------------------------

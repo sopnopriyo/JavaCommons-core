@@ -11,7 +11,7 @@ public class Min extends MapReduceBase {
 	 * 
 	 * @param   value used in mapping, this value is possible null if the parameter does not exist
 	 */
-	public void map(BigDecimal val) {
+	public void map(BigDecimal val, Object rawVal) {
 		// Only perform an action if a valid value was passed
 		if( val != null ) {
 			if( res == null ) {
