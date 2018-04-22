@@ -185,11 +185,14 @@ test {
 
 	// Setup test to run on parllel threads = to number of processors by default
 	if (project.hasProperty('maxParallelForks')) {
-		maxParallelForks = project.maxParallelForks as int
+		maxParallelForks = project.maxParallelForks as int;
 	} else {
-		// As our test tends to be io-blocked rather then cpu
-		// we will run more tests in parallels
-		maxParallelForks = (Runtime.runtime.availableProcessors() * 2) as int
+		// Lets optimize the test to run in parllel threads by default
+		// taking the system process count - 1 (so as to not lag hang the OS)
+		maxParallelForks = (Runtime.runtime.availableProcessors() - 1) as int;
+		if(maxParallelForks < 1) {
+			maxParallelForks = 1;
+		}
 	}
 	
 	// Set up the number of tests per fork

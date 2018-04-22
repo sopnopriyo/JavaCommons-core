@@ -1,6 +1,11 @@
 package picoded.core.struct.query.utils;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+
+import picoded.core.struct.query.Aggregation;
 
 /**
  * Utility interface, to provide a standardised interface to query
@@ -9,7 +14,6 @@ import java.util.Map;
  * Ideally this should be optimized for the relevent backend.
  */
 public interface CollectionQueryInterface <V extends Map<String,Object>> {
-
 
 	// Query operations (to optimize on specific implementation)
 	//--------------------------------------------------------------------------
@@ -61,6 +65,53 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	 *
 	 * @return  The total count for the query
 	 **/
-	long queryCount(String whereClause, Object[] whereValues);
+	default long queryCount(String whereClause, Object[] whereValues) {
+		return query(whereClause, whereValues).length;
+	}
+
+	// Aggregation operations (to optimize on specific implementation)
+	//--------------------------------------------------------------------------
+	
+	/**
+	 * Performs a search query, and returns the respective aggregation result
+	 *
+	 * @param   aggregationTerms used to compute the result
+	 * @param   where query statement
+	 * @param   where clause values array
+	 *
+	 * @return  BigDecimal[] array of the aggregation result
+	 **/
+	default BigDecimal[] aggregation(
+		String[] aggregationTerms, 
+		String   whereClause, 
+		Object[] whereValues
+	) {
+		// 1. Initialize the aggregation object (fail fast)
+		Aggregation agg = Aggregation.build(aggregationTerms);
+
+		// 2. Get the query result, as a collection
+		V[] resArray = query(whereClause, whereValues);
+		List<Object> resCollection = (List<Object>)(List<?>)Arrays.asList(resArray);
+
+		// 3. compute the aggregation (in a single pass)
+		return agg.compute(resCollection);
+	}
+	
+	/**
+	 * Performs a search query, and returns the respective aggregation result
+	 *
+	 * @param   singleAggregationTerm used to compute the result
+	 * @param   where query statement
+	 * @param   where clause values array
+	 *
+	 * @return  corresponding BigDecimal result
+	 **/
+	default BigDecimal singleAggregation(
+		String   singleAggregationTerm, 
+		String   whereClause, 
+		Object[] whereValues
+	) {
+		return aggregation( new String[] { singleAggregationTerm }, whereClause, whereValues )[0];
+	}
 	
 }

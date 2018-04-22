@@ -26,7 +26,7 @@ import picoded.core.struct.query.condition.Or;
  *
  * # String processing
  *
- * The process goes through the following steps for tokenizing th string
+ * The process goes through the following steps for tokenizing the query string
  *
  * 1) Replace out the ? numeric arguments with its named equivalent :x
  * 2) Enforce spaces before ":", before and after <=,=,!=,>=,(,)

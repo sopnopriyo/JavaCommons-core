@@ -1,6 +1,9 @@
 package picoded.core.struct.query;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -309,13 +312,13 @@ public interface Query extends Predicate<Object> {
 	}
 	
 	//--------------------------------------------------------------------
-	// Map based search
+	// Query searching
 	//--------------------------------------------------------------------
 
 	/**
 	 * Searches using the query, and returns the resulting set
 	 **/
-	default <V> List<V> search(List<V> list) {
+	default <V> List<V> search(Collection<V> list) {
 		List<V> ret = new ArrayList<V>();
 		for (V val :list) {
 			if (test(val)) {
@@ -328,10 +331,17 @@ public interface Query extends Predicate<Object> {
 	/**
 	 * Searches using the query, and sorted by the comparator
 	 **/
-	default <V> List<V> search(List<V> list, Comparator<V> compareFunc) {
+	default <V> List<V> search(Collection<V> list, Comparator<V> compareFunc) {
 		List<V> ret = search(list);
 		Collections.sort(ret, compareFunc);
 		return ret;
+	}
+	
+	/**
+	 * Searches using the query, and sorted by the comparator
+	 **/
+	default <V> List<V> search(Collection<V> list, String orderBy) {
+		return search(list, new OrderBy<V>(orderBy));
 	}
 	
 	/**
@@ -363,6 +373,58 @@ public interface Query extends Predicate<Object> {
 	 **/
 	default <K, V> List<V> search(Map<K, V> set, String orderBy) {
 		return search(set, new OrderBy<V>(orderBy));
+	}
+	
+	//--------------------------------------------------------------------
+	// Aggregation on search
+	//--------------------------------------------------------------------
+
+	/**
+	 * Searches using the query, and perform the stated aggregation
+	 * 
+	 * @param  collectionObj,  either using a map, list or collection class
+	 * @param  aggregationObj, used to compute the result
+	 * 
+	 * @return  BigDecimal[] array of the aggregation result
+	 **/
+	default BigDecimal[] aggregation(Object collectionObj, Aggregation aggregationObj) {
+
+		// 1. Perform the relevent search query, based on its collection type
+		Collection<Object> aggregationData = null;
+		if( collectionObj instanceof Map ) {
+			aggregationData = search( (Map<String,Object>)collectionObj );
+		} else if( collectionObj instanceof Collection ) {
+			aggregationData = search( (Collection<Object>)collectionObj );
+		} else if( collectionObj instanceof Object[]) {
+			aggregationData = search( Arrays.asList( (Object[]) collectionObj ));
+		}
+
+		// 2. Perform the aggregation computation
+		return aggregationObj.compute(aggregationData);
+	}
+	
+	/**
+	 * Searches using the query, and perform the stated aggregation
+	 * 
+	 * @param  collectionObj,    either using a map, list or collection class
+	 * @param  aggregationTerms, used to compute the result
+	 * 
+	 * @return  BigDecimal[] array of the aggregation result
+	 **/
+	default BigDecimal[] aggregation(Object collectionOb, String[] aggregationTerms) {
+		return aggregation(collectionOb, Aggregation.build(aggregationTerms));
+	}
+	
+	/**
+	 * Searches using the query, and perform the stated aggregatoin
+	 * 
+	 * @param  collectionObj,         either using a map, list or collection class
+	 * @param  singleAggregationTerm, used to compute the result
+	 * 
+	 * @return  corresponding BigDecimal result
+	 **/
+	default BigDecimal singleAggregation(Object collectionObj, String singleAggregationTerm) {
+		return aggregation(collectionObj, Aggregation.build(new String[] { singleAggregationTerm }))[0];
 	}
 	
 	//--------------------------------------------------------------------
