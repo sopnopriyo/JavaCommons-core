@@ -77,7 +77,7 @@ public class Aggregation {
 	 * 
 	 * @param  aggregationTerms to aggregate using
 	 **/
-	static Aggregation build(String[] queryString) {
+	public static Aggregation build(String[] queryString) {
 		return new Aggregation(queryString);
 	}
 	
