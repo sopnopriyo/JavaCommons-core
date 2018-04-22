@@ -99,7 +99,6 @@ public class QueryAggregation_test {
 
 	@Test
 	public void testCountIntVal() {
-		// Aggregation counting
 		BigDecimal res = queryAll.singleAggregation(fullDataSet, "count(intVal)");
 		assertNotNull(res);
 		assertEquals(10, res.intValue());
@@ -107,7 +106,6 @@ public class QueryAggregation_test {
 	
 	@Test
 	public void testCountDoubleVal() {
-		// Aggregation counting
 		BigDecimal res = queryBob.singleAggregation(fullDataSet, "count(doubleVal)");
 		assertNotNull(res);
 		assertEquals(5, res.intValue());
@@ -115,7 +113,6 @@ public class QueryAggregation_test {
 	
 	@Test
 	public void testCountStringVal() {
-		// Aggregation counting
 		BigDecimal res = queryTom.singleAggregation(fullDataSet, "count(stringVal)");
 		assertNotNull(res);
 		assertEquals(5, res.intValue());
@@ -129,31 +126,25 @@ public class QueryAggregation_test {
 
 	@Test
 	public void testSumInt() {
-		// Aggregation counting
 		BigDecimal res = queryAll.singleAggregation(fullDataSet, "sum(intVal)");
 		assertNotNull(res);
 		assertEquals(45, res.intValue());
 	}
 	
-	/*
-	@Test
-	public void testSumDouble() {
-		String aggTermAndArg = Aggregation.SUM + "(doubleVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(49.5, val.doubleValue(), 0);
-	}
-	
 	@Test
 	public void testSumString() {
-		// Aggregation counting
-		BigDecimal res = queryTom.singleAggregation(fullDataSet, "count(stringVal)");
+		BigDecimal res = queryTom.singleAggregation(fullDataSet, "sum(stringVal)");
 		assertNotNull(res);
-		assertEquals(5, res.doubleValue(), 0.0);
+		assertEquals(35, res.doubleValue(), 0.0);
 	}
-	*/
+
+	@Test
+	public void testSumDouble() {
+		BigDecimal res = queryBob.singleAggregation(fullDataSet, "sum(doubleVal)");
+		assertNotNull(res);
+		assertEquals(11, res.doubleValue(), 0.0);
+	}
+	
 
 	/*
 	//------------------------------------------
