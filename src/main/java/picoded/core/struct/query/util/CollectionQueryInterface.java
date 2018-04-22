@@ -74,7 +74,7 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	
 	default BigDecimal[] aggregation(
 		String[] aggregationTerms, 
-		String whereClause, 
+		String   whereClause, 
 		Object[] whereValues
 	) {
 		// 1. Initialize the aggregation object (fail fast)
