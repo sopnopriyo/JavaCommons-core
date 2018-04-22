@@ -145,13 +145,12 @@ public class QueryAggregation_test {
 		assertEquals(11, res.doubleValue(), 0.0);
 	}
 	
-
-	/*
 	//------------------------------------------
 	//
 	// MIN
 	//
 	//------------------------------------------
+
 	@Test
 	public void testMinIntVal() {
 		BigDecimal res = queryTom.singleAggregation(fullDataSet, "min(intVal)");
@@ -175,6 +174,61 @@ public class QueryAggregation_test {
 	
 	//------------------------------------------
 	//
+	// MAX
+	//
+	//------------------------------------------
+
+	@Test
+	public void testMaxIntVal() {
+		BigDecimal res = queryTom.singleAggregation(fullDataSet, "max(intVal)");
+		assertNotNull(res);
+		assertEquals(9, res.intValue());
+	}
+	
+	@Test
+	public void testMaxDoubleVal() {
+		BigDecimal res = queryBob.singleAggregation(fullDataSet, "max(doubleVal)");
+		assertNotNull(res);
+		assertEquals(4.4, res.doubleValue(), 0.0);
+	}
+	
+	@Test
+	public void testMaxStringVal() {
+		BigDecimal res = queryBob.singleAggregation(fullDataSet, "max(stringVal)");
+		assertNotNull(res);
+		assertEquals(4, res.doubleValue(), 0);
+	}
+	
+	//------------------------------------------
+	//
+	// AVG
+	//
+	//------------------------------------------
+
+	@Test
+	public void testAvgInt() {
+		BigDecimal res = queryAll.singleAggregation(fullDataSet, "avg(intVal)");
+		assertNotNull(res);
+		assertEquals(4.5, res.doubleValue(), 0.0);
+	}
+	
+	@Test
+	public void testAvgDouble() {
+		BigDecimal res = queryAll.singleAggregation(fullDataSet, "avg(doubleVal)");
+		assertNotNull(res);
+		assertEquals(4.95, res.doubleValue(), 0.0);
+	}
+	
+	@Test
+	public void testAvgString() {
+		BigDecimal res = queryAll.singleAggregation(fullDataSet, "avg(stringVal)");
+		assertNotNull(res);
+		assertEquals(4.5, res.doubleValue(), 0.0);
+	}
+	
+	/*
+	//------------------------------------------
+	//
 	// MULTIPLE
 	//
 	//------------------------------------------
@@ -195,78 +249,6 @@ public class QueryAggregation_test {
 		assertEquals(0.0, ((BigDecimal) res.get(minDoubleVal)).doubleValue(), 0);
 		assertEquals(49.5, ((BigDecimal) res.get(sumDoubleVal)).doubleValue(), 0);
 		assertEquals(4.5, ((BigDecimal) res.get(avgStringVal)).doubleValue(), 0);
-	}
-	
-	//------------------------------------------
-	//
-	// MAX
-	//
-	//------------------------------------------
-	@Test
-	public void testMaxIntVal() {
-		String aggTermAndArg = Aggregation.MAX + "(intVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(9, val.intValue());
-		assertEquals(9.0, val.doubleValue(), 0);
-	}
-	
-	@Test
-	public void testMaxDoubleVal() {
-		String aggTermAndArg = Aggregation.MAX + "(doubleVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(9.9, val.doubleValue(), 0);
-	}
-	
-	@Test
-	public void testMaxStringVal() {
-		String aggTermAndArg = Aggregation.MAX + "(stringVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(9, val.intValue());
-		assertEquals(9.0, val.doubleValue(), 0);
-	}
-	
-	//------------------------------------------
-	//
-	// AVG
-	//
-	//------------------------------------------
-	@Test
-	public void testAvgInt() {
-		String aggTermAndArg = Aggregation.AVG + "(intVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(4.5, val.doubleValue(), 0);
-	}
-	
-	@Test
-	public void testAvgDouble() {
-		String aggTermAndArg = Aggregation.AVG + "(doubleVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(4.95, val.doubleValue(), 0);
-	}
-	
-	@Test
-	public void testAvgString() {
-		String aggTermAndArg = Aggregation.AVG + "(stringVal)";
-		Map<String, Object> res = Aggregation
-			.aggregation(new String[] { aggTermAndArg }, fullDataSet);
-		
-		BigDecimal val = (BigDecimal) res.get(aggTermAndArg);
-		assertEquals(4.5, val.doubleValue(), 0);
 	}
 	
 	*/

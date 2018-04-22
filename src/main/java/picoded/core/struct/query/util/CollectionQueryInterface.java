@@ -72,6 +72,15 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	// Aggregation operations (to optimize on specific implementation)
 	//--------------------------------------------------------------------------
 	
+	/**
+	 * Performs a search query, and returns the respective aggregation result
+	 *
+	 * @param   aggregationTerms used to compute the result
+	 * @param   where query statement
+	 * @param   where clause values array
+	 *
+	 * @return  BigDecimal[] array of the aggregation result
+	 **/
 	default BigDecimal[] aggregation(
 		String[] aggregationTerms, 
 		String   whereClause, 
@@ -86,6 +95,23 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 
 		// 3. compute the aggregation (in a single pass)
 		return agg.compute(resCollection);
+	}
+	
+	/**
+	 * Performs a search query, and returns the respective aggregation result
+	 *
+	 * @param   singleAggregationTerm used to compute the result
+	 * @param   where query statement
+	 * @param   where clause values array
+	 *
+	 * @return  corresponding BigDecimal result
+	 **/
+	default BigDecimal singleAggregation(
+		String   singleAggregationTerm, 
+		String   whereClause, 
+		Object[] whereValues
+	) {
+		return aggregation( new String[] { singleAggregationTerm }, whereClause, whereValues )[0];
 	}
 	
 }
