@@ -71,6 +71,249 @@ public class NestedObject {
 
 		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
 	}
+
+	//--------------------------------------------------------------------------------------------------
+	//
+	// Map / List manipulation utility function
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Set a key-value pair inside Map, or List
+	 *
+	 * @param  inObj, of Map / List to add to
+	 * @param  key value as a string
+	 * @param  value to insert
+	 *
+	 * @return  The Map, or List object, in its converted form (relevent if it was originally a string JSON)
+	 **/
+	@SuppressWarnings("unchecked")
+	public static Object setMapOrListValue(Object inObj, String key, Object value) {
+		
+		// Start by setting the value
+		// in optimistic ideal scenerios
+		//------------------------------------------------
+		
+		// Try converting to a map
+		if (inObj instanceof Map) {
+			// Map found, converting and inserting
+			Map<String, Object> inMap = (Map<String, Object>) inObj;
+			inMap.put(key, value);
+			return inMap;
+		}
+		
+		// Try converting to a list
+		if (inObj instanceof List) {
+			// List found, converting and inserting
+			List<Object> inList = (List<Object>) inObj;
+			
+			// Convert key
+			int idx = GenericConvert.toInt(key, -1);
+			
+			// Invalid key exception
+			if (idx < 0) {
+				throw new RuntimeException("Unexpected key to insert to List : " + key);
+			}
+			
+			if (idx >= inList.size()) {
+				inList.add(value);
+			} else {
+				inList.set(idx, value);
+			}
+			return inList;
+		}
+		
+		// Ok sadly, the optimistic methods failed =(
+		//------------------------------------------------
+		
+		// Time to go aggressive, and try again as a map
+		Map<String, Object> tryMap = GenericConvert.toStringMap(inObj, null);
+		if (tryMap != null) {
+			return setMapOrListValue(tryMap, key, value);
+		}
+		
+		// or as a list
+		List<Object> tryList = GenericConvert.toList(inObj, null);
+		if (tryList != null) {
+			return setMapOrListValue(tryList, key, value);
+		}
+		
+		// Q_Q all failed, time to bail
+		//------------------------------------------------
+		throw new RuntimeException("Unexpected object to set value to (neither map, nor list)");
+	}
+	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// Key name manipulation and handling
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Split the object path into their respective component
+	 * 
+	 * For example `enter[into].the.breach[0]` becomes a string list of `["enter", "into", "the", "breach", "0"]`
+	 *
+	 * @param key       The input key to fetch, possibly nested
+	 *
+	 * @return         The fetched object, possibly empty array if key is invalid?
+	 **/
+	public static String[] splitObjectPath(String key) {
+		return GenericConvert.toStringArray(splitObjectPath(key, null));
+	}
+	
+	/**
+	 * Split the object path into their respective component
+	 * 
+	 * For example `enter[into].the.breach[0]` becomes a string list of `["enter", "into", "the", "breach", "0"]`
+	 *
+	 * @param key       The input key to fetch, possibly nested
+	 * @param ret       [Optional] return list, to append the key result into
+	 *
+	 * @return          The fetched object, possibly empty list if key is invalid?
+	 **/
+	protected static List<String> splitObjectPath(String key, List<String> ret) {
+		// Return array list of string,
+		// initialize if null
+		if (ret == null) {
+			ret = new ArrayList<String>();
+		}
+		
+		//
+		// No more key parts, terminates
+		//
+		// This is the actual termination point for the recursive function
+		//
+		if (key == null || key.length() <= 0) {
+			//if (ret.size() < 0) {
+			//ret.add("");
+			//}
+			return ret;
+		}
+		
+		// Trim off useless spaces, and try again (if applicable)
+		int keyLen = key.length();
+		key = key.trim();
+		if (key.length() != keyLen) {
+			return splitObjectPath(key, ret);
+		}
+		
+		// Trim off useless starting ".dots" and try again
+		if (key.startsWith(".")) {
+			return splitObjectPath(key.substring(1), ret);
+		}
+		
+		// Fetches the next 2 index points (most probably seperator of token parts)
+		int dotIndex = key.indexOf('.');
+		int leftBracketIndex = key.indexOf('[');
+		
+		// No match found, assume last key
+		if (dotIndex < 0 && leftBracketIndex < 0) {
+			ret.add(key);
+			return ret;
+		}
+		
+		// Left and right string parts to recursively process
+		String leftPart;
+		String rightPart;
+
+		// Begins left/right part splitting and processing
+		if (leftBracketIndex == 0) {
+			//
+			// Array bracket fetching start
+			// This is most likely an array fetching,
+			// but could also be a case of map fetching with string
+			//
+			int rightBracketIndex = key.indexOf(']', 1);
+			if (rightBracketIndex <= 0) {
+				throw new RuntimeException("Missing closing ']' right bracket for key : " + key);
+			}
+			
+			//
+			// Get the left part within the bracket, and the right part after it
+			//
+			// Format: [leftPart]rightPart___
+			//
+			leftPart = key.substring(1, rightBracketIndex).trim();
+			rightPart = key.substring(rightBracketIndex + 1).trim();
+			
+			// Sanatize the left path from quotation marks
+			if (leftPart.length() > 1
+				&& ((leftPart.startsWith("\"") && leftPart.endsWith("\"")) || (leftPart
+					.startsWith("\'") && leftPart.endsWith("\'")))) {
+				leftPart = leftPart.substring(1, leftPart.length() - 1);
+			}
+			
+		} else if (dotIndex >= 0 && (leftBracketIndex < 0 || dotIndex <= leftBracketIndex)) {
+			//
+			// Dot Index exists, and is before left bracket index OR there is no left bracket index
+			//
+			// This is most likely a nested object fetch -> so recursion is done
+			//
+			
+			//
+			// Get the left part before the dot, and right part after it
+			//
+			// Format: leftPart.rightPart___
+			//
+			leftPart = key.substring(0, dotIndex); //left
+			rightPart = key.substring(dotIndex + 1); //right
+			
+		} else if (leftBracketIndex > 0) {
+			//
+			// Left bracket index exists, and there is no dot before it
+			//
+			// This is most likely a nested object fetch -> so recursion is done
+			//
+			
+			//
+			// Get the left part before the left bracket, and right part INCLUDING the left bracket it
+			//
+			// Format: leftPart[rightPart___
+			//
+			leftPart = key.substring(0, leftBracketIndex); //left
+			rightPart = key.substring(leftBracketIndex); //[right]
+			
+		} else {
+			throw new RuntimeException("Unexpected key format : " + key);
+		}
+		
+		// Add left key to return set
+		ret.add(leftPart);
+		
+		// There is no right key, ends and terminate at recusive termination point above
+		if (rightPart == null || rightPart.length() <= 0) {
+			return splitObjectPath(null, ret);
+		}
+		
+		// ELSE : recursively process the right keys
+		return splitObjectPath(rightPart, ret);
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	
 	//--------------------------------------------------------------------------------------------------
 	//
@@ -142,7 +385,7 @@ public class NestedObject {
 					
 					// If last index. Time to finalize the object
 					if (lastIndex == i) {
-						setMapOrList(base, keyItem, value);
+						setMapOrListValue(base, keyItem, value);
 						break; // End key diving loop
 					}
 					
@@ -164,7 +407,7 @@ public class NestedObject {
 							newBase = new HashMap<String, Object>();
 						}
 						
-						setMapOrList(base, keyItem, newBase);
+						setMapOrListValue(base, keyItem, newBase);
 					}
 					
 					// Go one depth deeper, and try next layer
@@ -177,72 +420,6 @@ public class NestedObject {
 		}
 	}
 	
-	/**
-	 * Add a key-value pair inside Map, or List
-	 *
-	 * @param  inObj, of Map / List to add to
-	 * @param  key value as a string
-	 * @param  value to insert
-	 *
-	 * @return  The Map, or List object, in its converted form (relevent if it was originally a string JSON)
-	 **/
-	@SuppressWarnings("unchecked")
-	public static Object setMapOrList(Object inObj, String key, Object value) {
-		
-		// Start by setting the value
-		// in optimistic ideal scenerios
-		//------------------------------------------------
-		
-		// Try converting to a map
-		if (inObj instanceof Map) {
-			// Map found, converting and inserting
-			Map<String, Object> inMap = (Map<String, Object>) inObj;
-			inMap.put(key, value);
-			return inMap;
-		}
-		
-		// Try converting to a list
-		if (inObj instanceof List) {
-			// List found, converting and inserting
-			List<Object> inList = (List<Object>) inObj;
-			
-			// Convert key
-			int idx = GenericConvert.toInt(key, -1);
-			
-			// Invalid key exception
-			if (idx < 0) {
-				throw new RuntimeException("Unexpected key to insert to List : " + key);
-			}
-			
-			if (idx >= inList.size()) {
-				inList.add(value);
-			} else {
-				inList.set(idx, value);
-			}
-			return inList;
-		}
-		
-		// Ok sadly, the optimistic methods failed =(
-		//------------------------------------------------
-		
-		// Time to go aggressive, and try again as a map
-		Map<String, Object> tryMap = GenericConvert.toStringMap(inObj, null);
-		if (tryMap != null) {
-			return setMapOrList(tryMap, key, value);
-		}
-		
-		// or as a list
-		List<Object> tryList = GenericConvert.toList(inObj, null);
-		if (tryList != null) {
-			return setMapOrList(tryList, key, value);
-		}
-		
-		// Q_Q all failed, time to bail
-		//------------------------------------------------
-		throw new RuntimeException("Unexpected object to set value to (neither map, nor list)");
-	}
-	
-
 
 
 
@@ -522,146 +699,6 @@ public class NestedObject {
 	 **/
 	public static Object fetchObject(Object base, String key) {
 		return fetchObject(base, key, null);
-	}
-	
-	//--------------------------------------------------------------------------------------------------
-	//
-	// Key name manipulation and handling
-	//
-	//--------------------------------------------------------------------------------------------------
-	
-	/**
-	 * Split the key path into their respective component
-	 *
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, possibly empty array if key is invalid?
-	 **/
-	public static String[] splitObjectPath(String key) {
-		return GenericConvert.toStringArray(splitObjectPath(key, null));
-	}
-	
-	/**
-	 * Split the key path into their respective component
-	 *
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return          The fetched object, possibly empty array if key is invalid?
-	 **/
-	public static List<String> splitObjectPath(String key, List<String> ret) {
-		// Return array list of string
-		if (ret == null) {
-			ret = new ArrayList<String>();
-		}
-		
-		//
-		// No more key parts, terminates
-		//
-		// This is the actual termination point for the recursive function
-		//
-		if (key == null || key.length() <= 0) {
-			//if (ret.size() < 0) {
-			//ret.add("");
-			//}
-			return ret;
-		}
-		
-		// Trim off useless spaces, and try again (if applicable)
-		int keyLen = key.length();
-		key = key.trim();
-		if (key.length() != keyLen) {
-			return splitObjectPath(key, ret);
-		}
-		
-		// Trim off useless starting ".dots" and try again
-		if (key.startsWith(".")) {
-			return splitObjectPath(key.substring(1), ret);
-		}
-		
-		// Fetches the next 2 index points (most probably seperator of token parts)
-		int dotIndex = key.indexOf('.');
-		int leftBracketIndex = key.indexOf('[');
-		
-		// No match found, assume last key
-		if (dotIndex < 0 && leftBracketIndex < 0) {
-			ret.add(key);
-			return ret;
-		}
-		
-		// Left and right string parts to recursively process
-		String leftPart;
-		String rightPart;
-		// Begins left/right part splitting and processing
-		if (leftBracketIndex == 0) {
-			//
-			// Array bracket fetching start
-			// This is most likely an array fetching,
-			// but could also be a case of map fetching with string
-			//
-			int rightBracketIndex = key.indexOf(']', 1);
-			if (rightBracketIndex <= 0) {
-				throw new RuntimeException("Missing closing ']' right bracket for key : " + key);
-			}
-			
-			//
-			// Get the left part within the bracket, and the right part after it
-			//
-			// Format: [leftPart]rightPart___
-			//
-			leftPart = key.substring(1, rightBracketIndex).trim();
-			rightPart = key.substring(rightBracketIndex + 1).trim();
-			
-			// Sanatize the left path from quotation marks
-			if (leftPart.length() > 1
-				&& ((leftPart.startsWith("\"") && leftPart.endsWith("\"")) || (leftPart
-					.startsWith("\'") && leftPart.endsWith("\'")))) {
-				leftPart = leftPart.substring(1, leftPart.length() - 1);
-			}
-			
-		} else if (dotIndex >= 0 && (leftBracketIndex < 0 || dotIndex <= leftBracketIndex)) {
-			//
-			// Dot Index exists, and is before left bracket index OR there is no left bracket index
-			//
-			// This is most likely a nested object fetch -> so recursion is done
-			//
-			
-			//
-			// Get the left part before the dot, and right part after it
-			//
-			// Format: leftPart.rightPart___
-			//
-			leftPart = key.substring(0, dotIndex); //left
-			rightPart = key.substring(dotIndex + 1); //right
-			
-		} else if (leftBracketIndex > 0) {
-			//
-			// Left bracket index exists, and there is no dot before it
-			//
-			// This is most likely a nested object fetch -> so recursion is done
-			//
-			
-			//
-			// Get the left part before the left bracket, and right part INCLUDING the left bracket it
-			//
-			// Format: leftPart[rightPart___
-			//
-			leftPart = key.substring(0, leftBracketIndex); //left
-			rightPart = key.substring(leftBracketIndex); //[right]
-			
-		} else {
-			throw new RuntimeException("Unexpected key format : " + key);
-		}
-		
-		// Add left key to return set
-		ret.add(leftPart);
-		
-		// There is no right key, ends and terminate at recusive termination point above
-		if (rightPart == null || rightPart.length() <= 0) {
-			return splitObjectPath(null, ret);
-		}
-		
-		// ELSE : recursively process the right keys
-		return splitObjectPath(rightPart, ret);
 	}
 	
 	/**

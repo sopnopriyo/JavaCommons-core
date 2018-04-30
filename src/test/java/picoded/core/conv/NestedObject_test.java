@@ -36,7 +36,29 @@ public class NestedObject_test {
 	//--------------------------------------------------------------------------------------------------
 	
 	@Test
-	public void stringDeepCopy() {
+	public void DeepCopy_string_test() {
 		assertEquals("hello", NestedObject.deepCopy("hello"));
+	}
+
+	//--------------------------------------------------------------------------------------------------
+	//
+	// Split Object Path testing
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+	@Test
+	public void splitObjectPath_test() {
+		assertEquals(
+			new String[] { "enter", "into", "the", "breach", "0" }, 
+			NestedObject.splitObjectPath("enter[into].the.breach[0]")
+		);
+		assertEquals(
+			new String[] { "target", "1", "fire", "0" }, 
+			NestedObject.splitObjectPath("target[1].fire[0]")
+		);
+		assertEquals(
+			new String[] { "titan", "hull", "level" }, 
+			NestedObject.splitObjectPath("titan['hull']['level']")
+		);
 	}
 }
