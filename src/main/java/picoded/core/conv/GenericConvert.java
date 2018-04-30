@@ -266,13 +266,16 @@ public class GenericConvert extends GenericConvertStandard {
 	 * Does a deep cloning of a provided object
 	 * and its value, and returns it.
 	 * 
+	 * The output will be generalized into its respective
+	 * types, of map / list / array (@todo) implmentation
+	 * 
 	 * @TODO : Proper arbitary aray support?
 	 * 
 	 * @param  input value to detach from
 	 * 
 	 * @return  datached value to return
 	 */
-	static public Object detachValue(Object in) {
+	static public Object deepCopy(Object in) {
 		if (in instanceof byte[]) { //bytearray support
 			byte[] ori = (byte[]) in;
 			byte[] cop = new byte[ori.length];
@@ -281,6 +284,12 @@ public class GenericConvert extends GenericConvertStandard {
 			}
 			return cop;
 		}
+
+		//
+		// @TODO : Detect if object is an instance of
+		// Map, or List, or Object[]. If so
+		//
+		//
 		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
 	}
 	
