@@ -4,8 +4,6 @@ import java.util.*;
 
 /**
  * Handles the manipulation of nested objects, in a Map/List.
- *
- * This was originally part of the GenericConvert class, but has since been extracted and isolated out.
  **/
 public class NestedObject {
 	
@@ -14,6 +12,64 @@ public class NestedObject {
 	 **/
 	protected NestedObject() {
 		throw new IllegalAccessError("Utility class");
+	}
+	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// Deep cloning utility function.
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Does a deep cloning of a provided object
+	 * and its value, and returns it. 
+	 * 
+	 * The output will be generalized into its respective
+	 * types, of map / list / array (@todo) implmentation.
+	 * 
+	 * This is designed to support common java standard class
+	 * types, such as Map, List, Set, and known primitives
+	 * 
+	 * @TODO : Proper arbitary aray support?
+	 * 
+	 * @param  input value to detach from
+	 * 
+	 * @return  datached value to return
+	 */
+	static public Object deepCopy(Object in) {
+		if (in instanceof byte[]) { //bytearray support
+			byte[] ori = (byte[]) in;
+			byte[] cop = new byte[ori.length];
+			for (int a = 0; a < ori.length; ++a) {
+				cop[a] = ori[a];
+			}
+			return cop;
+		}
+
+		//
+		// @TODO : Support primitive arrays, as they are not Object[] arrays
+		//
+		// + int[]
+		// + long[]
+		// + short[]
+		// + float[]
+		// + double[]
+		// + byte[]
+		// + char[]
+		//
+		
+		//
+		// @TODO : Detect if object is an instance of
+		// Map, or List, or Set, or Object[]. 
+		//
+		// If so initialize such an object, and recusively 
+		// do a deepCopy on its children values as its being
+		// "copied" over - this will provide a more resilient
+		// deep copy mechanism. As the current possibly buggy
+		// JSON based deepCopy
+		//
+
+		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
 	}
 	
 	//--------------------------------------------------------------------------------------------------
@@ -124,7 +180,7 @@ public class NestedObject {
 	/**
 	 * Add a key-value pair inside Map, or List
 	 *
-	 * @param  inObj, or List object to add to
+	 * @param  inObj, of Map / List to add to
 	 * @param  key value as a string
 	 * @param  value to insert
 	 *
@@ -133,7 +189,8 @@ public class NestedObject {
 	@SuppressWarnings("unchecked")
 	public static Object setMapOrList(Object inObj, String key, Object value) {
 		
-		// Start checking its type nicely
+		// Start by setting the value
+		// in optimistic ideal scenerios
 		//------------------------------------------------
 		
 		// Try converting to a map
@@ -174,6 +231,7 @@ public class NestedObject {
 			return setMapOrList(tryMap, key, value);
 		}
 		
+		// or as a list
 		List<Object> tryList = GenericConvert.toList(inObj, null);
 		if (tryList != null) {
 			return setMapOrList(tryList, key, value);
@@ -184,6 +242,45 @@ public class NestedObject {
 		throw new RuntimeException("Unexpected object to set value to (neither map, nor list)");
 	}
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	//--------------------------------------------------------------------------------------------------
 	//
 	// NESTED object fetch (related to fully qualified keys handling)
@@ -449,7 +546,7 @@ public class NestedObject {
 	 *
 	 * @param key       The input key to fetch, possibly nested
 	 *
-	 * @return         The fetched object, possibly empty array if key is invalid?
+	 * @return          The fetched object, possibly empty array if key is invalid?
 	 **/
 	public static List<String> splitObjectPath(String key, List<String> ret) {
 		// Return array list of string
