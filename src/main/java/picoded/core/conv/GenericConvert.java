@@ -258,6 +258,34 @@ public class GenericConvert extends GenericConvertStandard {
 	
 	//--------------------------------------------------------------------------------------------------
 	//
+	// Value detach utility function.
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Does a deep cloning of a provided object
+	 * and its value, and returns it.
+	 * 
+	 * @TODO : Proper arbitary aray support?
+	 * 
+	 * @param  input value to detach from
+	 * 
+	 * @return  datached value to return
+	 */
+	static public Object detachValue(Object in) {
+		if (in instanceof byte[]) { //bytearray support
+			byte[] ori = (byte[]) in;
+			byte[] cop = new byte[ori.length];
+			for (int a = 0; a < ori.length; ++a) {
+				cop[a] = ori[a];
+			}
+			return cop;
+		}
+		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
+	}
+	
+	//--------------------------------------------------------------------------------------------------
+	//
 	// NESTED object fetch (related to fully qualified keys handling)
 	//
 	//--------------------------------------------------------------------------------------------------
