@@ -109,17 +109,6 @@ public class NestedObject {
 			return ret;
 		}
 
-		//
-		// @TODO : Detect if object is an instance of
-		// Map, or List, or Set
-		//
-		// If so initialize such an object, and recusively 
-		// do a deepCopy on its children values as its being
-		// "copied" over - this will provide a more resilient
-		// deep copy mechanism. As the current possibly buggy
-		// JSON based deepCopy
-		//
-
 		// Final fallback using JSON conversion
 		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
 	}
@@ -541,44 +530,6 @@ public class NestedObject {
 		}
 	}
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	//--------------------------------------------------------------------------------------------------
 	//
 	// NESTED object fetch (related to fully qualified keys handling)
@@ -753,6 +704,12 @@ public class NestedObject {
 	public static Object fetchNestedObject(Object base, String key) {
 		return fetchNestedObject(base, key, null);
 	}
+	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// Normalize object path, for case insensitive fetchNestedObject calls
+	//
+	//--------------------------------------------------------------------------------------------------
 	
 	/**
 	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
