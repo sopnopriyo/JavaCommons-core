@@ -274,8 +274,8 @@ public class GenericConvert extends GenericConvertStandard {
 	 *
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
-	public static Object fetchObject(Object base, String key, Object fallback) {
-		return NestedObject.fetchObject(base, key, fallback);
+	public static Object getMapOrListValue(Object base, String key, Object fallback) {
+		return NestedObject.getMapOrListValue(base, key, fallback);
 	}
 	
 	/**
@@ -286,8 +286,8 @@ public class GenericConvert extends GenericConvertStandard {
 	 *
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
-	public static Object fetchObject(Object base, String key) {
-		return NestedObject.fetchObject(base, key);
+	public static Object getMapOrListValue(Object base, String key) {
+		return NestedObject.getMapOrListValue(base, key);
 	}
 	
 	/**

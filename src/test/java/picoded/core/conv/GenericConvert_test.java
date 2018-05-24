@@ -296,24 +296,24 @@ public class GenericConvert_test {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void fetchObjectTest() {
-		assertNull(fetchObject(null, null, null));
-		assertEquals("default", fetchObject(null, null, "default"));
+		assertNull(getMapOrListValue(null, null, null));
+		assertEquals("default", getMapOrListValue(null, null, "default"));
 		Map map = new HashMap();
-		assertNull(fetchObject(map, null, null));
+		assertNull(getMapOrListValue(map, null, null));
 		map = new HashMap();
 		map.put("key", "value");
-		assertNull(fetchObject(map, null, null));
-		assertEquals("value", fetchObject(map, "key", null));
+		assertNull(getMapOrListValue(map, null, null));
+		assertEquals("value", getMapOrListValue(map, "key", null));
 		
 		List list = new ArrayList();
-		assertNull(fetchObject(list, null, null));
+		assertNull(getMapOrListValue(list, null, null));
 		list = new ArrayList();
 		list.add("value");
-		assertNull(fetchObject(list, null, null));
-		assertNull("value", fetchObject(list, "key", null));
-		assertEquals("value", fetchObject(list, "0", null));
+		assertNull(getMapOrListValue(list, null, null));
+		assertNull("value", getMapOrListValue(list, "key", null));
+		assertEquals("value", getMapOrListValue(list, "0", null));
 		
-		assertEquals("default", fetchObject("value", "0", "default"));
+		assertEquals("default", getMapOrListValue("value", "0", "default"));
 	}
 	
 	// @Test
@@ -327,23 +327,23 @@ public class GenericConvert_test {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void fetchObjectWithTwoParametersTest() {
-		assertNull(fetchObject(null, null));
+		assertNull(getMapOrListValue(null, null));
 		Map map = new HashMap();
-		assertNull(fetchObject(map, null));
+		assertNull(getMapOrListValue(map, null));
 		map = new HashMap();
 		map.put("key", "value");
-		assertNull(fetchObject(map, null));
-		assertEquals("value", fetchObject(map, "key"));
+		assertNull(getMapOrListValue(map, null));
+		assertEquals("value", getMapOrListValue(map, "key"));
 		
 		List list = new ArrayList();
-		assertNull(fetchObject(list, null));
+		assertNull(getMapOrListValue(list, null));
 		list = new ArrayList();
 		list.add("value");
-		assertNull(fetchObject(list, null));
-		assertNull("value", fetchObject(list, "key"));
-		assertEquals("value", fetchObject(list, "0"));
+		assertNull(getMapOrListValue(list, null));
+		assertNull("value", getMapOrListValue(list, "key"));
+		assertEquals("value", getMapOrListValue(list, "0"));
 		
-		assertNull(fetchObject("value", "0"));
+		assertNull(getMapOrListValue("value", "0"));
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
