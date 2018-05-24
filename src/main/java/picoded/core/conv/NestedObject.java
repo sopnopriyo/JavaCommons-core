@@ -37,30 +37,81 @@ public class NestedObject {
 	 * @return  datached value to return
 	 */
 	static public Object deepCopy(Object in) {
-		if (in instanceof byte[]) { //bytearray support
-			byte[] ori = (byte[]) in;
-			byte[] cop = new byte[ori.length];
-			for (int a = 0; a < ori.length; ++a) {
-				cop[a] = ori[a];
+
+		// Null clones to null
+		if( in == null ) {
+			return null;
+		}
+
+		// Array cloning
+		if( in.getClass().isArray() ) {
+
+			// Clone as a primitive array if possible, 
+			// and return the result if its valid
+			//
+			// This only support the following : 
+			// int[], long[], short[], float[], double[], byte[], char[]
+			Object ret = ArrayConv.clonePrimitiveArray(in);
+			if( ret != null ) {
+				return ret;
 			}
-			return cop;
+
+			//
+			// At this point array is assumed to be an Object[]
+			// and is cloned as such.
+			//
+			Object[] source = (Object[])in;
+			Object[] result = new Object[source.length];
+			for( int i=0; i<source.length; ++i) {
+				result[i] = deepCopy(source[i]);
+			}
+		}
+
+		// Set conversion
+		if( in instanceof Set ) {
+			// Return hashset
+			HashSet<Object> ret = new HashSet<>();
+
+			// For each value in original set
+			for (Object item : ((Set<Object>)in) ) {
+				ret.add(item);
+			}
+
+			// Return the cloned set
+			return ret;
+		}
+
+		// List conversion
+		if( in instanceof List ) {
+			// Return List
+			ArrayList<Object> ret = new ArrayList<>();
+
+			// For each item in list
+			for(Object item : ((List<Object>)in) ) {
+				ret.add(item);
+			}
+
+			// Return the cloned list
+			return ret;
+		}
+
+		// Map conversion
+		if( in instanceof Map ) {
+			// Return map
+			Map<Object,Object> ret = new HashMap<>();
+
+			// For each item in map
+			for( Map.Entry<Object,Object> pair : ((Map<Object,Object>)in).entrySet() ) {
+				ret.put( pair.getKey(), pair.getValue() );
+			}
+
+			// Return the cloned map
+			return ret;
 		}
 
 		//
-		// @TODO : Support primitive arrays, as they are not Object[] arrays
-		//
-		// + int[]
-		// + long[]
-		// + short[]
-		// + float[]
-		// + double[]
-		// + byte[]
-		// + char[]
-		//
-		
-		//
 		// @TODO : Detect if object is an instance of
-		// Map, or List, or Set, or Object[]. 
+		// Map, or List, or Set
 		//
 		// If so initialize such an object, and recusively 
 		// do a deepCopy on its children values as its being
@@ -69,6 +120,7 @@ public class NestedObject {
 		// JSON based deepCopy
 		//
 
+		// Final fallback using JSON conversion
 		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
 	}
 
@@ -386,31 +438,6 @@ public class NestedObject {
 		return splitObjectPath(rightPart, ret);
 	}
 	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Fully Qualified Name unpacking
@@ -447,10 +474,10 @@ public class NestedObject {
 	@SuppressWarnings("unchecked")
 	public static <K, V> void unpackFullyQualifiedNameKeys(Map<K, V> inMap) {
 		
-		/**
-		 * Normalize keyset, as modifications will occur
-		 * We do not want a modification access exception
-		 **/
+		//
+		// Normalize keyset, as modifications will occur
+		// We do not want a modification access exception
+		//
 		Set<K> keys = new HashSet<K>(inMap.keySet());
 		for (K key : keys) {
 			
