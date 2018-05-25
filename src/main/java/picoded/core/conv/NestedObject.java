@@ -115,173 +115,6 @@ public class NestedObject {
 
 	//--------------------------------------------------------------------------------------------------
 	//
-	// Map / List manipulation utility function
-	//
-	//--------------------------------------------------------------------------------------------------
-	
-	/**
-	 * Set a key-value pair inside Map, or List. This is used for convinence, when the map/list object type is unknown.
-	 * 
-	 * For example the following are valid varients
-	 * 
-	 * ```
-	 * // Typically how you set a map, or list values
-	 * mapObj.set("hello","world");
-	 * listObj.add("something");
-	 * listObj.set(0, "overwrite-value");
-	 * 
-	 * // Alternatively with setMapOrListValue
-	 * setMapOrListValue(mapObj, "hello", "world");
-	 * setMapOrListValue(listObj, "1", "something");
-	 * setMapOrListValue(listObj, "0", "overwrite-value");
-	 * ```
-	 *
-	 * @param  inObj, of Map / List to add to
-	 * @param  key value as a string
-	 * @param  value to insert
-	 *
-	 * @return  The Map, or List object, in its converted form (relevent if it was originally a string JSON)
-	 **/
-	@SuppressWarnings("unchecked")
-	public static Object setMapOrListValue(Object inObj, String key, Object value) {
-		
-		// Start by setting the value
-		// in optimistic ideal scenerios
-		//------------------------------------------------
-		
-		// Try converting to a map
-		if (inObj instanceof Map) {
-			// Map found, converting and inserting
-			Map<String, Object> inMap = (Map<String, Object>) inObj;
-			inMap.put(key, value);
-			return inMap;
-		}
-		
-		// Try converting to a list
-		if (inObj instanceof List) {
-			// List found, converting and inserting
-			List<Object> inList = (List<Object>) inObj;
-			
-			// Convert key
-			int idx = GenericConvert.toInt(key, -1);
-			
-			// Invalid key exception
-			if (idx < 0) {
-				throw new RuntimeException("Unexpected key to insert to List : " + key);
-			}
-			
-			if (idx >= inList.size()) {
-				inList.add(value);
-			} else {
-				inList.set(idx, value);
-			}
-			return inList;
-		}
-		
-		// Ok sadly, the optimistic methods failed =(
-		//------------------------------------------------
-		
-		// Time to go aggressive, and try again as a map
-		Map<String, Object> tryMap = GenericConvert.toStringMap(inObj, null);
-		if (tryMap != null) {
-			return setMapOrListValue(tryMap, key, value);
-		}
-		
-		// or as a list
-		List<Object> tryList = GenericConvert.toList(inObj, null);
-		if (tryList != null) {
-			return setMapOrListValue(tryList, key, value);
-		}
-		
-		// Q_Q all failed, time to bail
-		//------------------------------------------------
-		throw new RuntimeException("Unexpected object to set value to (neither map, nor list)");
-	}
-	
-	/**
-	 * Gets an Object from either a Map, or a List. By attempting to use the provided key.
-	 *
-	 * This attempts to use the key AS IT IS. Only converting it to an int for List if needed.
-	 * It does not do recursive fetch, if that is needed see `fetchNestedObject`
-	 *
-	 * For example the following are valid varients
-	 * 
-	 * ```
-	 * // Typically how you set a map, or list values
-	 * mapObj.get("hello");
-	 * listObj.get(1);
-	 * listObj.get(0);
-	 * 
-	 * // Alternatively with getMapOrListValue
-	 * getMapOrListValue(mapObj, "hello");
-	 * getMapOrListValue(listObj, "1");
-	 * getMapOrListValue(listObj, "0");
-	 * ```
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 * @param fallback  The fallback default (if not convertable)
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	@SuppressWarnings("unchecked")
-	public static Object getMapOrListValue(Object base, String key, Object fallback) {
-		
-		// Base to map / list conversion
-		Map<String, Object> baseMap = null;
-		List<Object> baseList = null;
-		
-		// Convert base object to either a list or map
-		Object obj = GenericConvert.resolvedListOrMap(base);
-		if (obj != null) {
-			if (obj instanceof Map) {
-				baseMap = (Map<String, Object>) obj;
-			} else {
-				baseList = (List<Object>) obj;
-			}
-		}
-		
-		// Fail on getting base item
-		if (baseMap == null && baseList == null) {
-			return fallback;
-		}
-		
-		// Reuse vars?
-		Object ret = null;
-		
-		// Full key fetch
-		if (baseMap != null) {
-			ret = baseMap.get(key);
-		} else { // if( baseList != null ) {
-			int idxPos = GenericConvert.toInt(key, -1);
-			if (idxPos >= 0 && idxPos < baseList.size()) {
-				ret = baseList.get(idxPos);
-			}
-		}
-		
-		// Full key found
-		if (ret != null) {
-			return ret;
-		}
-		
-		// Fallback
-		return fallback;
-	}
-	
-	/**
-	 * Default Null fallback, for `getMapOrListValue(base, key, fallback)`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object getMapOrListValue(Object base, String key) {
-		return getMapOrListValue(base, key, null);
-	}
-	
-	//--------------------------------------------------------------------------------------------------
-	//
 	// Key name manipulation and handling
 	//
 	//--------------------------------------------------------------------------------------------------
@@ -495,12 +328,12 @@ public class NestedObject {
 					
 					// If last index. Time to finalize the object
 					if (lastIndex == i) {
-						setMapOrListValue(base, keyItem, value);
+						MapOrListUtil.setValue(base, keyItem, value);
 						break; // End key diving loop
 					}
 					
 					// Or get the next base object
-					Object newBase = getMapOrListValue(base, keyItem, null);
+					Object newBase = MapOrListUtil.getValue(base, keyItem, null);
 					
 					// If base is null, generate it
 					if (newBase == null) {
@@ -517,7 +350,7 @@ public class NestedObject {
 							newBase = new HashMap<String, Object>();
 						}
 						
-						setMapOrListValue(base, keyItem, newBase);
+						MapOrListUtil.setValue(base, keyItem, newBase);
 					}
 					
 					// Go one depth deeper, and try next layer
@@ -559,7 +392,9 @@ public class NestedObject {
 		}
 		
 		// Full key fetching found -> if found it is returned =)
-		Object ret = getMapOrListValue(base, key, null);
+		//
+		// For example tje
+		Object ret = MapOrListUtil.getValue(base, key, null);
 		if (ret != null) {
 			return ret;
 		}
@@ -627,7 +462,7 @@ public class NestedObject {
 		String bracketKey = key.substring(1, rightBracketIndex).trim();
 		
 		// Fetch [sub object]
-		Object subObject = getMapOrListValue(base, bracketKey, null);
+		Object subObject = MapOrListUtil.getValue(base, bracketKey, null);
 		
 		// No sub object, cant go a step down, fallback
 		//
@@ -664,7 +499,7 @@ public class NestedObject {
 		String rightKey = key.substring(dotIndex + 1); //right
 		
 		// Fetch left
-		Object left = getMapOrListValue(base, leftKey, null);
+		Object left = MapOrListUtil.getValue(base, leftKey, null);
 		
 		// Time to continue, recusively fetching
 		return fetchNestedObject(left, rightKey, fallback);
@@ -687,7 +522,7 @@ public class NestedObject {
 		String rightKey = key.substring(leftBracketIndex); //[right]
 		
 		// Fetch left
-		Object left = getMapOrListValue(base, leftKey, null);
+		Object left = MapOrListUtil.getValue(base, leftKey, null);
 		
 		// Time to continue, recusively fetching [right]
 		return fetchNestedObject(left, rightKey, fallback);
@@ -782,7 +617,7 @@ public class NestedObject {
 		
 		String currentKey = splitKeyPath.get(0);
 		List<String> nextKeyPathSet = splitKeyPath.subList(1, splitKeyPath.size());
-		Object subObject = getMapOrListValue(base, currentKey);
+		Object subObject = MapOrListUtil.getValue(base, currentKey);
 		
 		// Failed fetch with currentKey
 		if (subObject == null) {
