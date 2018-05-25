@@ -291,7 +291,7 @@ public class NestedObject {
 	 * 
 	 * For example `enter[into].the.breach[0]` becomes a string list of `["enter", "into", "the", "breach", "0"]`
 	 *
-	 * @param key       The input key to fetch, possibly nested
+	 * @param key      The input key to fetch, possibly nested
 	 *
 	 * @return         The fetched object, possibly empty array if key is invalid?
 	 **/
@@ -541,22 +541,22 @@ public class NestedObject {
 	 * That could very well be, a map inside a list, inside a map, inside a .....
 	 *
 	 * Note that at each iteration step, it attempts to do a FULL key match first,
-	 * before the next iteration depth
+	 * before the next iteration depth, in various combinations
 	 *
-	 * @param base 		Map / List to manipulate from
-	 * @param key		The input key to fetch, possibly nested
-	 * @param fallback	The fallback default (if not convertable)
-	 * @return			The fetched object, always possible unless fallbck null
+	 * @param base      Map / List to manipulate from
+	 * @param key       The input key to fetch, possibly nested
+	 * @param fallback  The fallback default (if not convertable)
+	 * @return  The fetched object, always possible unless fallbck null
 	 */
 	public static Object fetchNestedObject(Object base, String key, Object fallback) {
 		
-		// Invalid base -> null, or not ( map OR list ) -> fallback
+		// Invalid base -> null, 
+		// or not ( map OR list ) -> fallback
+		//
+		// As its pretty much impossible to get any "nested" object
 		if (base == null || !((base instanceof Map) || (base instanceof List))) {
 			return fallback;
 		}
-		
-		// Reuse ret object
-		//Object ret;
 		
 		// Full key fetching found -> if found it is returned =)
 		Object ret = getMapOrListValue(base, key, null);
@@ -614,8 +614,8 @@ public class NestedObject {
 	 *
 	 * @param base      Map / List to manipulate from
 	 * @param key       The input key to fetch, possibly nested
-	 * @param fallback   The fallback default (if not convertable)
-	 * @return         The fetched object, always possible unless fallbck null
+	 * @param fallback  The fallback default (if not convertable)
+	 * @return  The fetched object, always possible unless fallbck null
 	 **/
 	protected static Object fetchNestedObject_key_startsWithLeftBracket(Object base, String key,
 		Object fallback) {
@@ -652,10 +652,10 @@ public class NestedObject {
 	 *
 	 * @param base      Map / List to manipulate from
 	 * @param key       The input key to fetch, possibly nested
-	 * @param fallback   The fallback default (if not convertable)
-	 * @param dotIndex  dot index position in the key to process
+	 * @param fallback  The fallback default (if not convertable)
+	 * @param dotIndex  Dot index position in the key to process
 	 *
-	 * @return         The fetched object, always possible unless fallbck null
+	 * @return  The fetched object, always possible unless fallbck null
 	 **/
 	protected static Object fetchNestedObject_key_withDotIndex(Object base, String key,
 		Object fallback, int dotIndex) {
@@ -675,7 +675,7 @@ public class NestedObject {
 	 *
 	 * @param base               Map / List to manipulate from
 	 * @param key                The input key to fetch, possibly nested
-	 * @param fallback            The fallback default (if not convertable)
+	 * @param fallback           The fallback default (if not convertable)
 	 * @param leftBracketIndex   Left bracket index position in the key to process
 	 *
 	 * @return         The fetched object, always possible unless fallbck null
@@ -696,8 +696,8 @@ public class NestedObject {
 	/**
 	 * Default Null fallback, for `fetchNestedObject(base, key, fallback)`
 	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
+	 * @param base     Map / List to manipulate from
+	 * @param key      The input key to fetch, possibly nested
 	 *
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
@@ -714,10 +714,10 @@ public class NestedObject {
 	/**
 	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
 	 *
-	 * @param base      Map / List to manipulate from
+	 * @param base  Map / List to manipulate from
 	 * @param key   The input key to fetch, possibly nested
 	 *
-	 * @return         The normalized key
+	 * @return  The normalized key
 	 **/
 	public static String normalizeObjectPath(Object base, String key) {
 		return normalizeObjectPath(base, splitObjectPath(key, null), null).toString();
@@ -726,13 +726,13 @@ public class NestedObject {
 	/**
 	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
 	 *
-	 * @param base			Map / List to manipulate from
-	 * @param splitKeyPath	split Key Path
-	 * @param res			String with existing value if available
-	 * @return         		The normalized key
+	 * @param base          Map / List to manipulate from
+	 * @param splitKeyPath  split Key Path
+	 * @param res           String with existing value if available
+	 * @return The normalized key
 	 */
 	@SuppressWarnings("unchecked")
-	public static StringBuilder normalizeObjectPath(Object base, List<String> splitKeyPath,
+	protected static StringBuilder normalizeObjectPath(Object base, List<String> splitKeyPath,
 		StringBuilder res) {
 		
 		//
