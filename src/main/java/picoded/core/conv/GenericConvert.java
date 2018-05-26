@@ -326,7 +326,7 @@ public class GenericConvert extends GenericConvertStandard {
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
 	public static Object fetchNestedObject(Object base, String key, Object fallback) {
-		return NestedObject.fetchNestedObject(base, key, fallback);
+		return NestedObjectFetch.fetchObject(base, key, fallback);
 	}
 	
 	/**
@@ -338,7 +338,7 @@ public class GenericConvert extends GenericConvertStandard {
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
 	public static Object fetchNestedObject(Object base, String key) {
-		return NestedObject.fetchNestedObject(base, key);
+		return NestedObjectFetch.fetchObject(base, key);
 	}
 	
 	/**

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 import picoded.core.conv.GenericConvert;
-import picoded.core.conv.NestedObject;
+import picoded.core.conv.NestedObjectFetch;
 
 /**
  * Internal representation of a simple MapReduceBase class,
@@ -42,7 +42,7 @@ public abstract class MapReduceBase {
 	public void map(Object inmap, String key) {
 		
 		// Val object extraction
-		Object valObj = NestedObject.fetchNestedObject(inmap, key);
+		Object valObj = NestedObjectFetch.fetchObject(inmap, key);
 
 		// Null mapping
 		if( valObj == null ) {

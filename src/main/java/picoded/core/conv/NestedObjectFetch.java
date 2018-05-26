@@ -175,6 +175,39 @@ public class NestedObjectFetch {
 			}
 		}
 
+		//-----------------------------------------------------------------------
+		//
+		//  Common mistakes workarounds 
+		//
+		//-----------------------------------------------------------------------
+		
+		// Try again with trimmed object path
+		// ` why ` -> `why`
+		String objectPathTrim = objectPath.trim();
+		if(!objectPath.equals(objectPathTrim)) {
+			return fetchObject(base, objectPathTrim, fallback);
+		}
+
+		// Trim off usesless starting ".dots", and try again
+		// `.doh` -> `doh`
+		if(objectPath.startsWith(".")) {
+			return fetchObject(base, objectPath.substring(1), fallback);
+		}
+
+		// Trim off usesless wrapping brackets
+		// `[wrap][it]` -> `wrap[it]`
+		if(objectPath.startsWith("[")) {
+			int closingBracket = objectPath.indexOf("]",1);
+			String unwrappedPath = objectPath.substring(1,closingBracket)+objectPath.substring(closingBracket+1);
+			return fetchObject(base, unwrappedPath, fallback);
+		}
+
+		//-----------------------------------------------------------------------
+		//
+		//  Final fallback
+		//
+		//-----------------------------------------------------------------------
+
 		// All else failed, including full key fetch -> fallback
 		return fallback;
 	}
