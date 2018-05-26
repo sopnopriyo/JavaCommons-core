@@ -14,6 +14,9 @@ import org.junit.Test;
 
 import picoded.core.struct.template.StandardArrayList_test;
 
+//
+// @TODO : assertNull is not a proper validation test - to do beyond that
+//
 public class GenericConvertList_test extends StandardArrayList_test {
 	
 	class GenericConvertTest<E> implements GenericConvertList<E> {
@@ -123,6 +126,10 @@ public class GenericConvertList_test extends StandardArrayList_test {
 		assertEquals("me", proxyList.getSubtle(1));
 	}
 	
+	//
+	// GET conversion test
+	//
+
 	@Test
 	public void getStringTest() {
 		proxyList.add("value");
@@ -266,13 +273,6 @@ public class GenericConvertList_test extends StandardArrayList_test {
 	}
 	
 	@Test
-	public void fetchObject2ParamTest() {
-		proxyList.add("value");
-		proxyList.add("me");
-		assertEquals("me", proxyList.fetchObject("1", "ok"));
-	}
-	
-	@Test
 	public void getGenericConvertStringMapTest() {
 		proxyList.add("value");
 		proxyList.add("ok");
@@ -336,13 +336,6 @@ public class GenericConvertList_test extends StandardArrayList_test {
 	}
 	
 	@Test
-	public void fetchObjectTest() {
-		proxyList.add("value");
-		proxyList.add("me");
-		assertEquals("me", proxyList.fetchObject("1"));
-	}
-	
-	@Test
 	public void getLong2ParamTest() {
 		proxyList.add("value");
 		proxyList.add("1");
@@ -354,5 +347,242 @@ public class GenericConvertList_test extends StandardArrayList_test {
 		proxyList.add("value");
 		proxyList.add("me");
 		assertEquals(-5l, proxyList.getLong(1, -5l));
+	}
+
+	//
+	// FETCH conversion test
+	//
+
+	@Test
+	public void fetchStringTest() {
+		proxyList.add("value");
+		proxyList.add("me");
+		assertEquals("me", proxyList.fetchString("1"));
+	}
+	
+	@Test
+	public void fetchString2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertEquals("ok", proxyList.fetchString("1", "ok"));
+	}
+	
+	@Test
+	public void fetchBoolean2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("false");
+		assertEquals(false, proxyList.fetchBoolean("1", true));
+	}
+	
+	@Test
+	public void fetchNumberTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(BigDecimal.valueOf(1), proxyList.fetchNumber("1"));
+	}
+	
+	@Test
+	public void fetchNumber2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(BigDecimal.valueOf(1), proxyList.fetchNumber("1", -1));
+	}
+	
+	@Test
+	public void fetchIntTest() {
+		assertEquals(0, proxyList.fetchInt("1"));
+	}
+	
+	@Test
+	public void fetchInt2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(1, proxyList.fetchInt("1", -1));
+	}
+	
+	@Test
+	public void fetchLongTest() {
+		assertEquals(0, proxyList.fetchLong("1"));
+	}
+	
+	@Test
+	public void fetchFloatTest() {
+		assertEquals(0, proxyList.fetchFloat("1"), 0.01);
+	}
+	
+	@Test
+	public void fetchDoubleTest() {
+		assertEquals(0, proxyList.fetchDouble("1"), 0.01);
+	}
+	
+	@Test
+	public void fetchDouble2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(1.0, proxyList.fetchDouble("1", -1l), 0.01);
+	}
+	
+	@Test
+	public void fetchByteTest() {
+		assertEquals(0, proxyList.fetchByte("1"));
+	}
+	
+	@Test
+	public void fetchByte2ParamTest() {
+		byte temp = 2;
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(1, proxyList.fetchByte("1", temp));
+	}
+	
+	@Test
+	public void fetchShortTest() {
+		assertEquals(0, proxyList.fetchShort("1"));
+	}
+	
+	@Test
+	public void fetchShort2ParamTest() {
+		short temp = 2;
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(1, proxyList.fetchShort("1", temp));
+	}
+	
+	@Test
+	public void fetchUUIDTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertNull(proxyList.fetchUUID("1"));
+	}
+	
+	@Test
+	public void fetchUUID2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchUUID("1", "ok"));
+	}
+	
+	@Test
+	public void fetchGUIDTest() {
+		proxyList.add("value");
+		proxyList.add("123456789o123456789o12");
+		assertEquals("123456789o123456789o12", proxyList.fetchGUID("1"));
+	}
+	
+	@Test
+	public void fetchObjectListTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertNull(proxyList.fetchObjectList("1"));
+	}
+	
+	@Test
+	public void fetchStringArray2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchStringArray("1", "ok"));
+	}
+	
+	@Test
+	public void fetchObjectArrayTest() {
+		assertNull(proxyList.fetchObjectArray("1"));
+	}
+	
+	@Test
+	public void fetchObjectArray2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchObjectArray("1", "ok"));
+	}
+	
+	@Test
+	public void fetchObject2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("me");
+		assertEquals("me", proxyList.fetchObject("1", "ok"));
+	}
+	
+	@Test
+	public void fetchGenericConvertStringMapTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchGenericConvertStringMap("1"));
+	}
+	
+	@Test
+	public void fetchGenericConvertStringMap2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchGenericConvertStringMap("1", "ok"));
+	}
+	
+	@Test
+	public void fetchGenericConvertListTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchGenericConvertList("0"));
+	}
+	
+	@Test
+	public void fetchGenericConvertListSecondTest() {
+		proxyList.add("value");
+		assertNull(proxyList.fetchGenericConvertList("1"));
+	}
+	
+	@Test
+	public void fetchGenericConvertList2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertNull(proxyList.fetchGenericConvertList("1", "ok"));
+	}
+	
+	@Test
+	public void fetchStringArrayTest() {
+		proxyList.add("value");
+		proxyList.add("me");
+		assertNull(proxyList.fetchStringArray("1"));
+	}
+	
+	@Test
+	public void fetchGUID2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertEquals("123456789o123456789o12", proxyList.fetchGUID("1", "123456789o123456789o12"));
+	}
+	
+	@Test
+	public void fetchFloat2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertEquals(-1.0, proxyList.fetchFloat("1", -1f), 0.01);
+	}
+	
+	@Test
+	public void fetchObjectList2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("ok");
+		assertArrayEquals(new Object[] { "1", 1 }, proxyList
+			.getObjectList(1, new Object[] { "1", 1 }).toArray());
+	}
+	
+	@Test
+	public void fetchObjectTest() {
+		proxyList.add("value");
+		proxyList.add("me");
+		assertEquals("me", proxyList.fetchObject("1"));
+	}
+	
+	@Test
+	public void fetchLong2ParamTest() {
+		proxyList.add("value");
+		proxyList.add("1");
+		assertEquals(1, proxyList.fetchLong("1", -1l));
+	}
+	
+	@Test
+	public void fetchLong2ParamAlternateTest() {
+		proxyList.add("value");
+		proxyList.add("me");
+		assertEquals(-5l, proxyList.fetchLong("1", -5l));
 	}
 }

@@ -24,6 +24,12 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 		return ProxyGenericConvertList.ensure(inList);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// basic GET and FETCH
+	//
+	//--------------------------------------------------------------------------------------------------
+
 	// Silent varient of get without OUT OF BOUND exception
 	//--------------------------------------------------------------------------------------------------
 	
@@ -38,6 +44,42 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 		return null;
 	}
 	
+	// NESTED object fetch
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Gets an object from the List,
+	 * That could very well be, a list inside a list, inside a map, inside a .....
+	 *
+	 * Note that at each iteration step, it attempts to do a FULL index match first,
+	 * before the next iteration depth
+	 *
+	 * @param index       The input index to fetch, possibly nested
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The fetched object, always possible unless fallbck null
+	 **/
+	default Object fetchObject(String index, Object fallbck) {
+		return NestedObjectFetch.fetchObject(this, index, fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, for `fetchObject(index,fallback)`
+	 *
+	 * @param index       The input index to fetch, possibly nested
+	 *
+	 * @return         The fetched object, always possible unless fallbck null
+	 **/
+	default Object fetchObject(String index) {
+		return fetchObject(index, null);
+	}
+	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// GET operations with conversion
+	//
+	//--------------------------------------------------------------------------------------------------
+
 	// to string conversion
 	//--------------------------------------------------------------------------------------------------
 	
@@ -396,36 +438,6 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 		return GenericConvert.toObjectArray(index);
 	}
 	
-	// NESTED object fetch (related to fully qualified indexs handling)
-	//--------------------------------------------------------------------------------------------------
-	
-	/**
-	 * Gets an object from the List,
-	 * That could very well be, a list inside a list, inside a map, inside a .....
-	 *
-	 * Note that at each iteration step, it attempts to do a FULL index match first,
-	 * before the next iteration depth
-	 *
-	 * @param index       The input index to fetch, possibly nested
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	default Object fetchObject(String index, Object fallbck) {
-		return NestedObjectFetch.fetchObject(this, index, fallbck);
-	}
-	
-	/**
-	 * Default Null fallback, for `fetchObject(index,fallback)`
-	 *
-	 * @param index       The input index to fetch, possibly nested
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	default Object fetchObject(String index) {
-		return fetchObject(index, null);
-	}
-	
 	// Generic string map
 	//--------------------------------------------------------------------------------------------------
 	
@@ -477,5 +489,422 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 	 **/
 	default <V> GenericConvertList<V> getGenericConvertList(int index) {
 		return GenericConvert.toGenericConvertList(getSubtle(index));
+	}
+
+	//--------------------------------------------------------------------------------------------------
+	//
+	// FETCH operations with conversion
+	//
+	//--------------------------------------------------------------------------------------------------
+
+	// to string conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable, aka null)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default String fetchString(String index, String fallbck) {
+		return GenericConvert.toString(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default null fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default String fetchString(String index) {
+		return GenericConvert.toString(fetchObject(index));
+	}
+	
+	// to boolean conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To boolean conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default boolean fetchBoolean(String index, boolean fallbck) {
+		return GenericConvert.toBoolean(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default boolean fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string to boolean, always possible
+	 **/
+	default boolean fetchBoolean(String index) {
+		return GenericConvert.toBoolean(fetchObject(index));
+	}
+	
+	// to Number conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To Number conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default Number fetchNumber(String index, Number fallbck) {
+		return GenericConvert.toNumber(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Number fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default Number fetchNumber(String index) {
+		return GenericConvert.toNumber(fetchObject(index));
+	}
+	
+	// to int conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To int conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default int fetchInt(String index, int fallbck) {
+		return GenericConvert.toInt(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default int fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default int fetchInt(String index) {
+		return GenericConvert.toInt(fetchObject(index));
+	}
+	
+	// to long conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To long conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default long fetchLong(String index, long fallbck) {
+		return GenericConvert.toLong(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default long fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default long fetchLong(String index) {
+		return GenericConvert.toLong(fetchObject(index));
+	}
+	
+	// to float conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To float conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default float fetchFloat(String index, float fallbck) {
+		return GenericConvert.toFloat(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default float fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default float fetchFloat(String index) {
+		return GenericConvert.toFloat(fetchObject(index));
+	}
+	
+	// to double conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To double conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default double fetchDouble(String index, double fallbck) {
+		return GenericConvert.toDouble(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default float fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default double fetchDouble(String index) {
+		return GenericConvert.toDouble(fetchObject(index));
+	}
+	
+	// to byte conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To byte conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default byte fetchByte(String index, byte fallbck) {
+		return GenericConvert.toByte(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default float fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default byte fetchByte(String index) {
+		return GenericConvert.toByte(fetchObject(index));
+	}
+	
+	// to short conversion
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To short conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default short fetchShort(String index, short fallbck) {
+		return GenericConvert.toShort(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default short fallback, To String conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 *
+	 * @return         The converted string, always possible unless null
+	 **/
+	default short fetchShort(String index) {
+		return GenericConvert.toShort(fetchObject(index));
+	}
+	
+	// to UUID / GUID
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To UUID conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted UUID, always possible unless null
+	 **/
+	default UUID fetchUUID(String index, Object fallbck) {
+		return GenericConvert.toUUID(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To UUID conversion of generic object
+	 *
+	 * @param input     The input value to convert
+	 *
+	 * @return         The converted value
+	 **/
+	default UUID fetchUUID(String index) {
+		return GenericConvert.toUUID(fetchObject(index));
+	}
+	
+	/**
+	 * To GUID conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted UUID, always possible unless null
+	 **/
+	default String fetchGUID(String index, Object fallbck) {
+		return GenericConvert.toGUID(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To GUID conversion of generic object
+	 *
+	 * @param input     The input value to convert
+	 *
+	 * @return         The converted value
+	 **/
+	default String fetchGUID(String index) {
+		return GenericConvert.toGUID(fetchObject(index));
+	}
+	
+	/**
+	 * To List<Object> conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted Object[], always possible unless null
+	 **/
+	default List<Object> fetchObjectList(String index, Object fallbck) {
+		return GenericConvert.toList(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To List<Object> conversion of generic object
+	 *
+	 * @param input     The input value to convert
+	 *
+	 * @default         The converted value
+	 **/
+	default List<Object> fetchObjectList(String index) {
+		return GenericConvert.toList(fetchObject(index));
+	}
+	
+	// to string array
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To String[] conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted String[], always possible unless null
+	 **/
+	default String[] fetchStringArray(String index, Object fallbck) {
+		return GenericConvert.toStringArray(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To String[] conversion of generic object
+	 *
+	 * @param input     The input value to convert
+	 *
+	 * @return         The converted value
+	 **/
+	default String[] fetchStringArray(String index) {
+		return GenericConvert.toStringArray(fetchObject(index));
+	}
+	
+	// to object array
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To Object[] conversion of generic object
+	 *
+	 * @param index       The input value index to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted Object[], always possible unless null
+	 **/
+	default Object[] fetchObjectArray(String index, Object fallbck) {
+		return GenericConvert.toObjectArray(index, fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To Object[] conversion of generic object
+	 *
+	 * @param input     The input value to convert
+	 *
+	 * @default         The converted value
+	 **/
+	default Object[] fetchObjectArray(String index) {
+		return GenericConvert.toObjectArray(index);
+	}
+	
+	// Generic string map
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To String Map conversion of generic object
+	 *
+	 * @param key       The input value key to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted Map if possible, else null
+	 **/
+	default <K extends String, V> GenericConvertMap<K, V> fetchGenericConvertStringMap(String index,
+		Object fallbck) {
+		return GenericConvert.toGenericConvertStringMap(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To String Map conversion of generic object
+	 *
+	 * @param key       The input value key to convert
+	 *
+	 * @return         The converted Map if possible, else null
+	 **/
+	default <K extends String, V> GenericConvertMap<K, V> fetchGenericConvertStringMap(String index) {
+		return GenericConvert.toGenericConvertStringMap(fetchObject(index));
+	}
+	
+	// to array
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
+	 * To String Map conversion of generic object
+	 *
+	 * @param key       The input value key to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted Map if possible, else null
+	 **/
+	default <V> GenericConvertList<V> fetchGenericConvertList(String index, Object fallbck) {
+		return GenericConvert.toGenericConvertList(fetchObject(index), fallbck);
+	}
+	
+	/**
+	 * Default Null fallback, To String Map conversion of generic object
+	 *
+	 * @param key       The input value key to convert
+	 *
+	 * @return         The converted Map if possible, else null
+	 **/
+	default <V> GenericConvertList<V> fetchGenericConvertList(String index) {
+		return GenericConvert.toGenericConvertList(fetchObject(index));
 	}
 }
