@@ -2,6 +2,8 @@ package picoded.core.conv;
 
 import java.util.*;
 
+import picoded.core.exception.ExceptionMessage;
+
 /**
  * Utility class and function, which handles the extraction of nested objects, 
  * in a Map/List using single key strings.
@@ -28,7 +30,7 @@ public class NestedObjectFetch {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected NestedObjectFetch() {
-		throw new IllegalAccessError("Utility class");
+		throw new IllegalAccessError( ExceptionMessage.staticClassConstructor );
 	}
 	
 	//--------------------------------------------------------------------------------------------------

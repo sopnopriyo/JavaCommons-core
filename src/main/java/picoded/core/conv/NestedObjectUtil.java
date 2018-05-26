@@ -2,16 +2,19 @@ package picoded.core.conv;
 
 import java.util.*;
 
+import picoded.core.exception.ExceptionMessage;
+
 /**
- * Handles the manipulation of nested objects, such as a Map/List.
+ * Utility class which handles various manipulation of nested objects, 
+ * such as a Map/List.
  **/
-public class NestedObject {
+public class NestedObjectUtil {
 	
 	/**
 	 * Invalid constructor (throws exception)
 	 **/
-	protected NestedObject() {
-		throw new IllegalAccessError("Utility class");
+	protected NestedObjectUtil() {
+		throw new IllegalAccessError( ExceptionMessage.staticClassConstructor );
 	}
 	
 	//--------------------------------------------------------------------------------------------------
@@ -158,7 +161,7 @@ public class NestedObject {
 			
 			// Get and process the key path
 			String keyStr = GenericConvert.toString(key, "");
-			String[] keyPath = GenericConvert.splitObjectPath(keyStr);
+			String[] keyPath = NestedObjectFetch.splitObjectPath(keyStr);
 			
 			// Key path is considered "complex" and needs "unpacking"
 			int keyLength = keyPath.length;

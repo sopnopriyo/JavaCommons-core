@@ -8,7 +8,8 @@ import java.util.Set;
 import java.util.HashSet;
 
 import picoded.core.conv.GenericConvert;
-import picoded.core.conv.NestedObject;
+import picoded.core.conv.NestedObjectUtil;
+import picoded.core.conv.NestedObjectFetch;
 import picoded.core.struct.template.UnsupportedDefaultMap;
 
 /**
@@ -525,7 +526,7 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	// But because there is so so many ways this could go wrong, not that it is a bug.
 	// But someone somewhere misunderstanding how it should work. So do test when using this.
 	default void unpackFullyQualifiedNameKeys() {
-		NestedObject.unpackFullyQualifiedNameKeys(this);
+		NestedObjectUtil.unpackFullyQualifiedNameKeys(this);
 	}
 	
 	// NESTED object fetch (related to fully qualified keys handling)
@@ -546,7 +547,7 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	 * @return The fetched object, always possible unless fallbck null
 	 **/
 	default Object getNestedObject(String key, Object fallbck) {
-		return GenericConvert.fetchNestedObject(this, key, fallbck);
+		return NestedObjectFetch.fetchObject(this, key, fallbck);
 	}
 	
 	/**
@@ -559,7 +560,7 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	 **/
 	default Object getNestedObject(String key) {
 		//return getNestedObject(key, null);
-		return GenericConvert.fetchNestedObject(this, key);
+		return NestedObjectFetch.fetchObject(this, key);
 	}
 	
 	// // Does a simple typecast and put conversion

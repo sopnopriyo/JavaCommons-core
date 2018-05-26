@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 
 import picoded.core.conv.GenericConvert;
+import picoded.core.conv.NestedObjectUtil;
+import picoded.core.conv.NestedObjectFetch;
 import picoded.core.struct.template.UnsupportedDefaultList;
 
 /**
@@ -410,7 +412,7 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
 	default Object getNestedObject(String index, Object fallbck) {
-		return GenericConvert.fetchNestedObject(this, index, fallbck);
+		return NestedObjectFetch.fetchObject(this, index, fallbck);
 	}
 	
 	/**
