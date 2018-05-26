@@ -14,6 +14,13 @@ import java.util.*;
  **/
 public class NestedObjectFetch {
 	
+	/**
+	 * Invalid constructor (throws exception)
+	 **/
+	protected NestedObjectFetch() {
+		throw new IllegalAccessError("Utility class");
+	}
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// nested object fetching
@@ -52,7 +59,19 @@ public class NestedObjectFetch {
 	 * at resolving any conflicts nor duplicate values
 	 * 
 	 * Note that at each iteration step, it attempts to do a FULL key match first,
-	 * before the next iteration depth, in various combinations
+	 * before the next iteration depth, in various combinations, as such in event
+	 * of multiple possilbe interpration, it give prefence for full path matches.
+	 * 
+	 * The following matches are done in sequence, till a valid response is given
+	 * 
+	 * - `this.is.1.annoying.deep.search`
+	 * - `this.is.1.annoying.deep`, `search`
+	 * - `this.is.1.annoying`, `deep.search`
+	 * - `this.is.1.annoying`, `deep`, `search`
+	 * - `this.is.1`, `annoying.deep.search`
+	 * - `this.is.1.annoying`, `annoying.deep`, `search`
+	 * - `this.is.1.annoying`, `annoying`, `deep.search`
+	 * - `this.is.1.annoying`, `annoying`, `deep`, `search`
 	 *
 	 * @param base        Map / List to manipulate from
 	 * @param objectPath  The input key to fetch, possibly nested
@@ -122,12 +141,12 @@ public class NestedObjectFetch {
 		//
 		// `this.is.1.annoying.deep.search`
 		// `this.is.1.annoying.deep`, `search`
-		// `this.is.1.annoying` , `deep.search`
-		// `this.is.1.annoying` , `deep`, `search`
-		// `this.is.1` , `annoying.deep.search`
-		// `this.is.1.annoying` , `annoying.deep`, `search`
-		// `this.is.1.annoying` , `annoying`, `deep.search`
-		// `this.is.1.annoying` , `annoying`, `deep`, `search`
+		// `this.is.1.annoying`, `deep.search`
+		// `this.is.1.annoying`, `deep`, `search`
+		// `this.is.1`, `annoying.deep.search`
+		// `this.is.1.annoying`, `annoying.deep`, `search`
+		// `this.is.1.annoying`, `annoying`, `deep.search`
+		// `this.is.1.annoying`, `annoying`, `deep`, `search`
 		//
 		for(int idx=splitPathLength; idx >=0; --idx) {
 
@@ -160,6 +179,18 @@ public class NestedObjectFetch {
 		return fallback;
 	}
 	
+	/**
+	 * Null fallback alternative for fetchObject
+	 *
+	 * @param base        Map / List to manipulate from
+	 * @param objectPath  The input key to fetch, possibly nested
+	 * 
+	 * @return  The fetched object, always possible unless fallbck null
+	 */
+	public static Object fetchObject(Object base, String objectPath) {
+		return fetchObject(base, objectPath, null);
+	}
+
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Key name splitting, used inside NestedObjectFetch
@@ -189,7 +220,7 @@ public class NestedObjectFetch {
 	 * @param key       The object path to split
 	 * @param ret       [Optional] return list, to append the key result into
 	 *
-	 * @return         The split object path, possibly empty array if key is invalid?
+	 * @return          The split object path, possibly empty array if key is invalid?
 	 **/
 	protected static List<String> splitObjectPath(String key, List<String> ret) {
 		// Return array list of string,
