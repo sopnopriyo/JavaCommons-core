@@ -3,7 +3,7 @@ package picoded.core.conv;
 import java.util.*;
 
 /**
- * Handles the manipulation of nested objects, in a Map/List.
+ * Handles the manipulation of nested objects, such as a Map/List.
  **/
 public class NestedObject {
 	
@@ -25,7 +25,7 @@ public class NestedObject {
 	 * and its value, and returns it. 
 	 * 
 	 * The output will be generalized into its respective
-	 * types, of map / list / array (@todo) implmentation.
+	 * types, of map / list / array implmentation.
 	 * 
 	 * This is designed to support common java standard class
 	 * types, such as Map, List, Set, and known primitives

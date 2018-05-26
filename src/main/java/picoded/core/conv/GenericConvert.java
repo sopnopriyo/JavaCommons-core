@@ -183,79 +183,7 @@ public class GenericConvert extends GenericConvertStandard {
 	public static <V> GenericConvertList<V> toGenericConvertList(Object input) {
 		return toGenericConvertList(input, null);
 	}
-	
-	/**
-	 * To Big Decimal
-	 *--------------------------------------------------------------------------------------------------
-	 *
-	 * To BigDecimal conversion of generic object
-	 *
-	 * Performs the following strategies in the following order
-	 *
-	 * - No conversion (if its a BigDecimal)
-	 * - Number to BigDecimal conversion
-	 * - Numeric string to BigDecimal conversion
-	 * - Fallback
-	 *
-	 * @param input     The input value to convert
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The converted value
-	 **/
-	@SuppressWarnings("unchecked")
-	public static BigDecimal toBigDecimal(Object input, Object fallbck) {
-		/**
-		 * Null handling
-		 **/
-		if (input == null) {
-			if (fallbck == null) {
-				return null;
-			}
-			return toBigDecimal(fallbck, null);
-		}
 
-		/**
-		 * If BigDecimal instance
-		 **/
-		if (input instanceof BigDecimal) {
-			return (BigDecimal) input;
-		}
-		
-		/**
-		 * If Number instance
-		 **/
-		if (input instanceof Number) {
-			return new BigDecimal(  ((Number) input).toString() );
-		}
-		
-		if (input instanceof String && ((String) input).length() > 0) {
-			/**
-			 * Numeric string conversion
-			 **/
-			try {
-				return new BigDecimal(input.toString());
-			} catch (Exception e) {
-				return toBigDecimal(fallbck, null);
-			}
-		}
-
-		/**
-		 * Fallback
-		 **/
-		return toBigDecimal(fallbck, null);
-	}
-	
-	/**
-	 * Default Null fallback, To GenericConvert BigDecimal conversion of generic object
-	 *
-	 * @param input     The input value to convert
-	 *
-	 * @return         The converted value
-	 **/
-	public static BigDecimal toBigDecimal(Object input) {
-		return toBigDecimal(input, null);
-	}
-	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// NESTED object fetch (related to fully qualified keys handling)

@@ -11,6 +11,16 @@ import java.util.*;
  * However in a complex nested object structure, this will
  * attempt every possible interpration of the string path,
  * and return the first possible result path.
+ * 
+ * For example
+ * 
+ * ```
+ * Object base = ConvertJSON.toMap("{ \"a\" : { \"b.c\" : [1,2], \"0\":\"haha\" } }");
+ * assertEquals(1, NestedObjectFetch.fetchObject(base, "a.b.c[0]"));
+ * assertEquals(2, NestedObjectFetch.fetchObject(base, "a[b.c][1]"));
+ * assertEquals("haha", NestedObjectFetch.fetchObject(base, "a.0"));
+ * assertEquals("haha", NestedObjectFetch.fetchObject(base, "a[0]"));
+ * ```
  **/
 public class NestedObjectFetch {
 	
