@@ -266,10 +266,10 @@ public class GenericConvertList_test extends StandardArrayList_test {
 	}
 	
 	@Test
-	public void getNestedObject2ParamTest() {
+	public void fetchObject2ParamTest() {
 		proxyList.add("value");
 		proxyList.add("me");
-		assertEquals("me", proxyList.getNestedObject("1", "ok"));
+		assertEquals("me", proxyList.fetchObject("1", "ok"));
 	}
 	
 	@Test
@@ -336,10 +336,10 @@ public class GenericConvertList_test extends StandardArrayList_test {
 	}
 	
 	@Test
-	public void getNestedObjectTest() {
+	public void fetchObjectTest() {
 		proxyList.add("value");
 		proxyList.add("me");
-		assertEquals("me", proxyList.getNestedObject("1"));
+		assertEquals("me", proxyList.fetchObject("1"));
 	}
 	
 	@Test

@@ -567,31 +567,31 @@ public class GenericConvertMap_test extends StandardHashMap_test {
 	}
 	
 	@Test(expected = UnsupportedOperationException.class)
-	public void getNestedObjectTest() {
-		assertEquals("", unsupported.getNestedObject("my_key"));
+	public void fetchObjectTest() {
+		assertEquals("", unsupported.fetchObject("my_key"));
 	}
 	
 	@Test
-	public void getNestedObjectValidTest() {
+	public void fetchObjectValidTest() {
 		proxyMap.put("my_key", "1");
-		assertEquals("1", proxyMap.getNestedObject("my_key"));
+		assertEquals("1", proxyMap.fetchObject("my_key"));
 	}
 	
 	@Test(expected = UnsupportedOperationException.class)
-	public void getNestedObjectOverloadTest() {
-		assertEquals("", unsupported.getNestedObject("my_key", "ok"));
+	public void fetchObjectOverloadTest() {
+		assertEquals("", unsupported.fetchObject("my_key", "ok"));
 	}
 	
 	@Test
-	public void getNestedObjectOverloadValidTest() {
+	public void fetchObjectOverloadValidTest() {
 		proxyMap.put("my_key", "1");
-		assertEquals("1", proxyMap.getNestedObject("my_key", "ok"));
+		assertEquals("1", proxyMap.fetchObject("my_key", "ok"));
 	}
 	
 	@Test
-	public void getNestedObjectOverloadInvalidTest() {
+	public void fetchObjectOverloadInvalidTest() {
 		proxyMap.put("my_key", "1");
-		assertEquals("ok", proxyMap.getNestedObject("my_key1", "ok"));
+		assertEquals("ok", proxyMap.fetchObject("my_key1", "ok"));
 	}
 	
 	//	 @Test(expected = UnsupportedOperationException.class)

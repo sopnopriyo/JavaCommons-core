@@ -411,19 +411,19 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 	 *
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
-	default Object getNestedObject(String index, Object fallbck) {
+	default Object fetchObject(String index, Object fallbck) {
 		return NestedObjectFetch.fetchObject(this, index, fallbck);
 	}
 	
 	/**
-	 * Default Null fallback, for `getNestedObject(index,fallback)`
+	 * Default Null fallback, for `fetchObject(index,fallback)`
 	 *
 	 * @param index       The input index to fetch, possibly nested
 	 *
 	 * @return         The fetched object, always possible unless fallbck null
 	 **/
-	default Object getNestedObject(String index) {
-		return getNestedObject(index, null);
+	default Object fetchObject(String index) {
+		return fetchObject(index, null);
 	}
 	
 	// Generic string map
