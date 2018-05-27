@@ -118,6 +118,48 @@ public class NestedObjectUtil {
 
 	//--------------------------------------------------------------------------------------------------
 	//
+	// Filtered key set handling
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+
+	/**
+	 * First level keySet fetching
+	 * 
+	 * @param  inMap input map to fetch and filter the keyset
+	 * 
+	 * @return  keyset that is filtered to one "level"
+	 **/
+	public static <V> Set<String> filterKeySet(Map<String,V> inMap) {
+		return filterKeySet(inMap.keySet());
+	}
+	
+	/**
+	 * First level keySet fetching
+	 * 
+	 * @param  inSet raw keyset representing a map
+	 * 
+	 * @return  keyset that is filtered to one "level"
+	 **/
+	public static Set<String> filterKeySet(Set<String> inSet) {
+		// Return key set when completed
+		HashSet<String> ret = new HashSet<String>();
+		
+		// Iterate across all the ConfigFile items : and populate the result
+		// with only the first level keys
+		for (String key : inSet) {
+			String keyString = key.toString();
+			String[] splitKeyString = NestedObjectFetch.splitObjectPath(keyString);
+			ret.add(splitKeyString[0]);
+		}
+		
+		// Return compiled keyset
+		return ret;
+	}
+	
+
+	//--------------------------------------------------------------------------------------------------
+	//
 	// Fully Qualified Name unpacking
 	//
 	//--------------------------------------------------------------------------------------------------

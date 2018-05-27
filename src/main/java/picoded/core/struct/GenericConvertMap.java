@@ -86,7 +86,7 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	 **/
 	default Object fetchObject(String key) {
 		//return fetchObject(key, null);
-		return NestedObjectFetch.fetchObject(this, key);
+		return fetchObject(key, null);
 	}
 	
 	//---------------------------------------------------------------------------------------------------
