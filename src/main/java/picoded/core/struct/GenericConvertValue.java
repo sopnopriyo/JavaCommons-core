@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import picoded.core.conv.GenericConvert;
-import picoded.core.conv.NestedObject;
+import picoded.core.conv.NestedObjectUtil;
 import picoded.core.exception.ExceptionMessage;
 import picoded.core.struct.template.UnsupportedDefaultMap;
 

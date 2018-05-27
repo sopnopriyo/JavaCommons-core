@@ -21,6 +21,7 @@ import picoded.core.struct.GenericConvertValue;
  * + Number
  * + UUID
  * + base-58 GUID
+ * + BigDecimal
  *
  * @see GenericConvert
  **/
@@ -33,10 +34,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		throw new IllegalAccessError("Utility class");
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  Internal utils function
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * Internal utils function
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * Converts anything to a list if possible
 	 *
 	 * @return List<?> or null
@@ -105,10 +109,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return baseMap;
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to string conversion
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to string conversion
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To String conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -154,10 +161,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return toString(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to string array
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to string array
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To String array conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -232,10 +242,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return toStringArray(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to string object map
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to string object map
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To String map conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -294,10 +307,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return toStringMap(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to object list
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to object list
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To object list conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -373,10 +389,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return toList(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to object array
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to object array
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To object array conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -434,10 +453,13 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return toObjectArray(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to Number
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to Number
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To Number conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -486,10 +508,89 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		return toNumber(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  To Big Decimal
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * to UUID aka GUID
-	 *--------------------------------------------------------------------------------------------------
 	 *
+	 * To BigDecimal conversion of generic object
+	 *
+	 * Performs the following strategies in the following order
+	 *
+	 * - No conversion (if its a BigDecimal)
+	 * - Number to BigDecimal conversion
+	 * - Numeric string to BigDecimal conversion
+	 * - Fallback
+	 *
+	 * @param input     The input value to convert
+	 * @param fallbck   The fallback default (if not convertable)
+	 *
+	 * @return         The converted value
+	 **/
+	@SuppressWarnings("unchecked")
+	public static BigDecimal toBigDecimal(Object input, Object fallbck) {
+		/**
+		 * Null handling
+		 **/
+		if (input == null) {
+			if (fallbck == null) {
+				return null;
+			}
+			return toBigDecimal(fallbck, null);
+		}
+
+		/**
+		 * If BigDecimal instance
+		 **/
+		if (input instanceof BigDecimal) {
+			return (BigDecimal) input;
+		}
+		
+		/**
+		 * If Number instance
+		 **/
+		if (input instanceof Number) {
+			return new BigDecimal(  ((Number) input).toString() );
+		}
+		
+		if (input instanceof String && ((String) input).length() > 0) {
+			/**
+			 * Numeric string conversion
+			 **/
+			try {
+				return new BigDecimal(input.toString());
+			} catch (Exception e) {
+				return toBigDecimal(fallbck, null);
+			}
+		}
+
+		/**
+		 * Fallback
+		 **/
+		return toBigDecimal(fallbck, null);
+	}
+	
+	/**
+	 * Default Null fallback, To GenericConvert BigDecimal conversion of generic object
+	 *
+	 * @param input     The input value to convert
+	 *
+	 * @return         The converted value
+	 **/
+	public static BigDecimal toBigDecimal(Object input) {
+		return toBigDecimal(input, null);
+	}
+	
+	//--------------------------------------------------------------------------------------------------
+	//
+	//  to UUID aka GUID
+	//
+	//--------------------------------------------------------------------------------------------------
+	
+	/**
 	 * To UUID conversion of generic object
 	 *
 	 * Performs the following strategies in the following order

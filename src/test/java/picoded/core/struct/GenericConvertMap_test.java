@@ -68,6 +68,10 @@ public class GenericConvertMap_test extends StandardHashMap_test {
 		assertNotNull(GenericConvertMap.build(new HashMap<String, String>()));
 	}
 	
+	//
+	// GET based testing
+	//
+
 	@Test(expected = UnsupportedOperationException.class)
 	public void getStringTest() {
 		assertEquals("", unsupported.getString("my_key"));
@@ -566,32 +570,534 @@ public class GenericConvertMap_test extends StandardHashMap_test {
 		assertArrayEquals(strArr, proxyMap.getObjectArray("my_key", strArr));
 	}
 	
+	//
+	// FETCH based testing
+	//
+
 	@Test(expected = UnsupportedOperationException.class)
-	public void getNestedObjectTest() {
-		assertEquals("", unsupported.getNestedObject("my_key"));
+	public void fetchStringTest() {
+		assertEquals("", unsupported.fetchString("my_key"));
 	}
 	
 	@Test
-	public void getNestedObjectValidTest() {
-		proxyMap.put("my_key", "1");
-		assertEquals("1", proxyMap.getNestedObject("my_key"));
+	public void fetchStringValidTest() {
+		proxyMap.put("my_key", "key");
+		assertEquals("key", proxyMap.fetchString("my_key"));
+	}
+	
+	@Test
+	public void fetchStringInvalidTest() {
+		proxyMap.put("my_key", "key");
+		assertEquals(null, proxyMap.fetchString("my_key1"));
 	}
 	
 	@Test(expected = UnsupportedOperationException.class)
-	public void getNestedObjectOverloadTest() {
-		assertEquals("", unsupported.getNestedObject("my_key", "ok"));
+	public void fetchStringOverloadTest() {
+		assertEquals("", unsupported.fetchString("my_key", "my_object"));
 	}
 	
 	@Test
-	public void getNestedObjectOverloadValidTest() {
-		proxyMap.put("my_key", "1");
-		assertEquals("1", proxyMap.getNestedObject("my_key", "ok"));
+	public void fetchStringOverloadValidTest() {
+		proxyMap.put("my_key", "key");
+		assertEquals("key", proxyMap.fetchString("my_key", "my_object"));
 	}
 	
 	@Test
-	public void getNestedObjectOverloadInvalidTest() {
+	public void fetchStringOverloadValidAlternateTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals("my_object", proxyMap.fetchString("my_key", "my_object"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchBooleanTest() {
+		assertEquals("", unsupported.fetchBoolean("my_key"));
+	}
+	
+	@Test
+	public void fetchBooleanValidTest() {
+		proxyMap.put("my_key", "true");
+		assertTrue(proxyMap.fetchBoolean("my_key"));
+	}
+	
+	@Test
+	public void fetchBooleanValidFalseTest() {
+		proxyMap.put("my_key", "my_object");
+		assertFalse(proxyMap.fetchBoolean("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchBooleanOverloadTest() {
+		assertEquals("", unsupported.fetchBoolean("my_key", true));
+	}
+	
+	@Test
+	public void fetchBooleanOverloadValidTest() {
+		proxyMap.put("my_key", "true");
+		assertTrue(proxyMap.fetchBoolean("my_key", true));
+	}
+	
+	@Test
+	public void fetchBooleanOverloadValidTrueTest() {
+		proxyMap.put("my_key", "true");
+		assertTrue(proxyMap.fetchBoolean("my_key", true));
+	}
+	
+	@Test
+	public void fetchBooleanOverloadValidFalseTest() {
+		proxyMap.put("my_key", "my_object");
+		assertFalse(proxyMap.fetchBoolean("my_key", false));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchNumberTest() {
+		assertEquals("", unsupported.fetchNumber("my_key"));
+	}
+	
+	@Test
+	public void fetchNumberValidTest() {
 		proxyMap.put("my_key", "1");
-		assertEquals("ok", proxyMap.getNestedObject("my_key1", "ok"));
+		assertEquals(BigDecimal.valueOf(1), proxyMap.fetchNumber("my_key"));
+	}
+	
+	@Test
+	public void fetchNumberNullTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchNumber("my_key1"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchNumberOverloadTest() {
+		assertEquals("", unsupported.fetchNumber("my_key", 1));
+	}
+	
+	@Test
+	public void fetchNumberOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(BigDecimal.valueOf(1), proxyMap.fetchNumber("my_key", 5));
+	}
+	
+	@Test
+	public void fetchNumberOverloadValidAlternateTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals(5, proxyMap.fetchNumber("my_key1", 5));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchIntTest() {
+		assertEquals("", unsupported.fetchInt("my_key"));
+	}
+	
+	@Test
+	public void fetchIntValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1, proxyMap.fetchInt("my_key"));
+	}
+	
+	@Test
+	public void fetchIntInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(0, proxyMap.fetchInt("my_key1"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchIntOverloadTest() {
+		assertEquals("", unsupported.fetchInt("my_key", 1));
+	}
+	
+	@Test
+	public void fetchIntOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1, proxyMap.fetchInt("my_key", 5));
+	}
+	
+	@Test
+	public void fetchIntOverloadInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(5, proxyMap.fetchInt("my_key1", 5));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchLongTest() {
+		assertEquals("", unsupported.fetchLong("my_key"));
+	}
+	
+	@Test
+	public void fetchLongValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1l, proxyMap.fetchLong("my_key"));
+	}
+	
+	@Test
+	public void fetchLongInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(0l, proxyMap.fetchLong("my_key1"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchLongOverloadTest() {
+		assertEquals("", unsupported.fetchLong("my_key", 1l));
+	}
+	
+	@Test
+	public void fetchLongOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1l, proxyMap.fetchLong("my_key", 5l));
+	}
+	
+	@Test
+	public void fetchLongOverloadInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(5l, proxyMap.fetchLong("my_key1", 5l));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchFloatTest() {
+		assertEquals("", unsupported.fetchFloat("my_key"));
+	}
+	
+	@Test
+	public void fetchFloatValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1f, proxyMap.fetchFloat("my_key"), 0.01);
+	}
+	
+	@Test
+	public void fetchFloatInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals(0f, proxyMap.fetchFloat("my_key"), 0.01);
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchFloatOverloadTest() {
+		assertEquals("", unsupported.fetchFloat("my_key", 1f));
+	}
+	
+	@Test
+	public void fetchFloatOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1f, proxyMap.fetchFloat("my_key", 1f), 0.01);
+	}
+	
+	@Test
+	public void fetchFloatOverloadInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals(5f, proxyMap.fetchFloat("my_key1", 5f), 0.01);
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchDoubleTest() {
+		assertEquals("", unsupported.fetchDouble("my_key"));
+	}
+	
+	@Test
+	public void fetchDoubleValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1f, proxyMap.fetchDouble("my_key"), 0.01);
+	}
+	
+	@Test
+	public void fetchDoubleInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals(0f, proxyMap.fetchDouble("my_key1"), 0.01);
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchDoubleOverloadTest() {
+		assertEquals("", unsupported.fetchDouble("my_key", 1d));
+	}
+	
+	@Test
+	public void fetchDoubleOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1d, proxyMap.fetchDouble("my_key", 5d), 0.01);
+	}
+	
+	@Test
+	public void fetchDoubleOverloadInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals(5d, proxyMap.fetchDouble("my_key1", 5d), 0.01);
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchByteTest() {
+		assertEquals("", unsupported.fetchByte("my_key"));
+	}
+	
+	@Test
+	public void fetchByteValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals((byte) 1, proxyMap.fetchByte("my_key"));
+	}
+	
+	@Test
+	public void fetchByteInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals((byte) 0, proxyMap.fetchByte("my_key1"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchByteOverloadTest() {
+		assertEquals("", unsupported.fetchByte("my_key", (byte) 'a'));
+	}
+	
+	@Test
+	public void fetchByteOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals((byte) 1, proxyMap.fetchByte("my_key", (byte) 'a'));
+	}
+	
+	@Test
+	public void fetchByteOverloadInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals((byte) 'a', proxyMap.fetchByte("my_key1", (byte) 'a'));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchShortTest() {
+		assertEquals("", unsupported.fetchShort("my_key"));
+	}
+	
+	@Test
+	public void fetchShortValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1, proxyMap.fetchShort("my_key"));
+	}
+	
+	@Test
+	public void fetchShortInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals(0, proxyMap.fetchShort("my_key1"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchShortOverloadTest() {
+		assertEquals("", unsupported.fetchShort("my_key", (short) 'a'));
+	}
+	
+	@Test
+	public void fetchShortOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals(1, proxyMap.fetchShort("my_key", (short) 'a'));
+	}
+	
+	@Test
+	public void fetchShortOverloadInvalidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertEquals((short) 'a', proxyMap.fetchShort("my_key1", (short) 'a'));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchUUIDTest() {
+		assertEquals("", unsupported.fetchUUID("my_key"));
+	}
+	
+	@Test
+	public void fetchUUIDValidTest() {
+		proxyMap.put("my_key", "my_object");
+		assertNull(proxyMap.fetchUUID("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchUUIDOverloadTest() {
+		assertEquals("", unsupported.fetchUUID("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchUUIDOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchUUID("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchUUIDOverloadInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertNotNull(proxyMap.fetchUUID("my_key", "o123456789o123456789ok"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchGUIDTest() {
+		assertEquals("", unsupported.fetchGUID("my_key"));
+	}
+	
+	@Test
+	public void fetchGUIDValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchGUID("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchGUIDOverloadTest() {
+		assertEquals("", unsupported.fetchGUID("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchGUIDOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchGUID("my_key", "ok"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchObjectListTest() {
+		assertNull(unsupported.fetchObjectList("my_key"));
+	}
+	
+	@Test
+	public void fetchObjectListValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchObjectList("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchObjectListOverloadTest() {
+		assertEquals("", unsupported.fetchObjectList("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchObjectListOverloadValidTest() {
+		List<String> list = new ArrayList<String>();
+		list.add("me");
+		proxyMap.put("my_key", "1");
+		assertEquals(list, proxyMap.fetchObjectList("my_key", list));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchStringMapTest() {
+		assertEquals("", unsupported.fetchStringMap("my_key"));
+	}
+	
+	@Test
+	public void fetchStringMapValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchStringMap("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchStringMapOverloadTest() {
+		assertEquals("", unsupported.fetchStringMap("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchStringMapOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchStringMap("my_key", "ok"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchGenericConvertStringMapTest() {
+		assertEquals("", unsupported.fetchGenericConvertStringMap("my_key"));
+	}
+	
+	@Test
+	public void fetchGenericConvertStringMapValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchGenericConvertStringMap("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchGenericConvertStringMapOverloadTest() {
+		assertEquals("", unsupported.fetchGenericConvertStringMap("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchGenericConvertStringMapOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchGenericConvertStringMap("my_key", "ok"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchGenericConvertListTest() {
+		assertEquals("", unsupported.fetchGenericConvertList("my_key"));
+	}
+	
+	@Test
+	public void fetchGenericConvertListValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchGenericConvertList("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchGenericConvertListOverloadTest() {
+		assertEquals("", unsupported.fetchGenericConvertList("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchGenericConvertListOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchGenericConvertList("my_key", "ok"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchStringArrayTest() {
+		assertEquals("", unsupported.fetchStringArray("my_key"));
+	}
+	
+	@Test
+	public void fetchStringArrayValidTest() {
+		proxyMap.put("my_key", "1");
+		assertNull(proxyMap.fetchStringArray("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchStringArrayOverloadTest() {
+		assertEquals("", unsupported.fetchStringArray("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchStringArrayOverloadValidTest() {
+		String[] strArr = new String[] { "1", "2" };
+		proxyMap.put("my_key", strArr);
+		assertArrayEquals(strArr, proxyMap.fetchStringArray("my_key", strArr));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchObjectArrayTest() {
+		assertNull(unsupported.fetchObjectArray("my_key"));
+	}
+	
+	@Test
+	public void fetchObjectArrayValidTest() {
+		proxyMap.put("my_key", "1, 2");
+		assertNull(proxyMap.fetchObjectArray("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchObjectArrayOverloadTest() {
+		assertNull(unsupported.fetchObjectArray("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchObjectArrayOverloadValidTest() {
+		Object[] strArr = new Object[] { "1", 2 };
+		proxyMap.put("my_key", strArr);
+		assertArrayEquals(strArr, proxyMap.fetchObjectArray("my_key", strArr));
+	}
+
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchObjectTest() {
+		assertEquals("", unsupported.fetchObject("my_key"));
+	}
+	
+	@Test
+	public void fetchObjectValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals("1", proxyMap.fetchObject("my_key"));
+	}
+	
+	@Test(expected = UnsupportedOperationException.class)
+	public void fetchObjectOverloadTest() {
+		assertEquals("", unsupported.fetchObject("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchObjectOverloadValidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals("1", proxyMap.fetchObject("my_key", "ok"));
+	}
+	
+	@Test
+	public void fetchObjectOverloadInvalidTest() {
+		proxyMap.put("my_key", "1");
+		assertEquals("ok", proxyMap.fetchObject("my_key1", "ok"));
 	}
 	
 	//	 @Test(expected = UnsupportedOperationException.class)

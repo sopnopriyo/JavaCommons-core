@@ -34,10 +34,13 @@ public class GenericConvert extends GenericConvertStandard {
 		throw new IllegalAccessError("Utility class");
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// To GenericConvertMap
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * To GenericConvertMap
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To GenericConvertMap conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -110,10 +113,13 @@ public class GenericConvert extends GenericConvertStandard {
 		return toGenericConvertStringMap(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// To GenericConvertList
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * To GenericConvertList
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To GenericConvertList conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -183,189 +189,117 @@ public class GenericConvert extends GenericConvertStandard {
 	public static <V> GenericConvertList<V> toGenericConvertList(Object input) {
 		return toGenericConvertList(input, null);
 	}
-	
-	/**
-	 * To Big Decimal
-	 *--------------------------------------------------------------------------------------------------
-	 *
-	 * To BigDecimal conversion of generic object
-	 *
-	 * Performs the following strategies in the following order
-	 *
-	 * - No conversion (if its a BigDecimal)
-	 * - Number to BigDecimal conversion
-	 * - Numeric string to BigDecimal conversion
-	 * - Fallback
-	 *
-	 * @param input     The input value to convert
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The converted value
-	 **/
-	@SuppressWarnings("unchecked")
-	public static BigDecimal toBigDecimal(Object input, Object fallbck) {
-		/**
-		 * Null handling
-		 **/
-		if (input == null) {
-			if (fallbck == null) {
-				return null;
-			}
-			return toBigDecimal(fallbck, null);
-		}
 
-		/**
-		 * If BigDecimal instance
-		 **/
-		if (input instanceof BigDecimal) {
-			return (BigDecimal) input;
-		}
-		
-		/**
-		 * If Number instance
-		 **/
-		if (input instanceof Number) {
-			return new BigDecimal(  ((Number) input).toString() );
-		}
-		
-		if (input instanceof String && ((String) input).length() > 0) {
-			/**
-			 * Numeric string conversion
-			 **/
-			try {
-				return new BigDecimal(input.toString());
-			} catch (Exception e) {
-				return toBigDecimal(fallbck, null);
-			}
-		}
-
-		/**
-		 * Fallback
-		 **/
-		return toBigDecimal(fallbck, null);
-	}
+	// //--------------------------------------------------------------------------------------------------
+	// //
+	// // NESTED object fetch (related to fully qualified keys handling)
+	// //
+	// //--------------------------------------------------------------------------------------------------
 	
-	/**
-	 * Default Null fallback, To GenericConvert BigDecimal conversion of generic object
-	 *
-	 * @param input     The input value to convert
-	 *
-	 * @return         The converted value
-	 **/
-	public static BigDecimal toBigDecimal(Object input) {
-		return toBigDecimal(input, null);
-	}
+	// /**
+	//  * Fetch an Object from either a Map, or a List. By attempting to use the provided key.
+	//  *
+	//  * This attempts to use the key AS IT IS. Only converting it to an int for List if needed.
+	//  * It does not do recursive fetch, if that is needed see `fetchNestedObject`
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  * @param fallbck   The fallback default (if not convertable)
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object getMapOrListValue(Object base, String key, Object fallback) {
+	// 	return MapOrListUtil.getValue(base, key, fallback);
+	// }
 	
-	//--------------------------------------------------------------------------------------------------
-	//
-	// NESTED object fetch (related to fully qualified keys handling)
-	//
-	//--------------------------------------------------------------------------------------------------
+	// /**
+	//  * Default Null fallback, for `fetchObject(base, key, fallback)`
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object getMapOrListValue(Object base, String key) {
+	// 	return MapOrListUtil.getValue(base, key);
+	// }
 	
-	/**
-	 * Fetch an Object from either a Map, or a List. By attempting to use the provided key.
-	 *
-	 * This attempts to use the key AS IT IS. Only converting it to an int for List if needed.
-	 * It does not do recursive fetch, if that is needed see `fetchNestedObject`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object getMapOrListValue(Object base, String key, Object fallback) {
-		return NestedObject.getMapOrListValue(base, key, fallback);
-	}
+	// /**
+	//  * Split the key path into their respective component
+	//  *
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, possibly empty array if key is invalid?
+	//  **/
+	// public static String[] splitObjectPath(String key) {
+	// 	return NestedObjectFetch.splitObjectPath(key);
+	// }
 	
-	/**
-	 * Default Null fallback, for `fetchObject(base, key, fallback)`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object getMapOrListValue(Object base, String key) {
-		return NestedObject.getMapOrListValue(base, key);
-	}
+	// /**
+	//  * Split the key path into their respective component
+	//  *
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, possibly empty array if key is invalid?
+	//  **/
+	// public static List<String> splitObjectPath(String key, List<String> ret) {
+	// 	return NestedObjectFetch.splitObjectPath(key, ret);
+	// }
 	
-	/**
-	 * Split the key path into their respective component
-	 *
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, possibly empty array if key is invalid?
-	 **/
-	public static String[] splitObjectPath(String key) {
-		return NestedObject.splitObjectPath(key);
-	}
+	// /**
+	//  * Gets an object from the map,
+	//  * That could very well be, a map inside a list, inside a map, inside a .....
+	//  *
+	//  * Note that at each iteration step, it attempts to do a FULL key match first,
+	//  * before the next iteration depth
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  * @param fallbck   The fallback default (if not convertable)
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object fetchNestedObject(Object base, String key, Object fallback) {
+	// 	return NestedObjectFetch.fetchObject(base, key, fallback);
+	// }
 	
-	/**
-	 * Split the key path into their respective component
-	 *
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, possibly empty array if key is invalid?
-	 **/
-	public static List<String> splitObjectPath(String key, List<String> ret) {
-		return NestedObject.splitObjectPath(key, ret);
-	}
+	// /**
+	//  * Default Null fallback, for `fetchNestedObject(base, key, fallback)`
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object fetchNestedObject(Object base, String key) {
+	// 	return NestedObjectFetch.fetchObject(base, key);
+	// }
 	
-	/**
-	 * Gets an object from the map,
-	 * That could very well be, a map inside a list, inside a map, inside a .....
-	 *
-	 * Note that at each iteration step, it attempts to do a FULL key match first,
-	 * before the next iteration depth
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object fetchNestedObject(Object base, String key, Object fallback) {
-		return NestedObject.fetchNestedObject(base, key, fallback);
-	}
+	// /**
+	//  * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param objPath   The input key to fetch, possibly nested
+	//  *
+	//  * @return         The normalized key
+	//  **/
+	// public static String normalizeObjectPath(Object base, String key) {
+	// 	return NestedObject.normalizeObjectPath(base, key);
+	// }
 	
-	/**
-	 * Default Null fallback, for `fetchNestedObject(base, key, fallback)`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object fetchNestedObject(Object base, String key) {
-		return NestedObject.fetchNestedObject(base, key);
-	}
-	
-	/**
-	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param objPath   The input key to fetch, possibly nested
-	 *
-	 * @return         The normalized key
-	 **/
-	public static String normalizeObjectPath(Object base, String key) {
-		return NestedObject.normalizeObjectPath(base, key);
-	}
-	
-	/**
-	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
-	 *
-	 * @param base           Map / List to manipulate from
-	 * @param splitKeyPath   Key path in a list format
-	 * @param res            StringBuilder results
-	 *
-	 * @return         The normalized key
-	 **/
-	public static StringBuilder normalizeObjectPath(Object base, List<String> splitKeyPath,
-		StringBuilder res) {
-		return NestedObject.normalizeObjectPath(base, splitKeyPath, res);
-	}
+	// /**
+	//  * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
+	//  *
+	//  * @param base           Map / List to manipulate from
+	//  * @param splitKeyPath   Key path in a list format
+	//  * @param res            StringBuilder results
+	//  *
+	//  * @return         The normalized key
+	//  **/
+	// public static StringBuilder normalizeObjectPath(Object base, List<String> splitKeyPath,
+	// 	StringBuilder res) {
+	// 	return NestedObject.normalizeObjectPath(base, splitKeyPath, res);
+	// }
 	
 	// //--------------------------------------------------------------------------------------------------
 	// //
