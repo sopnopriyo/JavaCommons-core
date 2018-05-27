@@ -17,11 +17,13 @@ import picoded.core.conv.NestedObjectUtil;
 import picoded.core.conv.NestedObjectFetch;
 
 /**
- * Config file loader
- *
- * Iterates a filepath and loads all the various JSON config files.
+ * Loads a config folder, consisting of JSON / HTML files.
  * 
+ * And making its various values avaliable.
  * 
+ * Note that internally this uses a ConcurrentHashMap for folders.
+ * As such one could initialize this once on context start of a server,
+ * and read it safely across multiple threads.
  **/
 public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	
@@ -38,21 +40,20 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	 * Blank constructor
 	 **/
 	public ConfigFileSet() {
-		
 	}
 	
 	/**
 	 * Constructor with the default file path to scan
 	 **/
 	public ConfigFileSet(String filePath) {
-		// addConfigSet(filePath);
+		addConfigSet(filePath);
 	}
 	
 	/**
 	 * Constructor with the default file path to scan
 	 **/
 	public ConfigFileSet(File filePath) {
-		// addConfigSet(filePath);
+		addConfigSet(filePath);
 	}
 	
 	//-----------------------------------------------------------------------------------
