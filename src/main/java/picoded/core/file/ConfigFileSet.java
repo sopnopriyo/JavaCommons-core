@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,9 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	//
 	//-----------------------------------------------------------------------------------
 	
+	// Logger to use, for config file warnings
+	private static final Logger LOGGER = Logger.getLogger( ConfigFileSet.class.getName() );
+
 	// The actual internal config file mapping
 	protected ConcurrentHashMap<String, Object> configMap = new ConcurrentHashMap<String, Object>();
 
@@ -44,16 +48,20 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	
 	/**
 	 * Constructor with the default file path to scan
+	 * 
+	 * @param  dirPath directory to perform scan recursively for html/json files
 	 **/
-	public ConfigFileSet(String filePath) {
-		addConfigSet(filePath);
+	public ConfigFileSet(String dirPath) {
+		addConfigSet(dirPath);
 	}
 	
 	/**
 	 * Constructor with the default file path to scan
+	 * 
+	 * @param  dirPath directory to perform scan recursively for html/json files
 	 **/
-	public ConfigFileSet(File filePath) {
-		addConfigSet(filePath);
+	public ConfigFileSet(File dirPath) {
+		addConfigSet(dirPath);
 	}
 	
 	//-----------------------------------------------------------------------------------
@@ -65,21 +73,30 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	/**
 	 * Scans the given directory, and add it to the existing configuration mapping
 	 * 
-	 * @param  filePath directory to perform scan recursively for html/json files
+	 * @param  dirPath directory to perform scan recursively for html/json files
 	 */
-	public void addConfigSet(File filePath) {
-		addConfigSetToMap(filePath, configMap);
+	public void addConfigSet(File dirPath) {
+		// Throw an exception, if config set is not a directory
+		if (!dirPath.isDirectory()) {
+			throw new IllegalArgumentException("Expected a directory path for : "+dirPath.getAbsolutePath());
+		}
+
+		// Iterate its child files, and add them to the config map
+		File[] innerFiles = dirPath.listFiles();
+		for (File innerFile : innerFiles) {
+			addConfigSubSetToMap(innerFile, configMap);
+		}
 	}
 	
 	/**
 	 * Scans the given directory, and add it to the existing configuration mapping
 	 * 
-	 * @param  filePath directory to perform scan recursively for html/json files
+	 * @param  dirPath directory to perform scan recursively for html/json files
 	 */
-	public void addConfigSet(String filePath) {
-		addConfigSet(new File(filePath));
+	public void addConfigSet(String dirPath) {
+		addConfigSet(new File(dirPath));
 	}
-	
+
 	/**
 	 * Add either a json file as a config object, or scan a folder for config objects.
 	 * This is done recursively, creating a ConcurrentHashMap (if needed) for each submap.
@@ -87,7 +104,7 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	 * @param inFile  that represents either a json file, or a folder to add
 	 * @param map     the current folder (or configMap for root) map representation
 	 */
-	private void addConfigSetToMap(File inFile, ConcurrentHashMap<String,Object> map) {
+	private void addConfigSubSetToMap(File inFile, ConcurrentHashMap<String,Object> map) {
 		// Input file name to use
 		String fileName = inFile.getName();
 
@@ -118,7 +135,7 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 			//
 			File[] innerFiles = inFile.listFiles();
 			for (File innerFile : innerFiles) {
-				addConfigSetToMap(innerFile, submap);
+				addConfigSubSetToMap(innerFile, submap);
 			}
 
 			// Store the directory map
@@ -139,23 +156,28 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 
 			//
 			// Store the data according to its format
+			// if possible
 			//
-			if ( //
-				fileExtension.equalsIgnoreCase("json") || //
-				fileExtension.equalsIgnoreCase("js") //
-			) {
-				//
-				// Takes in a JS / JSON file, and map it accordingly
-				//
-				String jsString = FileUtil.readFileToString(inFile);
-				map.put( filePrefix, ConvertJSON.toObject(jsString) );
-			} else if( //
-				fileExtension.equalsIgnoreCase("html") //
-			) {
-				//
-				// Takes in a HTML file, and store it as it is
-				//
-				map.put( fileName, FileUtil.readFileToString(inFile) );
+			try {
+				if ( //
+					fileExtension.equalsIgnoreCase("json") || //
+					fileExtension.equalsIgnoreCase("js") //
+				) {
+					//
+					// Takes in a JS / JSON file, and map it accordingly
+					//
+					String jsString = FileUtil.readFileToString(inFile);
+					map.put( filePrefix, ConvertJSON.toObject(jsString) );
+				} else if( //
+					fileExtension.equalsIgnoreCase("html") //
+				) {
+					//
+					// Takes in a HTML file, and store it as it is
+					//
+					map.put( fileName, FileUtil.readFileToString(inFile) );
+				}
+			} catch(Exception e) {
+				LOGGER.warning("[SKIP] Failed to load config file (invalid format?) : "+inFile.getAbsolutePath());
 			}
 		}
 	}

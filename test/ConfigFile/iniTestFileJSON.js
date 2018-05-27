@@ -10,7 +10,7 @@
 	},
 	"test":{
 		"test":{
-			"test"{
+			"test":{
 				"test":{
 					"test":{
 						"test":"final"
