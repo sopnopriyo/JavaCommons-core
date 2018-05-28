@@ -20,7 +20,10 @@ import picoded.core.conv.NestedObjectFetch;
 /**
  * Loads a config folder, consisting of JSON / HTML files.
  * 
- * And making its various values avaliable.
+ * And making its various values avaliable. 
+ * 
+ * Note that get/fetch result is meant to be mainly "read only",
+ * any modification may result into unexpected behaviour.
  * 
  * Note that internally this uses a ConcurrentHashMap for folders.
  * As such one could initialize this once on context start of a server,
