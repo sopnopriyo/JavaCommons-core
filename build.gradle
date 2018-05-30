@@ -89,7 +89,7 @@ dependencies {
 //
 jar {
 	// Archive name overwrite
-	archiveName = project.name+"-"+project.version+""+".jar"
+	archiveName = project.name+"-"+project.version+"-nodep"+".jar"
 	description = "Build the "+archiveName+" with no dependencies"
 
 	// Inherit the main jar manifest
@@ -173,6 +173,32 @@ artifacts {
 	archives fatJar
 	archives shadowJar
 	archives jar
+}
+
+//----------------------------------------------------------------
+//
+//  Concurent test threads
+//
+//----------------------------------------------------------------
+
+test {
+
+	// Setup test to run on parllel threads = to number of processors by default
+	if (project.hasProperty('maxParallelForks')) {
+		maxParallelForks = project.maxParallelForks as int;
+	} else {
+		// Lets optimize the test to run in parllel threads by default
+		// taking the system process count - 1 (so as to not lag hang the OS)
+		maxParallelForks = (Runtime.runtime.availableProcessors() - 1) as int;
+		if(maxParallelForks < 1) {
+			maxParallelForks = 1;
+		}
+	}
+	
+	// Set up the number of tests per fork
+	if (project.hasProperty('forkEvery')) {
+		forkEvery = project.forkEvery as int
+	}
 }
 
 //----------------------------------------------------------------

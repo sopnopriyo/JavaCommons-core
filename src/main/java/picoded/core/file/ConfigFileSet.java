@@ -6,35 +6,30 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import picoded.core.struct.GenericConvertMap;
+import picoded.core.conv.ConvertJSON;
+import picoded.core.conv.GenericConvert;
+import picoded.core.conv.NestedObjectUtil;
+import picoded.core.conv.NestedObjectFetch;
 
 /**
- * Config file loader
- *
- * Iterates a filepath and loads all the various config files
- *
- * Note that folder, and filename will be used as the config path. Unless its config.ini
+ * Loads a config folder, consisting of JSON / HTML files.
+ * 
+ * And making its various values avaliable. 
+ * 
+ * Note that get/fetch result is meant to be mainly "read only",
+ * any modification may result into unexpected behaviour.
+ * 
+ * Note that internally this uses a ConcurrentHashMap for folders.
+ * As such one could initialize this once on context start of a server,
+ * and read it safely across multiple threads.
  **/
-public class ConfigFileSet extends ConfigFile implements GenericConvertMap<String, Object> {
-	
-	//-----------------------------------------------------------------------------------
-	//
-	// Internal config file map
-	//
-	//-----------------------------------------------------------------------------------
-	
-	/**
-	 * The actual internal config file set mapping
-	 *
-	 * <main, <main-include.test, hello>>
-	 * <related <main-include.text, hi>>
-	 * <jsonFileName <jsonKey, jsonValue>>
-	 **/
-	protected Map<String, ConfigFile> configFileMap = new ConcurrentHashMap<String, ConfigFile>();
+public class ConfigFileSet implements GenericConvertMap<String, Object> {
 	
 	//-----------------------------------------------------------------------------------
 	//
@@ -42,25 +37,34 @@ public class ConfigFileSet extends ConfigFile implements GenericConvertMap<Strin
 	//
 	//-----------------------------------------------------------------------------------
 	
+	// Logger to use, for config file warnings
+	private static final Logger LOGGER = Logger.getLogger( ConfigFileSet.class.getName() );
+
+	// The actual internal config file mapping
+	protected ConcurrentHashMap<String, Object> configMap = new ConcurrentHashMap<String, Object>();
+
 	/**
 	 * Blank constructor
 	 **/
 	public ConfigFileSet() {
-		
 	}
 	
 	/**
 	 * Constructor with the default file path to scan
+	 * 
+	 * @param  dirPath directory to perform scan recursively for html/json files
 	 **/
-	public ConfigFileSet(String filePath) {
-		addConfigSet(filePath);
+	public ConfigFileSet(String dirPath) {
+		addConfigSet(dirPath);
 	}
 	
 	/**
 	 * Constructor with the default file path to scan
+	 * 
+	 * @param  dirPath directory to perform scan recursively for html/json files
 	 **/
-	public ConfigFileSet(File filePath) {
-		addConfigSet(filePath);
+	public ConfigFileSet(File dirPath) {
+		addConfigSet(dirPath);
 	}
 	
 	//-----------------------------------------------------------------------------------
@@ -68,203 +72,122 @@ public class ConfigFileSet extends ConfigFile implements GenericConvertMap<Strin
 	// Config File folder importing
 	//
 	//-----------------------------------------------------------------------------------
-	
-	public ConfigFileSet addConfigSet(File filePath) {
-		return addConfigSet(filePath, "", ".");
-	}
-	
-	public ConfigFileSet addConfigSet(String filePath) {
-		return addConfigSet(filePath, "", ".");
-	}
-	
-	public ConfigFileSet addConfigSet(String filePath, String prefix, String separator) {
-		return addConfigSet_recursive(new File(filePath), prefix, separator);
-	}
-	
-	public ConfigFileSet addConfigSet(File inFile, String prefix, String separator) {
-		return addConfigSet_recursive(inFile, prefix, separator);
-	}
-	
-	private ConfigFileSet addConfigSet_recursive(File inFile, String rootPrefix, String separator) {
-		if (rootPrefix == null) {
-			rootPrefix = "";
+
+	/**
+	 * Scans the given directory, and add it to the existing configuration mapping
+	 * 
+	 * @param  dirPath directory to perform scan recursively for html/json files
+	 */
+	public void addConfigSet(File dirPath) {
+		// Throw an exception, if config set is not a directory
+		if (!dirPath.isDirectory()) {
+			throw new IllegalArgumentException("Expected a directory path for : "+dirPath.getAbsolutePath());
 		}
-		
+
+		// Iterate its child files, and add them to the config map
+		File[] innerFiles = dirPath.listFiles();
+		for (File innerFile : innerFiles) {
+			addConfigSubSetToMap(innerFile, configMap);
+		}
+	}
+	
+	/**
+	 * Scans the given directory, and add it to the existing configuration mapping
+	 * 
+	 * @param  dirPath directory to perform scan recursively for html/json files
+	 */
+	public void addConfigSet(String dirPath) {
+		addConfigSet(new File(dirPath));
+	}
+
+	/**
+	 * Add either a json file as a config object, or scan a folder for config objects.
+	 * This is done recursively, creating a ConcurrentHashMap (if needed) for each submap.
+	 * 
+	 * @param inFile  that represents either a json file, or a folder to add
+	 * @param map     the current folder (or configMap for root) map representation
+	 */
+	private void addConfigSubSetToMap(File inFile, ConcurrentHashMap<String,Object> map) {
+		// Input file name to use
+		String fileName = inFile.getName();
+
+		// Check if file or directory is used
 		if (inFile.isDirectory()) {
+
+			//
+			// Its a directory - Generate the submap to use
+			//
+			ConcurrentHashMap<String,Object> submap;
+
+			// Use an existing submap if possible
+			Object currentMap = map.get(fileName) ;
+			if(currentMap instanceof ConcurrentHashMap) {
+				// Use an existing configured concurrent map
+				submap = (ConcurrentHashMap<String,Object>)currentMap;
+			} else if(currentMap instanceof Map) {
+				// Convert a previous config, to a concurrent map (folder)
+				submap = new ConcurrentHashMap<>();
+				submap.putAll( (Map<String,Object>)currentMap );
+			} else {
+				// Assuming no existing folder configured, init it
+				submap = new ConcurrentHashMap<>();
+			}
+
+			//
+			// Scan the directory, recursively
+			//
 			File[] innerFiles = inFile.listFiles();
 			for (File innerFile : innerFiles) {
-				if (innerFile.isDirectory()) {
-					String parentFolderName = innerFile.getName();
-					if (!rootPrefix.isEmpty()) {
-						parentFolderName = rootPrefix + separator + parentFolderName;
-					}
-					addConfigSet_recursive(innerFile, parentFolderName, separator);
-				} else {
-					addConfigSet_recursive(innerFile, rootPrefix, separator);
-				}
+				addConfigSubSetToMap(innerFile, submap);
 			}
+
+			// Store the directory map
+			map.put(fileName, submap);
 		} else {
-			String fileName = inFile.getName();
-			
-			// Get the filename extension
+
+			//
+			// Object is a file, store it accordingly if its a valid file
+			// For now, get the file prefix an extension to use
+			//
+			String filePrefix = null;
+			String fileExtension = null;
 			int endingDot = fileName.lastIndexOf('.');
-			String extension = "";
 			if (endingDot > 0) {
-				extension = fileName.substring(endingDot + 1);
+				fileExtension = fileName.substring(endingDot+1);
+				filePrefix = fileName.substring(0, endingDot);
 			}
-			
-			// Only accept ini or json files
-			if (extension.equalsIgnoreCase("json") || extension.equalsIgnoreCase("js") || extension.equalsIgnoreCase("html")) {
-				
-				ConfigFile cFile = new ConfigFile(inFile);
-				fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-				String prefix = "";
-				if (!rootPrefix.isEmpty()) {
-					prefix += rootPrefix + separator;
+
+			//
+			// Store the data according to its format
+			// if possible
+			//
+			try {
+				if ( //
+					fileExtension.equalsIgnoreCase("json") || //
+					fileExtension.equalsIgnoreCase("js") //
+				) {
+					//
+					// Takes in a JS / JSON file, and map it accordingly
+					//
+					String jsString = FileUtil.readFileToString(inFile);
+					map.put( filePrefix, ConvertJSON.toObject(jsString) );
+				} else if( //
+					fileExtension.equalsIgnoreCase("html") //
+				) {
+					//
+					// Takes in a HTML file, and store it as it is
+					//
+					map.put( fileName, FileUtil.readFileToString(inFile) );
 				}
-				
-				configFileMap.put(prefix + fileName, cFile);
+			} catch(Exception e) {
+				LOGGER.warning("[SKIP] Failed to load config file (invalid format?) : "+inFile.getAbsolutePath());
 			}
 		}
-		
-		return this;
 	}
-	
+
 	//-----------------------------------------------------------------------------------
 	//
-	// Getting a sub mapping clone
-	//
-	//-----------------------------------------------------------------------------------
-	
-	/**
-	 * Getting sub map under a prefix, filtering out restricted namespace
-	 *
-	 * @param  The prefix to filter for. Example ("sys.")
-	 *
-	 * @return  The created sub map
-	 **/
-	public ConfigFileSet createSubMap(String prefix) {
-		return createSubMapInternal(prefix, null);
-	}
-	
-	/**
-	 * Getting sub map under a prefix, filtering out restricted namespace
-	 *
-	 * @param  The prefix to filter for. Example ("sys.")
-	 * @param  The namespace to ignore
-	 *
-	 * @return  The created sub map
-	 **/
-	public ConfigFileSet createSubMap(String prefix, String ignore) {
-		return createSubMapInternal(prefix, new String[] { ignore });
-	}
-	
-	/**
-	 * Getting sub map under a prefix, filtering out restricted namespace
-	 *
-	 * @param  The prefix to filter for. Example ("sys.")
-	 * @param  The namespace to ignore
-	 *
-	 * @return  The created sub map
-	 **/
-	public ConfigFileSet createSubMap(String prefix, String... ignore) {
-		return createSubMapInternal(prefix, ignore);
-	}
-	
-	/**
-	 * Getting sub map under a prefix, filtering out restricted namespace
-	 *
-	 * @param  The prefix to filter for. Example ("sys.")
-	 * @param  The namespace to ignore
-	 *
-	 * @return  The created sub map
-	 **/
-	protected ConfigFileSet createSubMapInternal(String prefix, String[] ignore) {
-		ConfigFileSet ret = new ConfigFileSet();
-		
-		// Blank is as good as null
-		if (prefix != null && prefix.length() <= 0) {
-			prefix = null;
-		}
-		
-		//
-		// Iterate across all the ConfigFile items : and populate the result
-		//
-		for (String key : configFileMap.keySet()) {
-			
-			//
-			// Check for items to ignore
-			//
-			if (ignore != null) {
-				boolean breakOut = false;
-				for (String ignorePart : ignore) {
-					if (ignorePart != null && key.startsWith(ignorePart)) {
-						breakOut = true;
-						continue;
-					}
-				}
-				
-				if (breakOut == true) {
-					continue;
-				}
-			}
-			
-			//
-			// Add if prefix is null (all valid), or valid
-			//
-			if (prefix == null) {
-				ret.configFileMap.put(key, configFileMap.get(key));
-			} else {
-				if (key.startsWith(prefix)) {
-					
-					// Get the subkey without prefix filter
-					String subkey = key.substring(prefix.length()).trim();
-					
-					// The subkey without starting "."
-					while (subkey.startsWith(".")) {
-						subkey = subkey.substring(1).trim();
-					}
-					
-					// Skip if subkey ends up being blank
-					if (subkey.length() <= 0) {
-						continue;
-					}
-					
-					// Insert the sub map key without the prefix
-					ret.configFileMap.put(subkey, configFileMap.get(key));
-				}
-			}
-		}
-		
-		if (ret.configFileMap.size() <= 0) {
-			return null;
-		}
-		return ret;
-	}
-	
-	/**
-	 * Memoizer cache for getCachedSubMap()
-	 **/
-	protected Map<String, ConfigFileSet> _subMapCache = new ConcurrentHashMap<String, ConfigFileSet>();
-	
-	/**
-	 * Gets an internally cached submap (with prefix)
-	 **/
-	protected ConfigFileSet getCachedSubMap(String prefix) {
-		if (_subMapCache.containsKey(prefix)) {
-			return _subMapCache.get(prefix);
-		}
-		
-		ConfigFileSet cacheObj = createSubMapInternal(prefix, null);
-		if (cacheObj != null) {
-			_subMapCache.put(prefix, cacheObj);
-		}
-		return cacheObj;
-	}
-	
-	//-----------------------------------------------------------------------------------
-	//
-	// KeySet handling
+	// KeySet and fetch overwrite handling
 	//
 	//-----------------------------------------------------------------------------------
 	
@@ -272,79 +195,38 @@ public class ConfigFileSet extends ConfigFile implements GenericConvertMap<Strin
 	 * Top layer keySet fetching
 	 **/
 	public Set<String> keySet() {
-		HashSet<String> ret = new HashSet<String>();
-		
-		//
-		// Iterate across all the ConfigFile items : and populate the result
-		//
-		for (String key : configFileMap.keySet()) {
-			String keyString = key.toString();
-			String[] splitKeyString = keyString.split("\\.");
-			ret.add(splitKeyString[0]);
-		}
-		
-		return ret;
+		return NestedObjectUtil.filterKeySet( configMap.keySet() );
 	}
-	
-	//-----------------------------------------------------------------------------------
-	//
-	// Get request handling
-	//
-	//-----------------------------------------------------------------------------------
 	
 	/**
-	 * When a get request is called here, it attempts to pull from the resepective sub map, by splitting the request key.
+	 * Map get function, overwritten as a fetch
 	 *
-	 * For example: config.main.header.test
+	 * @param key The input value key to convert
 	 *
-	 * Will be split as "config.main.header", and "test",
-	 * It will then attempt to fetch from the "config.main.header" file if it exists.
-	 *
-	 * If it fails to find, it will then resepectively search 1 level higher
-	 * Splitting it as followed "config.main", and "header.test"
+	 * @return The converted string, always possible unless null
 	 **/
+	@Override
 	public Object get(Object key) {
-		String keyString = key.toString();
-		String[] splitKeyString = keyString.split("\\.");
-		
-		// an issue could arise if there are conflicting keys
-		// example
-		// <a.b.c, <d, e>> //json
-		// <a.b, <c.d, e>> //ini file
-		// in this case, passing a key of "a.b.c.d" will always hit the json
-		// file first, which might not be intended.
-		// having nonconflicting keys will avoid this, but this is just a heads
-		// up
-		for (int splitPt = splitKeyString.length; splitPt > 0; --splitPt) {
-			String fileKey = StringUtils.join(ArrayUtils.subarray(splitKeyString, 0, splitPt), ".");
-			String headerKey = StringUtils.join(
-				ArrayUtils.subarray(splitKeyString, splitPt, splitKeyString.length), ".");
-			
-			Object returnVal = getExact(fileKey, headerKey);
-			
-			if (returnVal != null) {
-				return returnVal;
-			}
-		}
-		
-		//
-		// Attempts to get a submap if possible, else returns null
-		//
-		return getCachedSubMap(keyString);
+		return fetchObject(key.toString(), null);
 	}
 	
-	// use this if you know the exact keyvaluepair you want
-	public Object getExact(Object fileKey, Object headerKey) {
-		String fileKeyString = fileKey.toString();
-		String headerKeyString = headerKey.toString();
-		
-		Map<String, Object> subMap = configFileMap.get(fileKeyString);
-		if (subMap != null) {
-			if (headerKeyString.length() <= 0) {
-				return subMap;
-			}
-			return subMap.get(headerKeyString);
-		}
-		return null;
+	/**
+	 * Gets an object from the map,
+	 * That could very well be, a map inside a list, inside a map, inside a
+	 * .....
+	 *
+	 * Note that at each iteration step, it attempts to do a FULL key match
+	 * first, before the next iteration depth.
+	 *
+	 * @param base Map / List to manipulate from
+	 * @param key The input key to fetch, possibly nested
+	 * @param fallbck The fallback default (if not convertable)
+	 *
+	 * @return The fetched object, always possible unless fallbck null
+	 **/
+	@Override
+	public Object fetchObject(String key, Object fallbck) {
+		return NestedObjectFetch.fetchObject(configMap, key, fallbck);
 	}
+	
 }

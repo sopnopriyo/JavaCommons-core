@@ -676,6 +676,7 @@ public class FileUtilBase {
 	 *
 	 * @param srcDir  an existing directory to copy, must not be {@code null}
 	 * @param destDir the directory to place the copy in, must not be {@code null}
+	 **/
 	public static void copyDirectoryToDirectory(final File srcDir, final File destDir) {
 		try {
 			FileUtils.copyDirectoryToDirectory(srcDir, destDir);
@@ -684,6 +685,7 @@ public class FileUtilBase {
 		}
 	}
 
+	/**
 	 * Copies a whole directory to a new location preserving the file dates.
 	 *
 	 * This method copies the specified directory and all its child

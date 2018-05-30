@@ -1,5 +1,6 @@
 package picoded.core.conv;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +34,13 @@ public class GenericConvert extends GenericConvertStandard {
 		throw new IllegalAccessError("Utility class");
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// To GenericConvertMap
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * To GenericConvertMap
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To GenericConvertMap conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -109,10 +113,13 @@ public class GenericConvert extends GenericConvertStandard {
 		return toGenericConvertStringMap(input, null);
 	}
 	
+	//--------------------------------------------------------------------------------------------------
+	//
+	// To GenericConvertList
+	//
+	//--------------------------------------------------------------------------------------------------
+	
 	/**
-	 * To GenericConvertList
-	 *--------------------------------------------------------------------------------------------------
-	 *
 	 * To GenericConvertList conversion of generic object
 	 *
 	 * Performs the following strategies in the following order
@@ -182,117 +189,117 @@ public class GenericConvert extends GenericConvertStandard {
 	public static <V> GenericConvertList<V> toGenericConvertList(Object input) {
 		return toGenericConvertList(input, null);
 	}
+
+	// //--------------------------------------------------------------------------------------------------
+	// //
+	// // NESTED object fetch (related to fully qualified keys handling)
+	// //
+	// //--------------------------------------------------------------------------------------------------
 	
-	//--------------------------------------------------------------------------------------------------
-	//
-	// NESTED object fetch (related to fully qualified keys handling)
-	//
-	//--------------------------------------------------------------------------------------------------
+	// /**
+	//  * Fetch an Object from either a Map, or a List. By attempting to use the provided key.
+	//  *
+	//  * This attempts to use the key AS IT IS. Only converting it to an int for List if needed.
+	//  * It does not do recursive fetch, if that is needed see `fetchNestedObject`
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  * @param fallbck   The fallback default (if not convertable)
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object getMapOrListValue(Object base, String key, Object fallback) {
+	// 	return MapOrListUtil.getValue(base, key, fallback);
+	// }
 	
-	/**
-	 * Fetch an Object from either a Map, or a List. By attempting to use the provided key.
-	 *
-	 * This attempts to use the key AS IT IS. Only converting it to an int for List if needed.
-	 * It does not do recursive fetch, if that is needed see `fetchNestedObject`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object fetchObject(Object base, String key, Object fallback) {
-		return NestedObject.fetchObject(base, key, fallback);
-	}
+	// /**
+	//  * Default Null fallback, for `fetchObject(base, key, fallback)`
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object getMapOrListValue(Object base, String key) {
+	// 	return MapOrListUtil.getValue(base, key);
+	// }
 	
-	/**
-	 * Default Null fallback, for `fetchObject(base, key, fallback)`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object fetchObject(Object base, String key) {
-		return NestedObject.fetchObject(base, key);
-	}
+	// /**
+	//  * Split the key path into their respective component
+	//  *
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, possibly empty array if key is invalid?
+	//  **/
+	// public static String[] splitObjectPath(String key) {
+	// 	return NestedObjectFetch.splitObjectPath(key);
+	// }
 	
-	/**
-	 * Split the key path into their respective component
-	 *
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, possibly empty array if key is invalid?
-	 **/
-	public static String[] splitObjectPath(String key) {
-		return NestedObject.splitObjectPath(key);
-	}
+	// /**
+	//  * Split the key path into their respective component
+	//  *
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, possibly empty array if key is invalid?
+	//  **/
+	// public static List<String> splitObjectPath(String key, List<String> ret) {
+	// 	return NestedObjectFetch.splitObjectPath(key, ret);
+	// }
 	
-	/**
-	 * Split the key path into their respective component
-	 *
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, possibly empty array if key is invalid?
-	 **/
-	public static List<String> splitObjectPath(String key, List<String> ret) {
-		return NestedObject.splitObjectPath(key, ret);
-	}
+	// /**
+	//  * Gets an object from the map,
+	//  * That could very well be, a map inside a list, inside a map, inside a .....
+	//  *
+	//  * Note that at each iteration step, it attempts to do a FULL key match first,
+	//  * before the next iteration depth
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  * @param fallbck   The fallback default (if not convertable)
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object fetchNestedObject(Object base, String key, Object fallback) {
+	// 	return NestedObjectFetch.fetchObject(base, key, fallback);
+	// }
 	
-	/**
-	 * Gets an object from the map,
-	 * That could very well be, a map inside a list, inside a map, inside a .....
-	 *
-	 * Note that at each iteration step, it attempts to do a FULL key match first,
-	 * before the next iteration depth
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 * @param fallbck   The fallback default (if not convertable)
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object fetchNestedObject(Object base, String key, Object fallback) {
-		return NestedObject.fetchNestedObject(base, key, fallback);
-	}
+	// /**
+	//  * Default Null fallback, for `fetchNestedObject(base, key, fallback)`
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param key       The input key to fetch, possibly nested
+	//  *
+	//  * @return         The fetched object, always possible unless fallbck null
+	//  **/
+	// public static Object fetchNestedObject(Object base, String key) {
+	// 	return NestedObjectFetch.fetchObject(base, key);
+	// }
 	
-	/**
-	 * Default Null fallback, for `fetchNestedObject(base, key, fallback)`
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param key       The input key to fetch, possibly nested
-	 *
-	 * @return         The fetched object, always possible unless fallbck null
-	 **/
-	public static Object fetchNestedObject(Object base, String key) {
-		return NestedObject.fetchNestedObject(base, key);
-	}
+	// /**
+	//  * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
+	//  *
+	//  * @param base      Map / List to manipulate from
+	//  * @param objPath   The input key to fetch, possibly nested
+	//  *
+	//  * @return         The normalized key
+	//  **/
+	// public static String normalizeObjectPath(Object base, String key) {
+	// 	return NestedObject.normalizeObjectPath(base, key);
+	// }
 	
-	/**
-	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
-	 *
-	 * @param base      Map / List to manipulate from
-	 * @param objPath   The input key to fetch, possibly nested
-	 *
-	 * @return         The normalized key
-	 **/
-	public static String normalizeObjectPath(Object base, String key) {
-		return NestedObject.normalizeObjectPath(base, key);
-	}
-	
-	/**
-	 * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
-	 *
-	 * @param base           Map / List to manipulate from
-	 * @param splitKeyPath   Key path in a list format
-	 * @param res            StringBuilder results
-	 *
-	 * @return         The normalized key
-	 **/
-	public static StringBuilder normalizeObjectPath(Object base, List<String> splitKeyPath,
-		StringBuilder res) {
-		return NestedObject.normalizeObjectPath(base, splitKeyPath, res);
-	}
+	// /**
+	//  * Takes a possibly case insensitive key, and normalize it to the actual key path (if found) for the selected object
+	//  *
+	//  * @param base           Map / List to manipulate from
+	//  * @param splitKeyPath   Key path in a list format
+	//  * @param res            StringBuilder results
+	//  *
+	//  * @return         The normalized key
+	//  **/
+	// public static StringBuilder normalizeObjectPath(Object base, List<String> splitKeyPath,
+	// 	StringBuilder res) {
+	// 	return NestedObject.normalizeObjectPath(base, splitKeyPath, res);
+	// }
 	
 	// //--------------------------------------------------------------------------------------------------
 	// //

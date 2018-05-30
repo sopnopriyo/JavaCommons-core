@@ -28,4 +28,13 @@ public class ExceptionMessage {
 	 * ```
 	 **/
 	public static String staticClassConstructor = "Static / Utility class - instances should NOT be constructed in standard programming";
+
+	/** 
+	 * Function not (yet?) implemented.
+	 * 
+	 * ```
+	 * throw new UnsupportedOperationException(ExceptionMessage.functionNotImplemented);
+	 * ```
+	 **/
+	public static String functionNotImplemented= "function not (yet?) implemented";
 }

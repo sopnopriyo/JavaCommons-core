@@ -1,5 +1,5 @@
 /**
- * Servlet classes used to extend and/or implement Servlet functionality
+ * Internal utility classes for the query package
  **/
 package picoded.core.struct.query.internal;
 

@@ -393,7 +393,7 @@ public class FileUtil extends FileUtilBase {
 	 *
 	 * @return The newest timestamp found, else 0 if failed
 	 **/
-	public static long newestFileTimestamp(File inFile, List<String> excludeNames) {
+	public static long getLatestFileTimestamp(File inFile, List<String> excludeNames) {
 		long tmpTimestamp = 0L;
 		if (inFile == null || !inFile.exists()) {
 			return tmpTimestamp;
@@ -411,7 +411,7 @@ public class FileUtil extends FileUtilBase {
 				}
 			}
 			if (f.isDirectory()) {
-				tmpTimestamp = newestFileTimestamp(f, excludeNames);
+				tmpTimestamp = getLatestFileTimestamp(f, excludeNames);
 			} else {
 				tmpTimestamp = f.lastModified();
 			}
@@ -427,8 +427,8 @@ public class FileUtil extends FileUtilBase {
 	 *
 	 * @return The newest timestamp found, else 0 if failed
 	 **/
-	public static long newestFileTimestamp(File inFile) {
-		return newestFileTimestamp(inFile, null);
+	public static long getLatestFileTimestamp(File inFile) {
+		return getLatestFileTimestamp(inFile, null);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------

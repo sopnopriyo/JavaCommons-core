@@ -83,15 +83,15 @@ public class AllCombinations_test {
 	/// Test key / value based search
 	@Test
 	public void keyValueMultipleSearch() {
-		Query cond = new Equals("key", "key_hello", arguments_a);
+		Query cond = new Equals("_key", "key_hello", arguments_a);
 		assertTrue(cond.test(sample_a));
 		assertTrue(cond.test(sample_b));
 		
-		cond = new Equals("key", "hello", arguments_a);
+		cond = new Equals("_key", "hello", arguments_a);
 		assertFalse(cond.test(sample_a));
 		assertFalse(cond.test(sample_b));
 		
-		cond = new Equals("val", "my", arguments_a);
+		cond = new Equals("_val", "my", arguments_a);
 		assertTrue(cond.test(sample_a));
 		assertFalse(cond.test(sample_b));
 	}
@@ -100,7 +100,7 @@ public class AllCombinations_test {
 	@Test
 	public void notEqualsTest() {
 		
-		Query cond = new NotEquals("key", "key_hello", arguments_a);
+		Query cond = new NotEquals("_key", "key_hello", arguments_a);
 		assertTrue(cond.test(sample_a));
 		assertTrue(cond.test(sample_b));
 		
@@ -111,10 +111,10 @@ public class AllCombinations_test {
 	@Test
 	public void notTest() {
 		List<Query> child = new ArrayList<Query>();
-		Query query = new NotEquals("key", "key_hello", arguments_a);
+		Query query = new NotEquals("_key", "key_hello", arguments_a);
 		child.add(query);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("key", "key_hello");
+		map.put("_key", "key_hello");
 		Query cond = new Not(child, map);
 		assertTrue(cond.test(sample_a));
 		assertTrue(cond.test(sample_b));
@@ -124,10 +124,10 @@ public class AllCombinations_test {
 	@Test
 	public void notAlternatePathTest() {
 		List<Query> child = new ArrayList<Query>();
-		Query query = new NotEquals("key", "key_hello", arguments_a);
+		Query query = new NotEquals("_key", "key_hello", arguments_a);
 		child.add(query);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("key", "key_hello");
+		map.put("_key", "key_hello");
 		map.put("key_hello", "key_hello");
 		Query cond = new Not(child, map);
 		assertFalse(cond.test(sample_a));
@@ -147,8 +147,8 @@ public class AllCombinations_test {
 	public void CombinationBaseThreeParamsTest() {
 		CombinationBase combinationBase = new CombinationBase(null, null, null);
 		assertNotNull(combinationBase);
-		Query rightQuery = new NotEquals("key", "key_hello", arguments_a);
-		Query leftQuery = new NotEquals("key", "key_hello", arguments_a);
+		Query rightQuery = new NotEquals("_key", "key_hello", arguments_a);
+		Query leftQuery = new NotEquals("_key", "key_hello", arguments_a);
 		Map<String, Object> defaultArgMap = new HashMap<String, Object>();
 		combinationBase = new CombinationBase(leftQuery, rightQuery, defaultArgMap);
 	}
@@ -164,7 +164,7 @@ public class AllCombinations_test {
 	@Test
 	public void keyValuesMapTest() {
 		List<Query> childQuery = new ArrayList<Query>();
-		Query query = new NotEquals("key", "key_hello", arguments_a);
+		Query query = new NotEquals("_key", "key_hello", arguments_a);
 		childQuery.add(query);
 		Map<String, Object> defaultArgMap = new HashMap<String, Object>();
 		CombinationBase combinationBase = new CombinationBase(childQuery, defaultArgMap);
@@ -190,16 +190,16 @@ public class AllCombinations_test {
 	@Test
 	public void testTest() {
 		List<Query> childQuery = new ArrayList<Query>();
-		Query query = new NotEquals("key", "key_hello", arguments_a);
+		Query query = new NotEquals("_key", "key_hello", arguments_a);
 		Map<String, Object> map = new HashMap<String, Object>();
 		CombinationBase combinationBase = new CombinationBase(childQuery, map);
 		Query cond = new Not(childQuery, map);
 		assertFalse(combinationBase.test(cond, map));
 		childQuery.add(query);
-		map.put("key", "key_hello");
+		map.put("_key", "key_hello");
 		combinationBase = new CombinationBase(childQuery, map);
 		assertFalse(combinationBase.test(null, map));
-		//assertTrue(combinationBase.test("key", map));
+		//assertTrue(combinationBase.test("_key", map));
 	}
 	
 	@Test
