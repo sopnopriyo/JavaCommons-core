@@ -1,6 +1,9 @@
 package picoded.core.struct;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import picoded.core.conv.*;
@@ -11,13 +14,25 @@ import picoded.core.conv.*;
  **/
 @SuppressWarnings("serial")
 public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
+
+	/**
+	 * "Serializable" classes should have a version id
+	 **/
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Blank constructor
 	 **/
 	public ArrayListMap() {
 		super();
 	}
-	
+
+	//------------------------------------------------------------------------
+	//
+	//  Inner Array Setup
+	//
+	//------------------------------------------------------------------------
+
 	/**
 	 * Gets the sublist stored for a key.
 	 * If it does not exists, it is initiated.
@@ -37,14 +52,52 @@ public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
 		return ret;
 	}
 	
+	//------------------------------------------------------------------------
+	//
+	//  Appending to array
+	//
+	//------------------------------------------------------------------------
+
 	/**
 	 * Adds to the sublist associated to the key value
 	 *
 	 * @param  the key used
 	 * @param  the value to store
 	 **/
-	public void addToList(K key, V val) {
+	public void append(K key, V val) {
 		getSubList(key).add(val);
+	}
+	
+	/**
+	 * Appends the value to the inner list, creating a new ArrayList if needed
+	 *
+	 * @param   key     key to use
+	 * @param   value   values emuneration to append
+	 *
+	 * @return   returns itself
+	 **/
+	public void append(K key, Collection<V> values) {
+		if (values == null) {
+			return;
+		}
+		append(key, Collections.enumeration(values));
+	}
+	
+	/**
+	 * Appends the value to the inner list, creating a new ArrayList if needed
+	 *
+	 * @param   key     key to use
+	 * @param   value   values emuneration to append
+	 *
+	 * @return   returns itself
+	 **/
+	public void append(K key, Enumeration<V> values) {
+		if (values == null) {
+			return;
+		}
+		while (values.hasMoreElements()) {
+			this.append(key, values.nextElement());
+		}
 	}
 	
 	/**
@@ -54,7 +107,7 @@ public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
 	 * @param  the key used
 	 * @param  the value to store
 	 **/
-	public void addToListIfNotExists(K key, V val) {
+	public void appendIfNotExists(K key, V val) {
 		ArrayList<V> subList = getSubList(key);
 		if (!(subList.contains(val))) {
 			subList.add(val);
@@ -77,4 +130,14 @@ public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
 	public String toString() {
 		return GenericConvert.toString(this);
 	}
+
+	/**
+	 * Returns a new map, with all the internal List<V> objects converted to V[] Array
+	 *
+	 * @return   the flatten map array
+	 **/
+	public Map<K, V[]> toMapArray(V[] arrayType) {
+		return MapValueConv.listToArray(standardMap(), arrayType);
+	}
+	
 }
