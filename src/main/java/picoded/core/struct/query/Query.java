@@ -158,7 +158,7 @@ public interface Query extends Predicate<Object> {
 		
 		if (isBasicOperator()) {
 			// Basic operator returns self
-			ret.addToListIfNotExists(fieldName(), this);
+			ret.appendIfNotExists(fieldName(), this);
 			return ret.standardMap();
 		} else if (isCombinationOperator()) {
 			// Child nodes iteration
