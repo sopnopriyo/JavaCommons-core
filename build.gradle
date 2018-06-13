@@ -66,6 +66,9 @@ dependencies {
 	api "com.fasterxml.jackson.core:jackson-core:2.9.4"
 	api "com.fasterxml.jackson.core:jackson-databind:2.9.4"
 
+	// http client support
+	api 'com.squareup.okhttp3:okhttp:3.10.0'
+
 	// This dependencies is used internally, and not exposed to consumers on their own compile classpath.
 	//-------------------------------------------------------------------------------------------------------------------
 	// implementation 'com.google.guava:guava:23.0'
@@ -73,6 +76,7 @@ dependencies {
 	// Testing dependencies
 	//-------------------------------------------------------------------------------------------------------------------
 	testImplementation 'junit:junit:4.12'
+	testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
 
 }
 
@@ -119,6 +123,7 @@ shadowJar {
 	// Shade depencies under "picoded.shade"
 	relocate "org", "picoded.shade.org"
 	relocate "com", "picoded.shade.com"
+	relocate "okhttp3", "picoded.shade.okhttp3"
 }
 
 //
@@ -165,6 +170,7 @@ task fatJar(type: com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
 	// Disable relocation
 	relocate "org", "org"
 	relocate "com", "com"
+	relocate "okhttp3", "okhttp3"
 }
 
 // Define the equivalent of buildAll
