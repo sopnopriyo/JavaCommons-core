@@ -24,11 +24,15 @@ public class RequestHttpClient_test{
 	public void setup(){
 		try{
 			mockWebServer = new MockWebServer();
+
+			// Start server at any available port in the system
 			mockWebServer.start(0);
+
 		} catch(IOException io){
 			throw new RuntimeException(io);
 		}
 
+		// Initialize the http client
 		requestHttpClient = new RequestHttpClient();
 	}
 
@@ -45,7 +49,9 @@ public class RequestHttpClient_test{
 	@Test
 	public void basic_GETRequest() {
 		// Simple hello world test
+		// Add the body for the response
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.get(mockWebServer.url("/").toString(), null, null, null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -53,12 +59,14 @@ public class RequestHttpClient_test{
 
 	@Test
 	public void headers_GETRequest() {
+		// Adding response headers
 		mockWebServer.enqueue(new MockResponse()
 				.addHeader("first", "first value")
 				.addHeader("first", "another value")
 				.addHeader("second", "single value")
 		);
 
+		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.get(mockWebServer.url("/").toString(), null, null, null);
 		Map<String, String[]> headers = responseHttp.headersMap();
 		assertNotNull(headers);
@@ -68,11 +76,13 @@ public class RequestHttpClient_test{
 
 	@Test
 	public void cookies_GETRequest() {
+		// Adding testing response for cookies
 		mockWebServer.enqueue(new MockResponse()
 				.addHeader("Set-Cookie", "cookie1=thiscookie")
 				.addHeader("Set-Cookie", "cookie2=myname")
 		);
 
+		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.get(mockWebServer.url("/").toString(), null, null, null);
 		Map<String, String[]> cookiesMap = responseHttp.cookiesMap();
 		assertNotNull(cookiesMap);
