@@ -55,6 +55,9 @@ public class RequestHttpClient_test{
 		assertNotNull(requestHttpClient);
 	}
 
+	/**
+	 * This basic GET request test retrieves information from the server
+	 */
 	@Test
 	public void basic_GETRequest() {
 		// Simple hello world test
@@ -70,8 +73,84 @@ public class RequestHttpClient_test{
 		assertEquals(responseHttp.toString(), "hello, world!");
 	}
 
+	/**
+	 * This test assert the headers sent via GET
+	 * was received correctly on the server side
+	 *
+	 * @throws InterruptedException
+	 */
 	@Test
-	public void headers_GETRequest() {
+	public void headers_GETRequest() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare headers
+		Map<String, String[]> headers = new HashMap<String, String[]>();
+		headers.put("first",  new String[]{ "random-value", "choose-value" });
+		headers.put("second", new String[]{ "single-value" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.get(
+				mockWebServer.url("/").toString(),
+				null,
+				null,
+				headers);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's headers
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+
+		List<String> firstHeader = new ArrayList<String>();
+		firstHeader.add("random-value");
+		firstHeader.add("choose-value");
+		assertEquals(firstHeader, serverRequestHeaders.get("first"));
+
+		List<String> secondHeader = new ArrayList<String>();
+		secondHeader.add("single-value");
+		assertEquals(secondHeader, serverRequestHeaders.get("second"));
+	}
+
+	/**
+	 * This test assert the cookies sent via GET
+	 * was received correctly on the server side
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void cookies_GETRequest() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare cookie map
+		Map<String, String[]> cookiesMap = new HashMap<String, String[]>();
+		cookiesMap.put("cookie1", new String[]{ "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[]{ "myname" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.get(
+				mockWebServer.url("/").toString(),
+				null,
+				cookiesMap,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's cookies
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
+
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, requestHeaders.get("cookie"));
+	}
+
+	/**
+	 * This test assert the headers is correctly
+	 * received by ResponseHttp
+	 *
+	 */
+	@Test
+	public void headers_ResponseHttp() {
 		// Adding response headers
 		mockWebServer.enqueue(new MockResponse()
 				.addHeader("first", "first value")
@@ -91,8 +170,13 @@ public class RequestHttpClient_test{
 		assertEquals(headers.get("second"), new String[] { "single value" });
 	}
 
+	/**
+	 * This test assert the cookies is correctly
+	 * received by ResponseHttp
+	 *
+	 */
 	@Test
-	public void cookies_GETRequest() {
+	public void cookies_ResponseHttp() {
 		// Adding testing response for cookies
 		mockWebServer.enqueue(new MockResponse()
 				.addHeader("Set-Cookie", "cookie1=thiscookie")
@@ -111,6 +195,12 @@ public class RequestHttpClient_test{
 		assertEquals(cookiesMap.get("cookie2"), new String[] { "myname" });
 	}
 
+	/**
+	 * This test assert that the post request body
+	 * is correctly sent via POST to the server
+	 *
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void basic_POSTRequest_Form() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
@@ -135,6 +225,12 @@ public class RequestHttpClient_test{
 			sentRequest.getUtf8Body());
 	}
 
+	/**
+	 * This test assert that the headers
+	 * is correctly sent via POST to the server
+	 *
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void headers_POSTRequest_Form() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
@@ -167,6 +263,12 @@ public class RequestHttpClient_test{
 		assertEquals(secondHeader, serverRequestHeaders.get("second"));
 	}
 
+	/**
+	 * This test assert that the cookies
+	 * is correctly sent via POST to the server
+	 *
+	 * @throws InterruptedException
+	 */
 	@Test
 	public void cookies_POSTRequest_Form() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
