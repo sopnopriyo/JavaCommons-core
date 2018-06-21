@@ -680,7 +680,6 @@ public final class RequestHttpClient {
 	//
 	//------------------------------------------------
 
-
 	/**
 	 * Performs DELETE request : with form parameters as the body
 	 *

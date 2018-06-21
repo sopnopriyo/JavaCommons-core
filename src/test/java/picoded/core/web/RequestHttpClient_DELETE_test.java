@@ -64,7 +64,6 @@ public class RequestHttpClient_DELETE_test{
 	//
 	//------------------------------------------------
 
-
 	/**
 	 * This test assert that the delete request body
 	 * is correctly sent via DELETE to the server
