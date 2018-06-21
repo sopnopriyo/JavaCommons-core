@@ -14,6 +14,7 @@ import okhttp3.*;
 import picoded.core.conv.NestedObjectUtil;
 import picoded.core.conv.StringEscape;
 import picoded.core.conv.MapValueConv;
+import picoded.core.conv.ConvertJSON;
 import picoded.core.struct.GenericConvertHashMap;
 import picoded.core.struct.GenericConvertMap;
 import picoded.core.common.EmptyArray;
@@ -52,6 +53,13 @@ import picoded.core.common.EmptyArray;
  * ```
  **/
 public final class RequestHttpClient {
+
+	//------------------------------------------------
+	//
+	//  OKHTTP variables
+	//
+	//------------------------------------------------
+	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
 	//------------------------------------------------
 	//
@@ -387,6 +395,47 @@ public final class RequestHttpClient {
 			// Prepare the request builder for post method with the RequestBody
 			reqBuilder = reqBuilder.post(reqBody);
 		}
+
+		// Build the request, and make the call
+		try{
+			Response response = client.newCall( reqBuilder.build() ).execute();
+			return new ResponseHttpImplementation(response);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	public ResponseHttp postJSON(//
+		String reqUrl, //
+		Map<String, String[]> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+		try{
+			String jsonString = ConvertJSON.fromMap(paramMap);
+			return postJSON(
+					reqUrl,
+					jsonString,
+					cookiesMap,
+					headersMap
+			);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public ResponseHttp postJSON(//
+		String reqUrl, //
+		String jsonString, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+		// Initialize the request builder with url and set up its headers
+		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		RequestBody body = RequestBody.create(JSON, jsonString);
+		reqBuilder = reqBuilder.post(body);
 
 		// Build the request, and make the call
 		try{
