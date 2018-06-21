@@ -990,5 +990,13 @@ public final class RequestHttpClient {
 			// Return the extracted cookies
 			return cookies_array;
 		};
+
+		/**
+		 * Gets the method of the request
+		 */
+		@Override
+		public String method(){
+			return response.request().method();
+		}
 	}
 }

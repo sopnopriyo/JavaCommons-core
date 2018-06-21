@@ -25,12 +25,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * This test suite will handle the PUT methods
+ * This test suite will handle the DELETE methods
  */
 public class RequestHttpClient_DELETE_test{
 
 	MockWebServer mockWebServer = null;
 	RequestHttpClient requestHttpClient = null;
+	String httpbinURL = "https://httpbin.org/delete";
 
 	@Before
 	public void setup(){
@@ -91,6 +92,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		assertEquals("second_value=double-value&second_value=another-value&first_value=single-value",
 				sentRequest.getUtf8Body());
 	}
@@ -161,6 +163,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's cookies
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		
 		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> cookies = new ArrayList<String>();
@@ -170,7 +173,7 @@ public class RequestHttpClient_DELETE_test{
 
 	//------------------------------------------------
 	//
-	//  PUT request JSON OBJECT test units
+	//  DELETE request JSON OBJECT test units
 	//
 	//------------------------------------------------
 	/**
@@ -201,6 +204,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		assertEquals("{\"second_value\":[\"double-value\",\"another-value\"],\"first_value\":[\"single-value\"]}",
 				sentRequest.getUtf8Body());
 	}
@@ -234,6 +238,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		assertEquals("[\"abc\",\"def\",\"{'name':'ghi'}\"]",
 				sentRequest.getUtf8Body());
 	}
@@ -268,6 +273,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's headers
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> firstHeader = new ArrayList<String>();
@@ -310,6 +316,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's cookies
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> cookies = new ArrayList<String>();
@@ -319,7 +326,7 @@ public class RequestHttpClient_DELETE_test{
 
 	//------------------------------------------------
 	//
-	//  PUT request JSON STRING test units
+	//  DELETE request JSON STRING test units
 	//
 	//------------------------------------------------
 	/**
@@ -356,6 +363,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		assertEquals(json, sentRequest.getUtf8Body());
 	}
 
@@ -386,6 +394,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's headers
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> firstHeader = new ArrayList<String>();
@@ -425,6 +434,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's cookies
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> cookies = new ArrayList<String>();
@@ -434,7 +444,7 @@ public class RequestHttpClient_DELETE_test{
 
 	//------------------------------------------------
 	//
-	//  PUT request MULTIPART test units
+	//  DELETE request MULTIPART test units
 	//
 	//------------------------------------------------
 
@@ -469,6 +479,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		String body = sentRequest.getUtf8Body();
 		assertTrue(body.indexOf(first) >= 0);
 		assertTrue(body.indexOf(second) >= 0);
@@ -514,6 +525,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		String body = sentRequest.getUtf8Body();
 
 		for(File file : fileArray){
@@ -573,6 +585,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's body
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		String body = sentRequest.getUtf8Body();
 
 		assertTrue(body.indexOf(first) >= 0);
@@ -617,6 +630,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's headers
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> firstHeader = new ArrayList<String>();
@@ -657,10 +671,57 @@ public class RequestHttpClient_DELETE_test{
 
 		// Check sent request's cookies
 		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
 		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
 
 		List<String> cookies = new ArrayList<String>();
 		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
 		assertEquals(cookies, requestHeaders.get("cookie"));
+	}
+
+	@Test
+	public void http_bin_delete_method(){
+		// Prepare delete body Params
+		Map<String, String[]> deleteBodyParams = new HashMap<String, String[]>();
+		deleteBodyParams.put("first_value",  new String[]{ "single-value" });
+		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+				httpbinURL,
+				deleteBodyParams,
+				null,
+				null);
+		assertEquals("DELETE", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
+
+		// Retrieve mockResponse from server and assert the results
+		responseHttp = requestHttpClient.deleteJSON(
+				httpbinURL,
+				deleteBodyParams,
+				null,
+				null);
+		assertEquals("DELETE", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
+
+		// Retrieve mockResponse from server and assert the results
+		responseHttp = requestHttpClient.deleteJSON_string(
+				httpbinURL,
+				"",
+				null,
+				null);
+		assertEquals("DELETE", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
+
+		// Retrieve mockResponse from server and assert the results
+		// @TODO: If params and fileMap is null, it will become a GET method!
+		responseHttp = requestHttpClient.deleteMultipart(
+				httpbinURL,
+				deleteBodyParams,
+				null,
+				null,
+				null);
+		assertEquals("DELETE", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
 	}
 }

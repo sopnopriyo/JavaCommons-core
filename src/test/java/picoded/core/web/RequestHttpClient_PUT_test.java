@@ -31,6 +31,7 @@ public class RequestHttpClient_PUT_test{
 
 	MockWebServer mockWebServer = null;
 	RequestHttpClient requestHttpClient = null;
+	String httpbinURL = "https://httpbin.org/put";
 
 	@Before
 	public void setup(){
@@ -663,5 +664,51 @@ public class RequestHttpClient_PUT_test{
 		List<String> cookies = new ArrayList<String>();
 		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
 		assertEquals(cookies, requestHeaders.get("cookie"));
+	}
+
+	@Test
+	public void http_bin_put_method(){
+		// Prepare delete body Params
+		Map<String, String[]> deleteBodyParams = new HashMap<String, String[]>();
+		deleteBodyParams.put("first_value",  new String[]{ "single-value" });
+		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.putForm(
+				httpbinURL,
+				deleteBodyParams,
+				null,
+				null);
+		assertEquals("PUT", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
+
+		// Retrieve mockResponse from server and assert the results
+		responseHttp = requestHttpClient.putJSON(
+				httpbinURL,
+				deleteBodyParams,
+				null,
+				null);
+		assertEquals("PUT", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
+
+		// Retrieve mockResponse from server and assert the results
+		responseHttp = requestHttpClient.putJSON_string(
+				httpbinURL,
+				"",
+				null,
+				null);
+		assertEquals("PUT", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
+
+		// Retrieve mockResponse from server and assert the results
+		// @TODO: If params and fileMap is null, it will become a GET method!
+		responseHttp = requestHttpClient.putMultipart(
+				httpbinURL,
+				deleteBodyParams,
+				null,
+				null,
+				null);
+		assertEquals("PUT", responseHttp.method());
+		assertEquals(responseHttp.statusCode(), 200);
 	}
 }

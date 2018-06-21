@@ -96,4 +96,11 @@ public interface ResponseHttp {
 		return null;
 	};
 
+	/**
+	 * Gets the method of the request
+	 */
+	public default String method(){
+		return "";
+	}
+
 }
