@@ -361,10 +361,10 @@ public final class RequestHttpClient {
 	}
 
 	/**
-	 * Performs POST request : with parameters, appended to the requestURL
+	 * Performs POST request : with form parameters as the body
 	 *
 	 * @param   Request URL to call
-	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   paramMap   [can be null] Parameters to add to the request body
 	 * @param   cookieMap  [can be null] Cookie map to send values
 	 * @param   headersMap [can be null] Headers map to send values
 	 *
@@ -405,15 +405,26 @@ public final class RequestHttpClient {
 		}
 	}
 
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   Parameters to add to the request body
+	 *                     Pass empty Map to use this method explicitly
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
 	public ResponseHttp postJSON(//
 		String reqUrl, //
-		Map<String, String[]> paramMap, //
+		Object params, //
 		Map<String, String[]> cookiesMap, //
 		Map<String, String[]> headersMap //
 	) {
 		try{
-			String jsonString = ConvertJSON.fromMap(paramMap);
-			return postJSON(
+			String jsonString = ConvertJSON.fromObject(params);
+			return postJSON_string(
 					reqUrl,
 					jsonString,
 					cookiesMap,
@@ -424,7 +435,18 @@ public final class RequestHttpClient {
 		}
 	}
 
-	public ResponseHttp postJSON(//
+	/**
+	 * Performs POST request : with json string as the parameter
+	 *
+	 * @param   Request URL to call
+	 * @param   jsonString Parameters to add to the request body,
+	 *                     pass empty String to use this method explicitly
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp postJSON_string(//
 		String reqUrl, //
 		String jsonString, //
 		Map<String, String[]> cookiesMap, //
@@ -433,6 +455,9 @@ public final class RequestHttpClient {
 		// Initialize the request builder with url and set up its headers
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		// Ensure jsonString is not null
+		jsonString = (jsonString != null) ? jsonString : "";
 
 		RequestBody body = RequestBody.create(JSON, jsonString);
 		reqBuilder = reqBuilder.post(body);
@@ -445,6 +470,7 @@ public final class RequestHttpClient {
 			throw new RuntimeException(e);
 		}
 	}
+
 	// ~GET~ / POST / PUT / DELETE
 	
 	// /**
