@@ -60,6 +60,12 @@ public class RequestHttpClient_test{
 		assertNotNull(requestHttpClient);
 	}
 
+	//------------------------------------------------
+	//
+	//  GET request test units
+	//
+	//------------------------------------------------
+
 	/**
 	 * This basic GET request test retrieves information from the server
 	 */
@@ -149,6 +155,12 @@ public class RequestHttpClient_test{
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
 
+	//------------------------------------------------
+	//
+	//  ResponseHttp test units
+	//
+	//------------------------------------------------
+
 	/**
 	 * This test assert the headers is correctly
 	 * received by ResponseHttp
@@ -199,6 +211,12 @@ public class RequestHttpClient_test{
 		assertEquals(cookiesMap.get("cookie1"), new String[] { "thiscookie" });
 		assertEquals(cookiesMap.get("cookie2"), new String[] { "myname" });
 	}
+
+	//------------------------------------------------
+	//
+	//  POST request JSON OBJECT test units
+	//
+	//------------------------------------------------
 
 	/**
 	 * This test assert that the post request body
@@ -448,6 +466,12 @@ public class RequestHttpClient_test{
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
 
+	//------------------------------------------------
+	//
+	//  POST request JSON STRING test units
+	//
+	//------------------------------------------------
+
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
@@ -557,6 +581,12 @@ public class RequestHttpClient_test{
 		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
+
+	//------------------------------------------------
+	//
+	//  POST request MULTIPART test units
+	//
+	//------------------------------------------------
 
 	/**
 	 * This test assert that the params
