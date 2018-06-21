@@ -3,6 +3,7 @@ package picoded.core.web;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,6 +61,7 @@ public final class RequestHttpClient {
 	//
 	//------------------------------------------------
 	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+	public static final MediaType OCTET_STREAM = MediaType.parse("application/octet-stream");
 
 	//------------------------------------------------
 	//
@@ -382,18 +384,7 @@ public final class RequestHttpClient {
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
 
 		if(paramMap != null){
-			// From the paramMap, create a RequestBody for attaching to the okhttp post method
-			FormBody.Builder formBodyBuilder = new FormBody.Builder();
-			for(String key : paramMap.keySet()){
-				String[] values = paramMap.get(key);
-				for(String value : values) {
-					formBodyBuilder.add(key, value);
-				}
-			}
-			RequestBody reqBody = formBodyBuilder.build();
-
-			// Prepare the request builder for post method with the RequestBody
-			reqBuilder = reqBuilder.post(reqBody);
+			reqBuilder = buildFormBody(reqBuilder, paramMap);
 		}
 
 		// Build the request, and make the call
@@ -456,11 +447,15 @@ public final class RequestHttpClient {
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
 
+		////////////////////////////////////////////////////////////////////////
+
 		// Ensure jsonString is not null
 		jsonString = (jsonString != null) ? jsonString : "";
 
 		RequestBody body = RequestBody.create(JSON, jsonString);
 		reqBuilder = reqBuilder.post(body);
+
+		////////////////////////////////////////////////////////////////////////
 
 		// Build the request, and make the call
 		try{
@@ -471,7 +466,91 @@ public final class RequestHttpClient {
 		}
 	}
 
+	public ResponseHttp postMultipart(//
+		String reqUrl, //
+		Map<String, String[]> paramsMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap, //
+		Map<String, File[]> filesMap //
+	) {
+		// Initialize the request builder with url and set up its headers
+		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		////////////////////////////////////////////////////////////////////////
+
+		if((paramsMap != null && paramsMap.size() > 0) ||
+			(filesMap != null && filesMap.size() > 0)){
+			reqBuilder = buildMultipartBody(reqBuilder, paramsMap, filesMap);
+		}
+
+		////////////////////////////////////////////////////////////////////////
+
+		// Build the request, and make the call
+		try{
+			Response response = client.newCall( reqBuilder.build() ).execute();
+			return new ResponseHttpImplementation(response);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
 	// ~GET~ / POST / PUT / DELETE
+
+	////////////////////////////////////////////////////////////////////////
+	//
+	// Helper functions
+	//
+	////////////////////////////////////////////////////////////////////////
+
+	private Request.Builder buildFormBody(
+		Request.Builder reqBuilder,
+		Map<String, String[]> paramMap
+	) {
+		// From the paramMap, create a RequestBody for attaching to the okhttp post method
+		FormBody.Builder formBodyBuilder = new FormBody.Builder();
+		for(String key : paramMap.keySet()){
+			String[] values = paramMap.get(key);
+			for(String value : values) {
+				formBodyBuilder.add(key, value);
+			}
+		}
+		RequestBody reqBody = formBodyBuilder.build();
+
+		// Prepare the request builder for post method with the RequestBody
+		reqBuilder = reqBuilder.post(reqBody);
+
+		return reqBuilder;
+	}
+
+	private Request.Builder buildMultipartBody(
+		Request.Builder reqBuilder,
+		Map<String, String[]> paramMap,
+		Map<String, File[]> filesMap
+	){
+		MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
+			.setType(MultipartBody.FORM);
+
+		if(paramMap != null){
+			for(String key : paramMap.keySet()){
+				String[] values = paramMap.get(key);
+				for(String value : values) {
+					multipartBuilder.addFormDataPart(key, value);
+				}
+			}
+		}
+
+		if(filesMap != null){
+			for(String key : filesMap.keySet()) {
+				File[] files = filesMap.get(key);
+				for(File file : files) {
+					multipartBuilder.addFormDataPart(key, file.getName(),
+						RequestBody.create(OCTET_STREAM, file));
+				}
+			}
+		}
+
+		return reqBuilder.post(multipartBuilder.build());
+	}
 	
 	// /**
 	//  * Sends a request with the respective HTTP / RequestBody type
