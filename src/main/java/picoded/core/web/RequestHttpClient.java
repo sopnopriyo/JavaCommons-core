@@ -836,6 +836,12 @@ public final class RequestHttpClient {
 	//
 	////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * Generate the form body for okhttp to process
+	 *
+	 * @param paramMap the parameters to be passed
+	 * @return Requestbody to be attached to Request.Builder
+	 */
 	private RequestBody buildFormBody(Map<String, String[]> paramMap) {
 		// From the paramMap, create a RequestBody for attaching to the okhttp post method
 		FormBody.Builder formBodyBuilder = new FormBody.Builder();
@@ -848,6 +854,13 @@ public final class RequestHttpClient {
 		return formBodyBuilder.build();
 	}
 
+	/**
+	 * Generate the multipart body for okhttp to process
+	 *
+	 * @param paramMap the parameters to be passed
+	 * @param filesMap the key files map to be submitted
+	 * @return Requestbody to be attached to Request.Builder
+	 */
 	private RequestBody buildMultipartBody(
 		Map<String, String[]> paramMap,
 		Map<String, File[]> filesMap
