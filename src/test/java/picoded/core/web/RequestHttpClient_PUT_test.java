@@ -66,9 +66,9 @@ public class RequestHttpClient_PUT_test{
 
 
 	/**
-	 * This test assert that the post request body
-	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * This test assert that the put request body
+	 * is correctly sent via PUT to the server
+	 * using putForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -76,15 +76,15 @@ public class RequestHttpClient_PUT_test{
 	public void basic_put_request_form() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
-		// Prepare post body Params
-		Map<String, String[]> postBodyParams = new HashMap<String, String[]>();
-		postBodyParams.put("first_value",  new String[]{ "single-value" });
-		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+		// Prepare put body Params
+		Map<String, String[]> putBodyParams = new HashMap<String, String[]>();
+		putBodyParams.put("first_value",  new String[]{ "single-value" });
+		putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.putForm(
 				mockWebServer.url("/").toString(),
-				postBodyParams,
+				putBodyParams,
 				null,
 				null);
 		assertEquals(responseHttp.statusCode(), 200);
@@ -98,8 +98,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the headers
-	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * is correctly sent via PUT to the server
+	 * using putForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -137,8 +137,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the cookies
-	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * is correctly sent via PUT to the server
+	 * using putForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -175,9 +175,9 @@ public class RequestHttpClient_PUT_test{
 	//
 	//------------------------------------------------
 	/**
-	 * This test assert that the post request body
-	 * is correctly sent via POST to the server
-	 * using postJSON() - Map<String, String[]>
+	 * This test assert that the put request body
+	 * is correctly sent via PUT to the server
+	 * using putJSON() - Map<String, String[]>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -186,15 +186,15 @@ public class RequestHttpClient_PUT_test{
 
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
-		// Prepare post body Params
-		Map<String, String[]> postBodyParams = new HashMap<String, String[]>();
-		postBodyParams.put("first_value",  new String[]{ "single-value" });
-		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+		// Prepare put body Params
+		Map<String, String[]> putBodyParams = new HashMap<String, String[]>();
+		putBodyParams.put("first_value",  new String[]{ "single-value" });
+		putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.putJSON(
 				mockWebServer.url("/").toString(),
-				postBodyParams,
+				putBodyParams,
 				null,
 				null);
 		assertEquals(responseHttp.statusCode(), 200);
@@ -207,9 +207,9 @@ public class RequestHttpClient_PUT_test{
 	}
 
 	/**
-	 * This test assert that the post request body
-	 * is correctly sent via POST to the server
-	 * using postJSON() - List<String>
+	 * This test assert that the put request body
+	 * is correctly sent via PUT to the server
+	 * using putJSON() - List<String>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -218,16 +218,16 @@ public class RequestHttpClient_PUT_test{
 
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
-		// Prepare post body Params
-		List<String> postBodyParams = new ArrayList<String>();
-		postBodyParams.add("abc");
-		postBodyParams.add("def");
-		postBodyParams.add("{'name':'ghi'}");
+		// Prepare put body Params
+		List<String> putBodyParams = new ArrayList<String>();
+		putBodyParams.add("abc");
+		putBodyParams.add("def");
+		putBodyParams.add("{'name':'ghi'}");
 
 		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.putJSON(
 				mockWebServer.url("/").toString(),
-				postBodyParams,
+				putBodyParams,
 				null,
 				null);
 		assertEquals(responseHttp.statusCode(), 200);
@@ -241,8 +241,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the headers
-	 * is correctly sent via POST to the server
-	 * using postJSON()
+	 * is correctly sent via PUT to the server
+	 * using putJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -283,8 +283,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the cookies
-	 * is correctly sent via POST to the server
-	 * using postJSON()
+	 * is correctly sent via PUT to the server
+	 * using putJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -324,9 +324,9 @@ public class RequestHttpClient_PUT_test{
 	//
 	//------------------------------------------------
 	/**
-	 * This test assert that the post request body
-	 * is correctly sent via POST to the server
-	 * using postJSON_string()
+	 * This test assert that the put request body
+	 * is correctly sent via PUT to the server
+	 * using putJSON_string()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -335,7 +335,7 @@ public class RequestHttpClient_PUT_test{
 
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
-		// Prepare post body JSON string
+		// Prepare put body JSON string
 		String json = "{'winCondition':'HIGH_SCORE',"
 				+ "'name':'Bowling',"
 				+ "'round':4,"
@@ -362,8 +362,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the headers
-	 * is correctly sent via POST to the server
-	 * using postJSON_string()
+	 * is correctly sent via PUT to the server
+	 * using putJSON_string()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -401,8 +401,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the cookies
-	 * is correctly sent via POST to the server
-	 * using postJSON_string()
+	 * is correctly sent via PUT to the server
+	 * using putJSON_string()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -442,8 +442,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the params
-	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * is correctly sent via PUT to the server
+	 * using putMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -479,8 +479,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the filesMap
-	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * is correctly sent via PUT to the server
+	 * using putMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -530,8 +530,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the params and fileMap
-	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * is correctly sent via PUT to the server
+	 * using putMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -592,8 +592,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the headers
-	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * is correctly sent via PUT to the server
+	 * using putMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -632,8 +632,8 @@ public class RequestHttpClient_PUT_test{
 
 	/**
 	 * This test assert that the cookies
-	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * is correctly sent via PUT to the server
+	 * using putMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
