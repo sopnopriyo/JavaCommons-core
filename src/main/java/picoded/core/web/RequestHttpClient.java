@@ -680,6 +680,157 @@ public final class RequestHttpClient {
 	//
 	//------------------------------------------------
 
+
+	/**
+	 * Performs DELETE request : with form parameters as the body
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteForm(//
+		String reqUrl, //
+		Map<String, String[]> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+
+		// Initialize the request builder with url and set up its headers
+		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		if(paramMap != null){
+			// Create the form with the paramMap
+			RequestBody requestBody = buildFormBody(paramMap);
+
+			// Attach RequestBody to the RequestBuilder
+			reqBuilder.delete(requestBody);
+		}
+
+		// Build the request, and make the call
+		try{
+			Response response = client.newCall( reqBuilder.build() ).execute();
+			return new ResponseHttpImplementation(response);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteJSON(
+		String reqUrl, //
+		Object params, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+		try{
+			String jsonString = ConvertJSON.fromObject(params);
+			return deleteJSON_string(
+					reqUrl,
+					jsonString,
+					cookiesMap,
+					headersMap
+			);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Performs DELETE request : with json string as the parameter
+	 *
+	 * @param   Request URL to call
+	 * @param   jsonString [can be null] JSON string to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteJSON_string(
+		String reqUrl, //
+		String jsonString, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+		// Initialize the request builder with url and set up its headers
+		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		////////////////////////////////////////////////////////////////////////
+
+		// Ensure jsonString is not null
+		jsonString = (jsonString != null) ? jsonString : "";
+
+		RequestBody body = RequestBody.create(JSON, jsonString);
+		reqBuilder = reqBuilder.delete(body);
+
+		////////////////////////////////////////////////////////////////////////
+
+		// Build the request, and make the call
+		try{
+			Response response = client.newCall( reqBuilder.build() ).execute();
+			return new ResponseHttpImplementation(response);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Performs DELETE request : using multipart
+	 *
+	 * @param   Request URL to call
+	 * @param   paramsMap [can be null] Parameters to add to the request body,
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteMultipart(//
+		String reqUrl, //
+		Map<String, String[]> paramsMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap, //
+		Map<String, File[]> filesMap //
+	) {
+		// Initialize the request builder with url and set up its headers
+		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		////////////////////////////////////////////////////////////////////////
+
+		if((paramsMap != null && paramsMap.size() > 0) ||
+				(filesMap != null && filesMap.size() > 0)){
+			// Form multipart with the paramsMap and filesMap
+			RequestBody requestBody = buildMultipartBody(paramsMap, filesMap);
+
+			// Attach RequestBody to the RequestBuilder
+			reqBuilder = reqBuilder.delete(requestBody);
+		}
+
+		////////////////////////////////////////////////////////////////////////
+
+		// Build the request, and make the call
+		try{
+			Response response = client.newCall( reqBuilder.build() ).execute();
+			return new ResponseHttpImplementation(response);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////
 	//
 	// Helper functions
