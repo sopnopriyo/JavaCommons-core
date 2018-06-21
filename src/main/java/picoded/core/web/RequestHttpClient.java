@@ -362,6 +362,12 @@ public final class RequestHttpClient {
 		}
 	}
 
+	//------------------------------------------------
+	//
+	//  POST request and parameter handling
+	//
+	//------------------------------------------------
+
 	/**
 	 * Performs POST request : with form parameters as the body
 	 *
@@ -511,6 +517,12 @@ public final class RequestHttpClient {
 			throw new RuntimeException(e);
 		}
 	}
+
+	//------------------------------------------------
+	//
+	//  PUT request and parameter handling
+	//
+	//------------------------------------------------
 
 	/**
 	 * Performs PUT request : with form parameters as the body
@@ -662,7 +674,11 @@ public final class RequestHttpClient {
 		}
 	}
 
-	// ~GET~ / ~POST~ / PUT / DELETE
+	//------------------------------------------------
+	//
+	//  DELETE request and parameter handling
+	//
+	//------------------------------------------------
 
 	////////////////////////////////////////////////////////////////////////
 	//
