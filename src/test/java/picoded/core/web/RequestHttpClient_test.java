@@ -214,7 +214,7 @@ public class RequestHttpClient_test{
 
 	//------------------------------------------------
 	//
-	//  POST request JSON OBJECT test units
+	//  POST request FORM test units
 	//
 	//------------------------------------------------
 
@@ -321,6 +321,12 @@ public class RequestHttpClient_test{
 		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
+
+	//------------------------------------------------
+	//
+	//  POST request JSON OBJECT test units
+	//
+	//------------------------------------------------
 
 	/**
 	 * This test assert that the post request body
@@ -812,5 +818,6 @@ public class RequestHttpClient_test{
 		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
+
 
 }
