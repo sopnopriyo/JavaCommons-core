@@ -351,6 +351,52 @@ public final class RequestHttpClient {
 			throw new RuntimeException(e);
 		}
 	}
+
+	/**
+	 * Performs POST request : with parameters, appended to the requestURL
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp postForm(//
+		String reqUrl, //
+		Map<String, String[]> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+
+		// Initialize the request builder with url and set up its headers
+		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
+		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+
+		if(paramMap != null){
+			// From the paramMap, create a RequestBody for attaching to the okhttp post method
+			FormBody.Builder formBodyBuilder = new FormBody.Builder();
+			for(String key : paramMap.keySet()){
+				String[] values = paramMap.get(key);
+				for(String value : values) {
+					formBodyBuilder.add(key, value);
+				}
+			}
+			RequestBody reqBody = formBodyBuilder.build();
+
+			// Prepare the request builder for post method with the RequestBody
+			reqBuilder = reqBuilder.post(reqBody);
+		}
+
+		// Build the request, and make the call
+		try{
+			Response response = client.newCall( reqBuilder.build() ).execute();
+			return new ResponseHttpImplementation(response);
+		}catch(IOException e){
+			throw new RuntimeException(e);
+		}
+	}
+	// ~GET~ / POST / PUT / DELETE
 	
 	// /**
 	//  * Sends a request with the respective HTTP / RequestBody type
