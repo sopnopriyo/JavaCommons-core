@@ -384,7 +384,11 @@ public final class RequestHttpClient {
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
 
 		if(paramMap != null){
-			reqBuilder = buildFormBody(reqBuilder, paramMap);
+			// Create the form with the paramMap
+			RequestBody requestBody = buildFormBody(paramMap);
+
+			// Attach RequestBody to the RequestBuilder
+			reqBuilder.post(requestBody);
 		}
 
 		// Build the request, and make the call
@@ -481,7 +485,11 @@ public final class RequestHttpClient {
 
 		if((paramsMap != null && paramsMap.size() > 0) ||
 			(filesMap != null && filesMap.size() > 0)){
-			reqBuilder = buildMultipartBody(reqBuilder, paramsMap, filesMap);
+			// Form multipart with the paramsMap and filesMap
+			RequestBody requestBody = buildMultipartBody(paramsMap, filesMap);
+
+			// Attach RequestBody to the RequestBuilder
+			reqBuilder = reqBuilder.post(requestBody);
 		}
 
 		////////////////////////////////////////////////////////////////////////
@@ -494,7 +502,10 @@ public final class RequestHttpClient {
 			throw new RuntimeException(e);
 		}
 	}
-	// ~GET~ / POST / PUT / DELETE
+
+
+
+	// ~GET~ / ~POST~ / PUT / DELETE
 
 	////////////////////////////////////////////////////////////////////////
 	//
@@ -502,10 +513,7 @@ public final class RequestHttpClient {
 	//
 	////////////////////////////////////////////////////////////////////////
 
-	private Request.Builder buildFormBody(
-		Request.Builder reqBuilder,
-		Map<String, String[]> paramMap
-	) {
+	private RequestBody buildFormBody(Map<String, String[]> paramMap) {
 		// From the paramMap, create a RequestBody for attaching to the okhttp post method
 		FormBody.Builder formBodyBuilder = new FormBody.Builder();
 		for(String key : paramMap.keySet()){
@@ -514,16 +522,10 @@ public final class RequestHttpClient {
 				formBodyBuilder.add(key, value);
 			}
 		}
-		RequestBody reqBody = formBodyBuilder.build();
-
-		// Prepare the request builder for post method with the RequestBody
-		reqBuilder = reqBuilder.post(reqBody);
-
-		return reqBuilder;
+		return formBodyBuilder.build();
 	}
 
-	private Request.Builder buildMultipartBody(
-		Request.Builder reqBuilder,
+	private RequestBody buildMultipartBody(
 		Map<String, String[]> paramMap,
 		Map<String, File[]> filesMap
 	){
@@ -549,7 +551,7 @@ public final class RequestHttpClient {
 			}
 		}
 
-		return reqBuilder.post(multipartBuilder.build());
+		return multipartBuilder.build();
 	}
 	
 	// /**
