@@ -669,15 +669,15 @@ public class RequestHttpClient_POST_test{
 
 	@Test
 	public void http_bin_put_method(){
-		// Prepare delete body Params
-		Map<String, String[]> deleteBodyParams = new HashMap<String, String[]>();
-		deleteBodyParams.put("first_value",  new String[]{ "single-value" });
-		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+		// Prepare post body Params
+		Map<String, String[]> postBodyParams = new HashMap<String, String[]>();
+		postBodyParams.put("first_value",  new String[]{ "single-value" });
+		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
 		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
 				httpbinURL,
-				deleteBodyParams,
+				postBodyParams,
 				null,
 				null);
 		assertEquals("POST", responseHttp.method());
@@ -686,7 +686,7 @@ public class RequestHttpClient_POST_test{
 		// Retrieve mockResponse from server and assert the results
 		responseHttp = requestHttpClient.postJSON(
 				httpbinURL,
-				deleteBodyParams,
+				postBodyParams,
 				null,
 				null);
 		assertEquals("POST", responseHttp.method());
@@ -705,11 +705,376 @@ public class RequestHttpClient_POST_test{
 		// @TODO: If params and fileMap is null, it will become a GET method!
 		responseHttp = requestHttpClient.httpPostMultipart(
 				httpbinURL,
-				deleteBodyParams,
+				postBodyParams,
 				null,
 				null,
 				null);
 		assertEquals("POST", responseHttp.method());
 		assertEquals(responseHttp.statusCode(), 200);
+	}
+
+
+
+
+	//------------------------------------------------
+	//
+	//  POST request FORM test units for wrapper methods
+	//
+	//------------------------------------------------
+
+	/**
+	 * This test assert that the post request body
+	 * is correctly sent via POST to the server
+	 * using postForm()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void basic_post_request_form_wrapper() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare post body Params
+		Map<String, Object> postBodyParams = new HashMap<String, Object>();
+		postBodyParams.put("first_value",  "single-value" );
+		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+		postBodyParams.put("third_value",  999);
+		postBodyParams.put("fourth_value", null);
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postForm(
+				mockWebServer.url("/").toString(),
+				postBodyParams,
+				null,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		assertEquals("second_value=double-value&second_value=another-value&fourth_value=null&first_value=single-value&third_value=999",
+				sentRequest.getUtf8Body());
+
+	}
+
+	/**
+	 * This test assert that the headers
+	 * is correctly sent via POST to the server
+	 * using postForm()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void headers_post_request_form_wrapper() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare headers
+		Map<String, String[]> headers = new HashMap<String, String[]>();
+		headers.put("first",  new String[]{ "random-value", "choose-value" });
+		headers.put("second", new String[]{ "single-value" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postForm(
+				mockWebServer.url("/").toString(),
+				null,
+				null,
+				headers);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's headers
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+
+		List<String> firstHeader = new ArrayList<String>();
+		firstHeader.add("random-value");
+		firstHeader.add("choose-value");
+		assertEquals(firstHeader, serverRequestHeaders.get("first"));
+
+		List<String> secondHeader = new ArrayList<String>();
+		secondHeader.add("single-value");
+		assertEquals(secondHeader, serverRequestHeaders.get("second"));
+	}
+
+	/**
+	 * This test assert that the cookies
+	 * is correctly sent via POST to the server
+	 * using postForm()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void cookies_post_request_form_wrapper() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare cookie map
+		Map<String, String[]> cookiesMap = new HashMap<String, String[]>();
+		cookiesMap.put("cookie1", new String[]{ "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[]{ "myname" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postForm(
+				mockWebServer.url("/").toString(),
+				null,
+				cookiesMap,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's cookies
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
+
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, requestHeaders.get("cookie"));
+	}
+
+	//------------------------------------------------
+	//
+	//  POST request MULTIPART test units for wrapper methods
+	//
+	//------------------------------------------------
+
+
+	/**
+	 * This test assert that the params
+	 * is correctly sent via POST to the server
+	 * using postMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void basic_post_request_multipart_params_only_wrapper() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		String first = GUID.base64();
+		String second = GUID.base64();
+		int third = 827382;
+
+		// Prepare post body Params
+		Map<String, Object> postBodyParams = new HashMap<String, Object>();
+		postBodyParams.put("first_value",  first );
+		postBodyParams.put("second_value", second);
+		postBodyParams.put("third_value",  third);
+		postBodyParams.put("fourth_value", null);
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+				mockWebServer.url("/").toString(),
+				postBodyParams,
+				null,
+				null,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		String body = sentRequest.getUtf8Body();
+		assertTrue(body.indexOf(first) >= 0);
+		assertTrue(body.indexOf(second) >= 0);
+		assertTrue(body.indexOf(Integer.toString(third)) >= 0);
+		assertTrue(body.indexOf("null") >= 0);
+	}
+
+
+	/**
+	 * This test assert that the filesMap
+	 * is correctly sent via POST to the server
+	 * using postMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void basic_post_request_multipart_files_only_wrapper() throws IOException, InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Generating random files with random content
+		Map<String, File[]> filesMap= new HashMap<String, File[]>();
+		int number = 3;
+		File[] fileArray = new File[number];
+		for(int i = 0; i < number; i++){
+			File temp = File.createTempFile(GUID.base64(), ".tmp");
+			String randomString = GUID.base64();
+			FileOutputStream outputStream = new FileOutputStream(temp);
+			byte[] strToBytes = randomString.getBytes();
+			outputStream.write(strToBytes);
+			outputStream.close();
+			fileArray[i] = temp;
+		}
+		filesMap.put("files", fileArray);
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+				mockWebServer.url("/").toString(),
+				null,
+				filesMap,
+				null,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		String body = sentRequest.getUtf8Body();
+
+		for(File file : fileArray){
+			// Assert that file name exists
+			assertTrue(body.indexOf(file.getName()) >= 0);
+
+			// Assert that the content of file exists
+			String content = new String ( Files.readAllBytes( Paths.get(file.getAbsolutePath()) ) );
+			assertTrue(body.indexOf(content) >= 0);
+		}
+
+	}
+
+	/**
+	 * This test assert that the params and fileMap
+	 * is correctly sent via POST to the server
+	 * using postMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void basic_post_request_multipart_params_and_files_wrapper() throws IOException, InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare params
+		Map<String, String[]> params = new HashMap<String, String[]>();
+
+		String first = GUID.base64();
+		String second = GUID.base64();
+		int third = 827382;
+
+		// Prepare post body Params
+		Map<String, Object> postBodyParams = new HashMap<String, Object>();
+		postBodyParams.put("first_value",  first );
+		postBodyParams.put("second_value", second);
+		postBodyParams.put("third_value",  third);
+
+		// Generating random files with random content
+		Map<String, File[]> filesMap= new HashMap<String, File[]>();
+		int number = 3;
+		File[] fileArray = new File[number];
+		for(int i = 0; i < number; i++){
+			File temp = File.createTempFile(GUID.base64(), ".tmp");
+			String randomString = GUID.base64();
+			FileOutputStream outputStream = new FileOutputStream(temp);
+			byte[] strToBytes = randomString.getBytes();
+			outputStream.write(strToBytes);
+			outputStream.close();
+			fileArray[i] = temp;
+		}
+		filesMap.put("files", fileArray);
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+				mockWebServer.url("/").toString(),
+				postBodyParams,
+				filesMap,
+				null,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		String body = sentRequest.getUtf8Body();
+
+		assertTrue(body.indexOf(first) >= 0);
+		assertTrue(body.indexOf(second) >= 0);
+		assertTrue(body.indexOf(Integer.toString(third)) >= 0);
+
+		for(File file : fileArray){
+			// Assert that file name exists
+			assertTrue(body.indexOf(file.getName()) >= 0);
+
+			// Assert that the content of file exists
+			String content = new String ( Files.readAllBytes( Paths.get(file.getAbsolutePath()) ) );
+			assertTrue(body.indexOf(content) >= 0);
+		}
+	}
+
+	/**
+	 * This test assert that the headers
+	 * is correctly sent via POST to the server
+	 * using postMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void headers_post_request_multipart_wrapper() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare headers
+		Map<String, String[]> headers = new HashMap<String, String[]>();
+		headers.put("first",  new String[]{ "random-value", "choose-value" });
+		headers.put("second", new String[]{ "single-value" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+				mockWebServer.url("/").toString(),
+				null,
+				null,
+				null,
+				headers);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's headers
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+
+		List<String> firstHeader = new ArrayList<String>();
+		firstHeader.add("random-value");
+		firstHeader.add("choose-value");
+		assertEquals(firstHeader, serverRequestHeaders.get("first"));
+
+		List<String> secondHeader = new ArrayList<String>();
+		secondHeader.add("single-value");
+		assertEquals(secondHeader, serverRequestHeaders.get("second"));
+	}
+
+	/**
+	 * This test assert that the cookies
+	 * is correctly sent via POST to the server
+	 * using postMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void cookies_post_request_multipart_wrapper() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+
+		// Prepare cookie map
+		Map<String, String[]> cookiesMap = new HashMap<String, String[]>();
+		cookiesMap.put("cookie1", new String[]{ "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[]{ "myname" });
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+				mockWebServer.url("/").toString(),
+				null,
+				null,
+				cookiesMap,
+				null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+
+		// Check sent request's cookies
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
+
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
 }
