@@ -79,7 +79,7 @@ public class RequestHttpClient_GET_test{
 		// Add the body for the response
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.get(
+		ResponseHttp responseHttp = requestHttpClient.httpGet(
 			mockWebServer.url("/").toString(),
 			null,
 			null,
@@ -104,7 +104,7 @@ public class RequestHttpClient_GET_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.get(
+		ResponseHttp responseHttp = requestHttpClient.httpGet(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -142,7 +142,7 @@ public class RequestHttpClient_GET_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.get(
+		ResponseHttp responseHttp = requestHttpClient.httpGet(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -180,7 +180,7 @@ public class RequestHttpClient_GET_test{
 		);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.get(
+		ResponseHttp responseHttp = requestHttpClient.httpGet(
 			mockWebServer.url("/").toString(),
 			null,
 			null,
@@ -205,7 +205,7 @@ public class RequestHttpClient_GET_test{
 		);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.get(
+		ResponseHttp responseHttp = requestHttpClient.httpGet(
 			mockWebServer.url("/").toString(),
 			null,
 			null,

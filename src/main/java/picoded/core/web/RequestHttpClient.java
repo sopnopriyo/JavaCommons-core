@@ -291,6 +291,122 @@ public final class RequestHttpClient {
 
 	//------------------------------------------------
 	//
+	//  Simple Wrappers for Requests
+	//
+	//------------------------------------------------
+
+	public ResponseHttp get(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+
+		return httpGet(reqUrl, reformedParamMap, cookiesMap, headersMap);
+	}
+
+	public ResponseHttp postForm(String reqUrl, Map<String, Object> paramMap){
+		return postForm(reqUrl, paramMap, null, null);
+	}
+
+	public ResponseHttp postForm(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+		return httpPostForm(reqUrl, reformedParamMap, cookiesMap, headersMap);
+	}
+
+	public ResponseHttp postMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap //
+	){
+		return postMultipart(reqUrl, paramMap, filesMap, null, null);
+	}
+
+	public ResponseHttp postMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+		return httpPostMultipart(reqUrl, reformedParamMap, filesMap, cookiesMap, headersMap);
+	}
+
+	public ResponseHttp putForm(String reqUrl, Map<String, Object> paramMap){
+		return putForm(reqUrl, paramMap, null, null);
+	}
+
+	public ResponseHttp putForm(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+		return httpPutForm(reqUrl, reformedParamMap, cookiesMap, headersMap);
+	}
+
+	public ResponseHttp putMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap //
+	){
+		return putMultipart(reqUrl, paramMap, filesMap, null, null);
+	}
+
+	public ResponseHttp putMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+		return httpPutMultipart(reqUrl, reformedParamMap, filesMap, cookiesMap, headersMap);
+	}
+
+	public ResponseHttp deleteForm(String reqUrl, Map<String, Object> paramMap){
+		return deleteForm(reqUrl, paramMap, null, null);
+	}
+
+	public ResponseHttp deleteForm(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+		return httpDeleteForm(reqUrl, reformedParamMap, cookiesMap, headersMap);
+	}
+
+	public ResponseHttp deleteMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap //
+	){
+		return deleteMultipart(reqUrl, paramMap, filesMap, null, null);
+	}
+
+	public ResponseHttp deleteMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	){
+		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
+		return httpDeleteMultipart(reqUrl, reformedParamMap, filesMap, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
 	//  GET request and parameter handling
 	//
 	//------------------------------------------------
@@ -340,7 +456,7 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp get( //
+	public ResponseHttp httpGet( //
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //
@@ -372,7 +488,7 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp postForm(//
+	public ResponseHttp httpPostForm(//
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //
@@ -440,12 +556,12 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp postMultipart(//
+	public ResponseHttp httpPostMultipart(//
 		String reqUrl, //
 		Map<String, String[]> paramsMap, //
+		Map<String, File[]> filesMap, //
 		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap, //
-		Map<String, File[]> filesMap //
+		Map<String, String[]> headersMap //
 	) {
 		return executeMultipartRequest("POST", reqUrl, paramsMap, cookiesMap, headersMap, filesMap);
 	}
@@ -466,7 +582,7 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp putForm(//
+	public ResponseHttp httpPutForm(//
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //
@@ -534,12 +650,12 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp putMultipart(//
+	public ResponseHttp httpPutMultipart(//
 		String reqUrl, //
 		Map<String, String[]> paramsMap, //
+		Map<String, File[]> filesMap, //
 		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap, //
-		Map<String, File[]> filesMap //
+		Map<String, String[]> headersMap //
 	) {
 		return executeMultipartRequest("PUT", reqUrl, paramsMap, cookiesMap, headersMap, filesMap);
 	}
@@ -560,7 +676,7 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp deleteForm(//
+	public ResponseHttp httpDeleteForm(//
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //
@@ -628,12 +744,12 @@ public final class RequestHttpClient {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp deleteMultipart(//
+	public ResponseHttp httpDeleteMultipart(//
 		String reqUrl, //
 		Map<String, String[]> paramsMap, //
+		Map<String, File[]> filesMap, //
 		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap, //
-		Map<String, File[]> filesMap //
+		Map<String, String[]> headersMap //
 	) {
 		return executeMultipartRequest("DELETE", reqUrl, paramsMap, cookiesMap, headersMap, filesMap);
 	}
@@ -823,6 +939,23 @@ public final class RequestHttpClient {
 		}
 
 		return multipartBuilder.build();
+	}
+
+	private Map<String, String[]> convertMapObjectToStringArray(Map<String,Object> mapToConvert){
+		Map<String, String[]> reformedParamMap = new HashMap<String, String[]>();
+		for(String key : mapToConvert.keySet()){
+			Object value = mapToConvert.get(key);
+			if(value instanceof String){
+				reformedParamMap.put(key, new String[] {value.toString()});
+			} else if(value instanceof String[]) {
+				reformedParamMap.put(key, (String[])value);
+			} else {
+				String convertedString = ConvertJSON.fromObject(value);
+				reformedParamMap.put(key, new String[] {convertedString});
+			}
+		}
+
+		return reformedParamMap;
 	}
 	
 	// /**

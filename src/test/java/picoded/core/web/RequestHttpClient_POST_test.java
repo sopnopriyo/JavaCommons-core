@@ -68,7 +68,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * using httpPostForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -82,7 +82,7 @@ public class RequestHttpClient_POST_test{
 		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
 				mockWebServer.url("/").toString(),
 				postBodyParams,
 				null,
@@ -99,7 +99,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * using httpPostForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -113,7 +113,7 @@ public class RequestHttpClient_POST_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -138,7 +138,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * using httpPostForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -152,7 +152,7 @@ public class RequestHttpClient_POST_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -444,7 +444,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the params
 	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * using httpPostMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -460,7 +460,7 @@ public class RequestHttpClient_POST_test{
 		params.put("second", new String[] { second, third });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPostMultipart(
 				mockWebServer.url("/").toString(),
 				params,
 				null,
@@ -481,7 +481,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the filesMap
 	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * using httpPostMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -505,12 +505,12 @@ public class RequestHttpClient_POST_test{
 		filesMap.put("files", fileArray);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPostMultipart(
 				mockWebServer.url("/").toString(),
 				null,
+				filesMap,
 				null,
-				null,
-				filesMap);
+				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -532,7 +532,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the params and fileMap
 	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * using httpPostMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -564,12 +564,12 @@ public class RequestHttpClient_POST_test{
 		filesMap.put("files", fileArray);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPostMultipart(
 				mockWebServer.url("/").toString(),
 				params,
+				filesMap,
 				null,
-				null,
-				filesMap);
+				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -594,7 +594,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * using httpPostMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -608,12 +608,12 @@ public class RequestHttpClient_POST_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPostMultipart(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
-				headers,
-				null);
+				null,
+				headers);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -634,7 +634,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using postMultipart()
+	 * using httpPostMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -648,11 +648,11 @@ public class RequestHttpClient_POST_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPostMultipart(
 				mockWebServer.url("/").toString(),
 				null,
-				cookiesMap,
 				null,
+				cookiesMap,
 				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -675,7 +675,7 @@ public class RequestHttpClient_POST_test{
 		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
 				httpbinURL,
 				deleteBodyParams,
 				null,
@@ -703,7 +703,7 @@ public class RequestHttpClient_POST_test{
 
 		// Retrieve mockResponse from server and assert the results
 		// @TODO: If params and fileMap is null, it will become a GET method!
-		responseHttp = requestHttpClient.postMultipart(
+		responseHttp = requestHttpClient.httpPostMultipart(
 				httpbinURL,
 				deleteBodyParams,
 				null,

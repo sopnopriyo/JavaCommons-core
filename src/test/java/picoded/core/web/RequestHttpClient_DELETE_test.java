@@ -68,7 +68,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the delete request body
 	 * is correctly sent via DELETE to the server
-	 * using deleteForm()
+	 * using httpDeleteForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -82,7 +82,7 @@ public class RequestHttpClient_DELETE_test{
 		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
 				mockWebServer.url("/").toString(),
 				deleteBodyParams,
 				null,
@@ -100,7 +100,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via DELETE to the server
-	 * using deleteForm()
+	 * using httpDeleteForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -114,7 +114,7 @@ public class RequestHttpClient_DELETE_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -139,7 +139,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via DELETE to the server
-	 * using deleteForm()
+	 * using httpDeleteForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -153,7 +153,7 @@ public class RequestHttpClient_DELETE_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -452,7 +452,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the params
 	 * is correctly sent via DELETE to the server
-	 * using deleteMultipart()
+	 * using httpDeleteMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -468,7 +468,7 @@ public class RequestHttpClient_DELETE_test{
 		params.put("second", new String[] { second, third });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteMultipart(
 				mockWebServer.url("/").toString(),
 				params,
 				null,
@@ -490,7 +490,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the filesMap
 	 * is correctly sent via DELETE to the server
-	 * using deleteMultipart()
+	 * using httpDeleteMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -514,12 +514,12 @@ public class RequestHttpClient_DELETE_test{
 		filesMap.put("files", fileArray);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteMultipart(
 				mockWebServer.url("/").toString(),
 				null,
+				filesMap,
 				null,
-				null,
-				filesMap);
+				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -542,7 +542,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the params and fileMap
 	 * is correctly sent via DELETE to the server
-	 * using deleteMultipart()
+	 * using httpDeleteMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -574,12 +574,12 @@ public class RequestHttpClient_DELETE_test{
 		filesMap.put("files", fileArray);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteMultipart(
 				mockWebServer.url("/").toString(),
 				params,
+				filesMap,
 				null,
-				null,
-				filesMap);
+				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -605,7 +605,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via DELETE to the server
-	 * using deleteMultipart()
+	 * using httpDeleteMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -619,12 +619,12 @@ public class RequestHttpClient_DELETE_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteMultipart(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
-				headers,
-				null);
+				null,
+				headers);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -646,7 +646,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via DELETE to the server
-	 * using deleteMultipart()
+	 * using httpDeleteMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -660,11 +660,11 @@ public class RequestHttpClient_DELETE_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteMultipart(
 				mockWebServer.url("/").toString(),
 				null,
-				cookiesMap,
 				null,
+				cookiesMap,
 				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -687,7 +687,7 @@ public class RequestHttpClient_DELETE_test{
 		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
 				httpbinURL,
 				deleteBodyParams,
 				null,
@@ -715,7 +715,7 @@ public class RequestHttpClient_DELETE_test{
 
 		// Retrieve mockResponse from server and assert the results
 		// @TODO: If params and fileMap is null, it will become a GET method!
-		responseHttp = requestHttpClient.deleteMultipart(
+		responseHttp = requestHttpClient.httpDeleteMultipart(
 				httpbinURL,
 				deleteBodyParams,
 				null,

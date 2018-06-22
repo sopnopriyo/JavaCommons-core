@@ -69,7 +69,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the put request body
 	 * is correctly sent via PUT to the server
-	 * using putForm()
+	 * using httpPutForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -83,7 +83,7 @@ public class RequestHttpClient_PUT_test{
 		putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPutForm(
 				mockWebServer.url("/").toString(),
 				putBodyParams,
 				null,
@@ -100,7 +100,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via PUT to the server
-	 * using putForm()
+	 * using httpPutForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -114,7 +114,7 @@ public class RequestHttpClient_PUT_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPutForm(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -139,7 +139,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via PUT to the server
-	 * using putForm()
+	 * using httpPutForm()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -153,7 +153,7 @@ public class RequestHttpClient_PUT_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPutForm(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -444,7 +444,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the params
 	 * is correctly sent via PUT to the server
-	 * using putMultipart()
+	 * using httpPutMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -460,7 +460,7 @@ public class RequestHttpClient_PUT_test{
 		params.put("second", new String[] { second, third });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPutMultipart(
 				mockWebServer.url("/").toString(),
 				params,
 				null,
@@ -481,7 +481,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the filesMap
 	 * is correctly sent via PUT to the server
-	 * using putMultipart()
+	 * using httpPutMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -505,12 +505,12 @@ public class RequestHttpClient_PUT_test{
 		filesMap.put("files", fileArray);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPutMultipart(
 				mockWebServer.url("/").toString(),
 				null,
+				filesMap,
 				null,
-				null,
-				filesMap);
+				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -532,7 +532,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the params and fileMap
 	 * is correctly sent via PUT to the server
-	 * using putMultipart()
+	 * using httpPutMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -564,12 +564,12 @@ public class RequestHttpClient_PUT_test{
 		filesMap.put("files", fileArray);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPutMultipart(
 				mockWebServer.url("/").toString(),
 				params,
+				filesMap,
 				null,
-				null,
-				filesMap);
+				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -594,7 +594,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via PUT to the server
-	 * using putMultipart()
+	 * using httpPutMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -608,12 +608,12 @@ public class RequestHttpClient_PUT_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPutMultipart(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
-				headers,
-				null);
+				null,
+				headers);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -634,7 +634,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via PUT to the server
-	 * using putMultipart()
+	 * using httpPutMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -648,11 +648,11 @@ public class RequestHttpClient_PUT_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putMultipart(
+		ResponseHttp responseHttp = requestHttpClient.httpPutMultipart(
 				mockWebServer.url("/").toString(),
 				null,
-				cookiesMap,
 				null,
+				cookiesMap,
 				null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -674,7 +674,7 @@ public class RequestHttpClient_PUT_test{
 		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPutForm(
 				httpbinURL,
 				deleteBodyParams,
 				null,
@@ -702,7 +702,7 @@ public class RequestHttpClient_PUT_test{
 
 		// Retrieve mockResponse from server and assert the results
 		// @TODO: If params and fileMap is null, it will become a GET method!
-		responseHttp = requestHttpClient.putMultipart(
+		responseHttp = requestHttpClient.httpPutMultipart(
 				httpbinURL,
 				deleteBodyParams,
 				null,
