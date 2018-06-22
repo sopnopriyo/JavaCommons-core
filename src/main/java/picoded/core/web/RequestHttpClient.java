@@ -640,7 +640,7 @@ public final class RequestHttpClient {
 
 	////////////////////////////////////////////////////////////////////////
 	//
-	// Helper functions
+	// Util functions
 	//
 	////////////////////////////////////////////////////////////////////////
 
@@ -800,6 +800,7 @@ public final class RequestHttpClient {
 		MultipartBody.Builder multipartBuilder = new MultipartBody.Builder()
 			.setType(MultipartBody.FORM);
 
+		// With each param, add it to the form data part
 		if(paramMap != null){
 			for(String key : paramMap.keySet()){
 				String[] values = paramMap.get(key);
@@ -809,6 +810,8 @@ public final class RequestHttpClient {
 			}
 		}
 
+		// for each file in the file array of the param, add it accordingly
+		// to the form data part
 		if(filesMap != null){
 			for(String key : filesMap.keySet()) {
 				File[] files = filesMap.get(key);
