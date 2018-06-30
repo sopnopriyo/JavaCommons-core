@@ -667,51 +667,51 @@ public class RequestHttpClient_POST_test{
 	}
 
 
-	@Test
-	public void http_bin_put_method(){
-		// Prepare post body Params
-		Map<String, String[]> postBodyParams = new HashMap<String, String[]>();
-		postBodyParams.put("first_value",  new String[]{ "single-value" });
-		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+	// @Test
+	// public void http_bin_put_method(){
+	// 	// Prepare post body Params
+	// 	Map<String, String[]> postBodyParams = new HashMap<String, String[]>();
+	// 	postBodyParams.put("first_value",  new String[]{ "single-value" });
+	// 	postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
-		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
-				httpbinURL,
-				postBodyParams,
-				null,
-				null);
-		assertEquals("POST", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	ResponseHttp responseHttp = requestHttpClient.httpPostForm(
+	// 			httpbinURL,
+	// 			postBodyParams,
+	// 			null,
+	// 			null);
+	// 	assertEquals("POST", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		responseHttp = requestHttpClient.postJSON(
-				httpbinURL,
-				postBodyParams,
-				null,
-				null);
-		assertEquals("POST", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	responseHttp = requestHttpClient.postJSON(
+	// 			httpbinURL,
+	// 			postBodyParams,
+	// 			null,
+	// 			null);
+	// 	assertEquals("POST", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		responseHttp = requestHttpClient.postJSON_string(
-				httpbinURL,
-				"",
-				null,
-				null);
-		assertEquals("POST", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	responseHttp = requestHttpClient.postJSON_string(
+	// 			httpbinURL,
+	// 			"",
+	// 			null,
+	// 			null);
+	// 	assertEquals("POST", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		// @TODO: If params and fileMap is null, it will become a GET method!
-		responseHttp = requestHttpClient.httpPostMultipart(
-				httpbinURL,
-				postBodyParams,
-				null,
-				null,
-				null);
-		assertEquals("POST", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
-	}
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	// @TODO: If params and fileMap is null, it will become a GET method!
+	// 	responseHttp = requestHttpClient.httpPostMultipart(
+	// 			httpbinURL,
+	// 			postBodyParams,
+	// 			null,
+	// 			null,
+	// 			null);
+	// 	assertEquals("POST", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
+	// }
 
 
 

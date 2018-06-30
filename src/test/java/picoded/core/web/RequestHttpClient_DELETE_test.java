@@ -679,51 +679,51 @@ public class RequestHttpClient_DELETE_test{
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
 
-	@Test
-	public void http_bin_delete_method(){
-		// Prepare delete body Params
-		Map<String, String[]> deleteBodyParams = new HashMap<String, String[]>();
-		deleteBodyParams.put("first_value",  new String[]{ "single-value" });
-		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+	// @Test
+	// public void http_bin_delete_method(){
+	// 	// Prepare delete body Params
+	// 	Map<String, String[]> deleteBodyParams = new HashMap<String, String[]>();
+	// 	deleteBodyParams.put("first_value",  new String[]{ "single-value" });
+	// 	deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
-		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
-				httpbinURL,
-				deleteBodyParams,
-				null,
-				null);
-		assertEquals("DELETE", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
+	// 			httpbinURL,
+	// 			deleteBodyParams,
+	// 			null,
+	// 			null);
+	// 	assertEquals("DELETE", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		responseHttp = requestHttpClient.deleteJSON(
-				httpbinURL,
-				deleteBodyParams,
-				null,
-				null);
-		assertEquals("DELETE", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	responseHttp = requestHttpClient.deleteJSON(
+	// 			httpbinURL,
+	// 			deleteBodyParams,
+	// 			null,
+	// 			null);
+	// 	assertEquals("DELETE", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		responseHttp = requestHttpClient.deleteJSON_string(
-				httpbinURL,
-				"",
-				null,
-				null);
-		assertEquals("DELETE", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	responseHttp = requestHttpClient.deleteJSON_string(
+	// 			httpbinURL,
+	// 			"",
+	// 			null,
+	// 			null);
+	// 	assertEquals("DELETE", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		// @TODO: If params and fileMap is null, it will become a GET method!
-		responseHttp = requestHttpClient.httpDeleteMultipart(
-				httpbinURL,
-				deleteBodyParams,
-				null,
-				null,
-				null);
-		assertEquals("DELETE", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
-	}
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	// @TODO: If params and fileMap is null, it will become a GET method!
+	// 	responseHttp = requestHttpClient.httpDeleteMultipart(
+	// 			httpbinURL,
+	// 			deleteBodyParams,
+	// 			null,
+	// 			null,
+	// 			null);
+	// 	assertEquals("DELETE", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
+	// }
 
 
 

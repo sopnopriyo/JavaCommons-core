@@ -666,51 +666,51 @@ public class RequestHttpClient_PUT_test{
 		assertEquals(cookies, requestHeaders.get("cookie"));
 	}
 
-	@Test
-	public void http_bin_put_method(){
-		// Prepare put body Params
-		Map<String, String[]> putBodyParams = new HashMap<String, String[]>();
-		putBodyParams.put("first_value",  new String[]{ "single-value" });
-		putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
+	// @Test
+	// public void http_bin_put_method(){
+	// 	// Prepare put body Params
+	// 	Map<String, String[]> putBodyParams = new HashMap<String, String[]>();
+	// 	putBodyParams.put("first_value",  new String[]{ "single-value" });
+	// 	putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
-		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPutForm(
-				httpbinURL,
-				putBodyParams,
-				null,
-				null);
-		assertEquals("PUT", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	ResponseHttp responseHttp = requestHttpClient.httpPutForm(
+	// 			httpbinURL,
+	// 			putBodyParams,
+	// 			null,
+	// 			null);
+	// 	assertEquals("PUT", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		responseHttp = requestHttpClient.putJSON(
-				httpbinURL,
-				putBodyParams,
-				null,
-				null);
-		assertEquals("PUT", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	responseHttp = requestHttpClient.putJSON(
+	// 			httpbinURL,
+	// 			putBodyParams,
+	// 			null,
+	// 			null);
+	// 	assertEquals("PUT", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		responseHttp = requestHttpClient.putJSON_string(
-				httpbinURL,
-				"",
-				null,
-				null);
-		assertEquals("PUT", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	responseHttp = requestHttpClient.putJSON_string(
+	// 			httpbinURL,
+	// 			"",
+	// 			null,
+	// 			null);
+	// 	assertEquals("PUT", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
 
-		// Retrieve mockResponse from server and assert the results
-		// @TODO: If params and fileMap is null, it will become a GET method!
-		responseHttp = requestHttpClient.httpPutMultipart(
-				httpbinURL,
-				putBodyParams,
-				null,
-				null,
-				null);
-		assertEquals("PUT", responseHttp.method());
-		assertEquals(responseHttp.statusCode(), 200);
-	}
+	// 	// Retrieve mockResponse from server and assert the results
+	// 	// @TODO: If params and fileMap is null, it will become a GET method!
+	// 	responseHttp = requestHttpClient.httpPutMultipart(
+	// 			httpbinURL,
+	// 			putBodyParams,
+	// 			null,
+	// 			null,
+	// 			null);
+	// 	assertEquals("PUT", responseHttp.method());
+	// 	assertEquals(responseHttp.statusCode(), 200);
+	// }
 
 
 
