@@ -33,8 +33,9 @@ class RequestHttpClient_base {
 	//  OKHTTP MediaType variables
 	//
 	//------------------------------------------------
-	public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-	public static final MediaType OCTET_STREAM = MediaType.parse("application/octet-stream");
+	
+	public static final MediaType MEDIATYPE_JSON = MediaType.parse("application/json; charset=utf-8");
+	public static final MediaType MEDIATYPE_OCTETSTREAM = MediaType.parse("application/octet-stream");
 
 	//------------------------------------------------
 	//
@@ -392,45 +393,15 @@ class RequestHttpClient_base {
 	 **/
 	public ResponseHttp httpPostJSON(//
 		String reqUrl, //
-		Object params, //
+		Object jsonObj, //
 		Map<String, String[]> cookiesMap, //
 		Map<String, String[]> headersMap //
 	) {
 		try{
-			String jsonString = null;
-			if( params instanceof String ) {
-				jsonString = (String)params;
-			} else {
-				jsonString = ConvertJSON.fromObject(params);
-			}
-			return httpPostJSON(
-					reqUrl,
-					jsonString,
-					cookiesMap,
-					headersMap
-			);
+			return executeJsonRequest("POST", reqUrl, jsonObj, cookiesMap, headersMap);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Performs POST request : with json string as the parameter
-	 *
-	 * @param   Request URL to call
-	 * @param   jsonString [can be null] JSON String to add to the request body
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
-	 *
-	 * @return  The ResponseHttp object
-	 **/
-	public ResponseHttp httpPostJSON(//
-		String reqUrl, //
-		String jsonString, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
-	) {
-		return executeJsonRequest("POST", reqUrl, jsonString, cookiesMap, headersMap);
 	}
 
 	//------------------------------------------------
@@ -665,7 +636,7 @@ class RequestHttpClient_base {
 	 *
 	 * @param   method to be used to send the request (POST/PUT/DELETE)
 	 * @param   Request URL to call
-	 * @param   jsonString [can be null] JSON string to add to the request body
+	 * @param   json [can be null] JSON string / object to add to the request body
 	 * @param   cookieMap  [can be null] Cookie map to send values
 	 * @param   headersMap [can be null] Headers map to send values
 	 *
@@ -674,7 +645,7 @@ class RequestHttpClient_base {
 	private ResponseHttp executeJsonRequest( //
 		String method, //
 		String reqUrl, //
-		String jsonString, //
+		Object jsonObj, //
 		Map<String, String[]> cookiesMap, //
 		Map<String, String[]> headersMap //
 	){
@@ -682,16 +653,19 @@ class RequestHttpClient_base {
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
 
-		////////////////////////////////////////////////////////////////////////
-
-		// Ensure jsonString is not null
-		jsonString = (jsonString != null) ? jsonString : "";
-
-		RequestBody body = RequestBody.create(JSON, jsonString);
+		// Normalize json object to jsonString
+		String jsonString = null;
+		if( jsonObj == null ) {
+			jsonString = "";
+		} else if( jsonObj instanceof String ) {
+			jsonString = (String)jsonObj;
+		} else {
+			jsonString = ConvertJSON.fromObject(jsonObj);
+		}
+		
+		// Perform the json request
+		RequestBody body = RequestBody.create(MEDIATYPE_JSON, jsonString);
 		reqBuilder = reqBuilder.method(method, body);
-
-		////////////////////////////////////////////////////////////////////////
-
 		return executeRequestBuilder(reqBuilder);
 	}
 
@@ -719,8 +693,6 @@ class RequestHttpClient_base {
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
 
-		////////////////////////////////////////////////////////////////////////
-
 		if((paramsMap != null && paramsMap.size() > 0) ||
 				(filesMap != null && filesMap.size() > 0)){
 			// Form multipart with the paramsMap and filesMap
@@ -729,8 +701,6 @@ class RequestHttpClient_base {
 			// Attach RequestBody to the RequestBuilder
 			reqBuilder = reqBuilder.method(method, requestBody);
 		}
-
-		////////////////////////////////////////////////////////////////////////
 
 		return executeRequestBuilder(reqBuilder);
 	}
@@ -800,7 +770,7 @@ class RequestHttpClient_base {
 				File[] files = filesMap.get(key);
 				for(File file : files) {
 					multipartBuilder.addFormDataPart(key, file.getName(),
-						RequestBody.create(OCTET_STREAM, file));
+						RequestBody.create(MEDIATYPE_OCTETSTREAM, file));
 				}
 			}
 		}
