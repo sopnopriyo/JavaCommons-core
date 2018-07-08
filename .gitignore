@@ -31,7 +31,9 @@ build/*
 test/tmp
 
 #
-# Include back .gitignore
+# Include back .gitignore, and etc
 #
 !.gitignore
 !.travis.yml
+!.classpath
+!.project
