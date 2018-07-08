@@ -397,7 +397,12 @@ class RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	) {
 		try{
-			String jsonString = ConvertJSON.fromObject(params);
+			String jsonString = null;
+			if( params instanceof String ) {
+				jsonString = (String)params;
+			} else {
+				jsonString = ConvertJSON.fromObject(params);
+			}
 			return httpPostJSON(
 					reqUrl,
 					jsonString,
