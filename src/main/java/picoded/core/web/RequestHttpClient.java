@@ -331,7 +331,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  Wrappers for POST form / multipart support
+	//  Wrappers for PUT form / multipart support
 	//
 	//------------------------------------------------
 
@@ -358,13 +358,33 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	public ResponseHttp put(
 		String reqUrl, //
 		Map<String, Object> paramMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		Map<String, Object> cookiesMap //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpPutForm(reqUrl, reformedParamMap, cookiesMap, headersMap);
+		return put(reqUrl, paramMap, cookiesMap, null);
 	}
 
+	/**
+	 * Wrapper method for PUT form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public ResponseHttp put(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return httpPutForm( //
+			reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
+	}
 
 	/**
 	 * Wrapper method for PUT multipart requests
@@ -396,11 +416,100 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		Map<String, Object> cookiesMap //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpPutMultipart(reqUrl, reformedParamMap, filesMap, cookiesMap, headersMap);
+		return putMultipart(reqUrl, paramMap, filesMap, cookiesMap, null);
+	}
+
+	/**
+	 * Wrapper method for PUT multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public ResponseHttp putMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return httpPutMultipart( //
+			reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			filesMap, //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
+	}
+
+	//------------------------------------------------
+	//
+	//  PUT JSON
+	//
+	//------------------------------------------------
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp putJSON(//
+		String reqUrl, //
+		Object params //
+	) {
+		return putJSON(reqUrl, params, null, null);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp putJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap //
+	) {
+		return putJSON(reqUrl, params, cookiesMap, null);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp putJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	) {
+		return httpPutJSON( //
+			reqUrl, //
+			params, //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
 	}
 
 	//------------------------------------------------
