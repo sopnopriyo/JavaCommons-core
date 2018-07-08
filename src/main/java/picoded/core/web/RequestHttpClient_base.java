@@ -331,7 +331,7 @@ class RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  POST request Form / Multipart
+	//  POST request Form / Multipart / JSON
 	//
 	//------------------------------------------------
 
@@ -375,12 +375,6 @@ class RequestHttpClient_base {
 		return executeMultipartRequest("POST", reqUrl, paramsMap, filesMap, cookiesMap, headersMap);
 	}
 
-	//------------------------------------------------
-	//
-	//  POST JSON handling
-	//
-	//------------------------------------------------
-
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -406,7 +400,7 @@ class RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  PUT request and parameter handling
+	//  PUT request Form / Multipart / JSON
 	//
 	//------------------------------------------------
 
@@ -430,54 +424,6 @@ class RequestHttpClient_base {
 	}
 
 	/**
-	 * Performs PUT request : with json parameters as Map<String, String[]>
-	 *
-	 * @param   Request URL to call
-	 * @param   params     [can be null] JSON valid Java objects to add to the request body
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
-	 *
-	 * @return  The ResponseHttp object
-	 **/
-	public ResponseHttp putJSON(
-		String reqUrl, //
-		Object params, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
-	) {
-		try{
-			String jsonString = ConvertJSON.fromObject(params);
-			return putJSON_string(
-					reqUrl,
-					jsonString,
-					cookiesMap,
-					headersMap
-			);
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	/**
-	 * Performs PUT request : with json string as the parameter
-	 *
-	 * @param   Request URL to call
-	 * @param   jsonString [can be null] JSON string to add to the request body
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
-	 *
-	 * @return  The ResponseHttp object
-	 **/
-	public ResponseHttp putJSON_string(
-		String reqUrl, //
-		String jsonString, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
-	) {
-		return executeJsonRequest("PUT", reqUrl, jsonString, cookiesMap, headersMap);
-	}
-
-	/**
 	 * Performs PUT request : using multipart
 	 *
 	 * @param   Request URL to call
@@ -496,6 +442,29 @@ class RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	) {
 		return executeMultipartRequest("PUT", reqUrl, paramsMap, filesMap, cookiesMap, headersMap);
+	}
+
+	/**
+	 * Performs PUT request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   jsonObj    [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp httpPutJSON(
+		String reqUrl, //
+		Object jsonObj, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+		try{
+			return executeJsonRequest("PUT", reqUrl, jsonObj, cookiesMap, headersMap);
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	//------------------------------------------------

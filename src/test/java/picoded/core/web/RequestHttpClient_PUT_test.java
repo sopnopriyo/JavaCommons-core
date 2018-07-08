@@ -178,7 +178,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the put request body
 	 * is correctly sent via PUT to the server
-	 * using putJSON() - Map<String, String[]>
+	 * using httpPutJSON() - Map<String, String[]>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -193,7 +193,7 @@ public class RequestHttpClient_PUT_test{
 		putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				putBodyParams,
 				null,
@@ -210,7 +210,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the put request body
 	 * is correctly sent via PUT to the server
-	 * using putJSON() - List<String>
+	 * using httpPutJSON() - List<String>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -226,7 +226,7 @@ public class RequestHttpClient_PUT_test{
 		putBodyParams.add("{'name':'ghi'}");
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				putBodyParams,
 				null,
@@ -243,7 +243,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via PUT to the server
-	 * using putJSON()
+	 * using httpPutJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -260,7 +260,7 @@ public class RequestHttpClient_PUT_test{
 		Map<String, String[]> params = new HashMap<String, String[]>();
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				params,
 				null,
@@ -285,7 +285,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via PUT to the server
-	 * using putJSON()
+	 * using httpPutJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -302,7 +302,7 @@ public class RequestHttpClient_PUT_test{
 		Map<String, String[]> params = new HashMap<String, String[]>();
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				params,
 				cookiesMap,
@@ -327,7 +327,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the put request body
 	 * is correctly sent via PUT to the server
-	 * using putJSON_string()
+	 * using httpPutJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -348,7 +348,7 @@ public class RequestHttpClient_PUT_test{
 				+ "]}";
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				json,
 				null,
@@ -364,7 +364,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via PUT to the server
-	 * using putJSON_string()
+	 * using httpPutJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -378,7 +378,7 @@ public class RequestHttpClient_PUT_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -403,7 +403,7 @@ public class RequestHttpClient_PUT_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via PUT to the server
-	 * using putJSON_string()
+	 * using httpPutJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -417,7 +417,7 @@ public class RequestHttpClient_PUT_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPutJSON(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -683,7 +683,7 @@ public class RequestHttpClient_PUT_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.putJSON(
+	// 	responseHttp = requestHttpClient.httpPutJSON(
 	// 			httpbinURL,
 	// 			putBodyParams,
 	// 			null,
@@ -692,7 +692,7 @@ public class RequestHttpClient_PUT_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.putJSON_string(
+	// 	responseHttp = requestHttpClient.httpPutJSON(
 	// 			httpbinURL,
 	// 			"",
 	// 			null,
@@ -740,7 +740,7 @@ public class RequestHttpClient_PUT_test{
 		putBodyParams.put("fourth_value", null);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.put(
 				mockWebServer.url("/").toString(),
 				putBodyParams,
 				null,
@@ -773,7 +773,7 @@ public class RequestHttpClient_PUT_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.put(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -812,7 +812,7 @@ public class RequestHttpClient_PUT_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.putForm(
+		ResponseHttp responseHttp = requestHttpClient.put(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,

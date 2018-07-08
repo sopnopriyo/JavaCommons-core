@@ -331,7 +331,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  Wrappers for PUT Requests
+	//  Wrappers for POST form / multipart support
 	//
 	//------------------------------------------------
 
@@ -342,8 +342,8 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public ResponseHttp putForm(String reqUrl, Map<String, Object> paramMap){
-		return putForm(reqUrl, paramMap, null, null);
+	public ResponseHttp put(String reqUrl, Map<String, Object> paramMap){
+		return put(reqUrl, paramMap, null, null);
 	}
 
 	/**
@@ -355,7 +355,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public ResponseHttp putForm(
+	public ResponseHttp put(
 		String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, String[]> cookiesMap, //
