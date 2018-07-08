@@ -606,12 +606,12 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  PUT JSON
+	//  DELETE JSON
 	//
 	//------------------------------------------------
 
 	/**
-	 * Performs POST request : with json parameters as Map<String, String[]>
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
 	 * @param   Request URL to call
 	 * @param   params     [can be null] JSON valid Java objects to add to the request body
@@ -628,7 +628,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	}
 
 	/**
-	 * Performs POST request : with json parameters as Map<String, String[]>
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
 	 * @param   Request URL to call
 	 * @param   params     [can be null] JSON valid Java objects to add to the request body
@@ -646,7 +646,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	}
 
 	/**
-	 * Performs POST request : with json parameters as Map<String, String[]>
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
 	 * @param   Request URL to call
 	 * @param   params     [can be null] JSON valid Java objects to add to the request body

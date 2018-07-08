@@ -3,6 +3,7 @@ package picoded.core.web;
 import picoded.core.common.HttpRequestType;
 import picoded.core.conv.GenericConvert;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -62,355 +63,569 @@ import picoded.core.common.EmptyArray;
 public class RequestHttp {
 	
 	//--------------------------------------------------------
-	// Utility function
+	// Static client library support
 	//--------------------------------------------------------
 	
-	/**
-	 * Takes a standard Map<String,Object> to Map<String,String[]> header format
-	 *
-	 * Note this does a "dumb" conversion of stringifying every object provided
-	 * and placing it as a single element into a String[], unless its a String[] itself
-	 *
-	 * @param  Simplified request parameters of Map<String,Object>
-	 *
-	 * @return Converted into Map<String,String[]>
-	 **/
-	protected static Map<String, String[]> simpleParameterConversion(Map<String, Object> inMap) {
-		// Null check
-		if (inMap == null) {
-			return null;
-		}
-		
-		// Setup and duplicate over
-		Map<String, String[]> ret = new HashMap<String, String[]>();
-		Set<String> keySet = inMap.keySet();
-		
-		// Enforce conversion to string, and store each value
-		for (String key : keySet) {
-			Object val = inMap.get(key);
+	// Local static client variable
+	private static volatile RequestHttpClient clientObj = null;
 
-			// Its a String[], use directly
-			if( val instanceof String[] ) {
-				ret.put(key, (String[])val);
+	/**
+	 * Get and return the static client object
+	 */
+	protected static RequestHttpClient client() {
+		// Thread safe get
+		if( clientObj != null ) {
+			return clientObj;
+		}
+		// Client object not yet initialized, try to get one
+		// with a syncronized lock, initializing if needed
+		synchronized(RequestHttp.class) {
+			// This is to resolve race conditions,
+			// where a seperate thread setup the client obj
+			if(clientObj != null) {
+				return clientObj;
 			}
 
-			// Convert to string and use accordingly
-			String valStr = GenericConvert.toString(val);
-			ret.put(key, new String[] { valStr });
+			clientObj = new RequestHttpClient();
+			return clientObj;
 		}
-		
-		// Return the converted params
-		return ret;
 	}
 	
-// 	//--------------------------------------------------------
-// 	// simple GET / POST / PUT / DELETE
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Performs GET request : with parameters, appended to the requestURL
-// 	 *
-// 	 * Parameters here are in a strict 1 to 1 pair, and is parsed to string as such
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp simpleGet(String requestURL, Map<String, Object> parametersMap) {
-// 		return get(requestURL, simpleParameterConversion(parametersMap));
-// 	}
-	
-// 	/**
-// 	 * Performs POST request : with parameters
-// 	 *
-// 	 * Parameters here are in a strict 1 to 1 pair, and is parsed to string as such
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp simplePost(String requestURL, Map<String, Object> parametersMap) {
-// 		return post(requestURL, simpleParameterConversion(parametersMap));
-// 	}
-	
-// 	/**
-// 	 * Performs PUT request : with parameters
-// 	 *
-// 	 * Parameters here are in a strict 1 to 1 pair, and is parsed to string as such
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp simplePut(String requestURL, Map<String, Object> parametersMap) {
-// 		return put(requestURL, simpleParameterConversion(parametersMap));
-// 	}
-	
-// 	/**
-// 	 * Performs DELETE request : with parameters
-// 	 *
-// 	 * Parameters here are in a strict 1 to 1 pair, and is parsed to string as such
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp simpleDelete(String requestURL, Map<String, Object> parametersMap) {
-// 		return delete(requestURL, simpleParameterConversion(parametersMap));
-// 	}
-	
-// 	//--------------------------------------------------------
-// 	// GET request operations
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Performs GET request : in the most basic form
-// 	 *
-// 	 * @param   Request URL to call
-// 	 *
-// 	 * @return  The ResponseHttp object, use it to get more info
-// 	 **/
-// 	public static ResponseHttp get(String requestURL) {
-// 		return byType(HttpRequestType.GET, requestURL, null, null, null);
-// 	}
-	
-// 	/**
-// 	 * Performs GET request : with parameters, appended to the requestURL
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp get(String requestURL, Map<String, String[]> parametersMap) {
-// 		return byType(HttpRequestType.GET, requestURL, parametersMap, null, null);
-// 	}
-	
-// 	/**
-// 	 * Performs GET request : with parameters, appended to the requestURL
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 * @param   [Optional] Cookie map to send values
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp get( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap) { //
-// 		return byType(HttpRequestType.GET, requestURL, parametersMap, cookiesMap, null);
-// 	}
-	
-// 	/**
-// 	 * Performs GET request : with parameters, appended to the requestURL
-// 	 *
-// 	 * @param   Request URL to call
-// 	 * @param   [Optional] Parameters to add to the request
-// 	 * @param   [Optional] Cookie map to send values
-// 	 * @param   [Optional] Headers map to send values
-// 	 *
-// 	 * @return  The ResponseHttp object
-// 	 **/
-// 	public static ResponseHttp get( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return byType(HttpRequestType.GET, requestURL, parametersMap, cookiesMap, headersMap);
-// 	}
-	
-// 	//--------------------------------------------------------
-// 	// POST request operations
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Performs (form) POST request : with parameters
-// 	 **/
-// 	public static ResponseHttp post(String requestURL, Map<String, String[]> parametersMap) {
-// 		return byType(HttpRequestType.POST, requestURL, parametersMap, null, null);
-// 	}
-	
-// 	/**
-// 	 * Performs (form) POST request with parameters, cookies and headers
-// 	 **/
-// 	public static ResponseHttp post( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return byType(HttpRequestType.POST, requestURL, parametersMap, cookiesMap, headersMap);
-// 	}
-	
-// 	/**
-// 	 * Performs (form) POST request : with parameters and files
-// 	 **/
-// 	public static ResponseHttp post(String requestURL, Map<String, String[]> parametersMap,
-// 		Map<String, File[]> filesMap) {
-// 		return byType(HttpRequestType.POST, requestURL, parametersMap, null, null, filesMap, null);
-// 	}
-	
-// 	/**
-// 	 * Performs (form) POST request with parameters, files, cookies and headers
-// 	 **/
-// 	public static ResponseHttp post( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, File[]> filesMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return byType(HttpRequestType.POST, requestURL, parametersMap, cookiesMap, headersMap,
-// 			filesMap, null);
-// 	}
-	
-// 	//--------------------------------------------------------
-// 	// PUT request operations
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Performs (form) PUT request : with parameters
-// 	 **/
-// 	public static ResponseHttp put(String requestURL, Map<String, String[]> parametersMap) {
-// 		return byType(HttpRequestType.PUT, requestURL, parametersMap, null, null);
-// 	}
-	
-// 	/**
-// 	 * Performs (form) PUT request with parameters, cookies and headers
-// 	 **/
-// 	public static ResponseHttp put( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return byType(HttpRequestType.PUT, requestURL, parametersMap, cookiesMap, headersMap);
-// 	}
-	
-// 	/**
-// 	 * Performs (form) PUT request : with parameters and files
-// 	 **/
-// 	public static ResponseHttp put(String requestURL, Map<String, String[]> parametersMap,
-// 		Map<String, File[]> filesMap) {
-// 		return byType(HttpRequestType.PUT, requestURL, parametersMap, null, null, filesMap, null);
-// 	}
-	
-// 	/**
-// 	 * Performs (form) PUT request with parameters, files, cookies and headers
-// 	 **/
-// 	public static ResponseHttp put( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, File[]> filesMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return byType(HttpRequestType.PUT, requestURL, parametersMap, cookiesMap, headersMap,
-// 			filesMap, null);
-// 	}
-	
-// 	//--------------------------------------------------------
-// 	// DELETE request operations
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Performs delete request
-// 	 **/
-// 	public static ResponseHttp delete(String requestURL) {
-// 		return byType(HttpRequestType.DELETE, requestURL, null, null, null);
-// 	}
-	
-// 	/**
-// 	 * Performs DELETE request : with parameters
-// 	 * Note: parameters are treated the same way as GET request
-// 	 **/
-// 	public static ResponseHttp delete(String requestURL, Map<String, String[]> parametersMap) {
-// 		return byType(HttpRequestType.DELETE, requestURL, parametersMap, null, null);
-// 	}
-	
-// 	/**
-// 	 * Performs delete request with parameters, cookies and headers
-// 	 * Note: parameters are treated the same way as GET request
-// 	 **/
-// 	public static ResponseHttp delete( //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return byType(HttpRequestType.DELETE, requestURL, parametersMap, cookiesMap, headersMap);
-// 	}
-	
-// 	//--------------------------------------------------------
-// 	// X request operations
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Performs X request with parameters, cookies and headers
-// 	 **/
-// 	public static ResponseHttp byType( //
-// 		HttpRequestType requestType, //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap //
-// 	) { //
-// 		return RequestHttp_apache.callRequest(requestType, requestURL, parametersMap, cookiesMap,
-// 			headersMap, null);
-// 	}
-	
-// 	/**
-// 	 * Performs X request with parameters, cookies and headers
-// 	 **/
-// 	public static ResponseHttp byType( //
-// 		HttpRequestType requestType, //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap, //
-// 		InputStream requestStream //
-// 	) { //
-// 		return RequestHttp_apache.callRequest(requestType, requestURL, parametersMap, cookiesMap,
-// 			headersMap, requestStream);
-// 	}
-	
-// 	/**
-// 	 * Performs X request with parameters, cookies and headers
-// 	 **/
-// 	public static ResponseHttp byType( //
-// 		HttpRequestType requestType, //
-// 		String requestURL, //
-// 		Map<String, String[]> parametersMap, //
-// 		Map<String, String[]> cookiesMap, //
-// 		Map<String, String[]> headersMap, //
-// 		Map<String, File[]> filesMap, //
-// 		InputStream requestStream //
-// 	) { //
-// 		return RequestHttp_apache.callRequest(requestType, requestURL, parametersMap, cookiesMap,
-// 			headersMap, filesMap, requestStream);
-// 	}
-	
-// 	//--------------------------------------------------------
-// 	// Websocket operations
-// 	//--------------------------------------------------------
-	
-// 	/**
-// 	 * Creates a basic websocket connection
-// 	 **/
-// 	public static ResponseHttp websocket(String requestURL) {
-// 		return new ResponseHttp_websocket(requestURL, null);
-// 	}
-	
-// 	/**
-// 	 * Creates a basic websocket connection
-// 	 **/
-// 	public static ResponseHttp websocket(String requestURL, Consumer<String> handler) {
-// 		return new ResponseHttp_websocket(requestURL, handler);
-// 	}
+	//------------------------------------------------
+	//
+	//  Wrappers for GET Requests
+	//
+	//------------------------------------------------
+
+	/**
+	 * Wrapper method for GET request
+	 *
+	 * @param   Request URL to call
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp get(
+		String reqUrl //
+	){
+		return client().get(reqUrl);
+	}
+
+	/**
+	 * Wrapper method for GET request
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp get(
+		String reqUrl, //
+		Map<String, Object> paramMap //
+	){
+		return client().get(reqUrl, paramMap);
+	}
+
+	/**
+	 * Wrapper method for GET request
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp get(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap //
+	){
+		return client().get(reqUrl, paramMap, cookiesMap);
+	}
+
+	/**
+	 * Wrapper method for GET request
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp get(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().get(reqUrl, paramMap, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  Wrappers for POST form / multipart support
+	//
+	//------------------------------------------------
+
+	/**
+	 * Wrapper method for POST form request
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp post(String reqUrl, Map<String, Object> paramMap){
+		return client().post(reqUrl, paramMap);
+	}
+
+	/**
+	 * Wrapper method for POST form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp post(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap //
+	){
+		return client().post(reqUrl, paramMap,cookiesMap);
+	}
+
+	/**
+	 * Wrapper method for POST form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp post(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().post(reqUrl, paramMap, cookiesMap, headersMap);
+	}
+
+	/**
+	 * Wrapper method for POST multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp postMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap //
+	){
+		return client().postMultipart(reqUrl, paramMap);
+	}
+
+	/**
+	 * Wrapper method for POST multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp postMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap //
+	){
+		return client().postMultipart(reqUrl, paramMap, filesMap);
+	}
+
+	/**
+	 * Wrapper method for POST multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp postMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().postMultipart(reqUrl, paramMap, filesMap, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  Post JSON
+	//
+	//------------------------------------------------
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp postJSON(//
+		String reqUrl, //
+		Object params //
+	) {
+		return client().postJSON(reqUrl, params);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp postJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap //
+	) {
+		return client().postJSON(reqUrl, params, cookiesMap);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp postJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	) {
+		return client().postJSON( reqUrl, params, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  Wrappers for PUT form / multipart support
+	//
+	//------------------------------------------------
+
+	/**
+	 * Wrapper method for PUT form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp put(String reqUrl, Map<String, Object> paramMap){
+		return client().put(reqUrl, paramMap);
+	}
+
+	/**
+	 * Wrapper method for PUT form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp put(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap //
+	){
+		return client().put(reqUrl, paramMap, cookiesMap);
+	}
+
+	/**
+	 * Wrapper method for PUT form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp put(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().put(reqUrl, paramMap, cookiesMap, headersMap);
+	}
+
+	/**
+	 * Wrapper method for PUT multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp putMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap //
+	){
+		return client().putMultipart(reqUrl, paramMap, filesMap);
+	}
+
+	/**
+	 * Wrapper method for PUT multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp putMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap //
+	){
+		return client().putMultipart(reqUrl, paramMap, filesMap, cookiesMap);
+	}
+
+	/**
+	 * Wrapper method for PUT multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp putMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().putMultipart( reqUrl, paramMap, filesMap, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  PUT JSON
+	//
+	//------------------------------------------------
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp putJSON(//
+		String reqUrl, //
+		Object params //
+	) {
+		return client().putJSON(reqUrl, params);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp putJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap //
+	) {
+		return client().putJSON(reqUrl, params, cookiesMap);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp putJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	) {
+		return client().putJSON(reqUrl, params, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  Wrappers for DELETE Requests
+	//
+	//------------------------------------------------
+
+	/**
+	 * Wrapper method for DELETE form requests
+	 *
+	 * @param   Request URL to call
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp delete(String reqUrl){
+		return client().delete(reqUrl);
+	}
+
+	/**
+	 * Wrapper method for DELETE form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp delete(String reqUrl, Map<String, Object> paramMap){
+		return client().delete(reqUrl, paramMap);
+	}
+
+	/**
+	 * Wrapper method for DELETE form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp delete(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().delete( reqUrl, paramMap, cookiesMap, headersMap);
+	}
+
+	/**
+	 * Wrapper method for DELETE multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp deleteMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap //
+	){
+		return client().deleteMultipart(reqUrl, paramMap, filesMap);
+	}
+
+	/**
+	 * Wrapper method for DELETE multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp deleteMultipart(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return client().deleteMultipart(reqUrl, paramMap, filesMap, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  DELETE JSON
+	//
+	//------------------------------------------------
+
+	/**
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp deleteJSON(//
+		String reqUrl, //
+		Object params //
+	) {
+		return client().deleteJSON(reqUrl, params);
+	}
+
+	/**
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp deleteJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap //
+	) {
+		return client().deleteJSON(reqUrl, params, cookiesMap, null);
+	}
+
+	/**
+	 * Performs DELETE request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public static ResponseHttp deleteJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	) {
+		return client().deleteJSON(reqUrl, params, cookiesMap, headersMap);
+	}
+
 }
