@@ -87,36 +87,12 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * Wrapper method for GET request
 	 *
 	 * @param   Request URL to call
-	 * @param   paramMap   [can be null] Parameters to add to the request
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
 	public ResponseHttp get(
-		String reqUrl, //
-		Map<String, Object> paramMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		String reqUrl //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpGet(reqUrl, reformedParamMap, cookiesMap, headersMap);
-	}
-
-	/**
-	 * Wrapper method for GET request
-	 *
-	 * @param   Request URL to call
-	 * @param   paramMap   [can be null] Parameters to add to the request
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
-	 * @return ResponseHttp object
-	 */
-	public ResponseHttp get(
-		String reqUrl, //
-		Map<String, Object> paramMap, //
-		Map<String, String[]> cookiesMap //
-	){
-		return get(reqUrl, paramMap, cookiesMap, null);
+		return get(reqUrl, null, null, null);
 	}
 
 	/**
@@ -137,12 +113,40 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * Wrapper method for GET request
 	 *
 	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
 	public ResponseHttp get(
-		String reqUrl //
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap //
 	){
-		return get(reqUrl, null, null, null);
+		return get(reqUrl, paramMap, cookiesMap, null);
+	}
+
+	/**
+	 * Wrapper method for GET request
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 * @return ResponseHttp object
+	 */
+	public ResponseHttp get(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	){
+		return httpGet( //
+			reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
 	}
 
 	//------------------------------------------------

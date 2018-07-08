@@ -325,7 +325,6 @@ class RequestHttpClient_base {
 		// Build the request
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
-
 		return executeRequestBuilder(reqBuilder);
 	}
 

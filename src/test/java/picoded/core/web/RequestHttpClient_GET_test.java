@@ -79,11 +79,9 @@ public class RequestHttpClient_GET_test{
 		// Add the body for the response
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpGet(
-			mockWebServer.url("/").toString(),
-			null,
-			null,
-			null);
+		ResponseHttp responseHttp = requestHttpClient.get( 
+			mockWebServer.url("/").toString()
+		);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
 
@@ -287,7 +285,7 @@ public class RequestHttpClient_GET_test{
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
 		// Prepare headers
-		Map<String, String[]> headers = new HashMap<String, String[]>();
+		Map<String, Object> headers = new HashMap<>();
 		headers.put("first",  new String[]{ "random-value", "choose-value" });
 		headers.put("second", new String[]{ "single-value" });
 
@@ -325,7 +323,7 @@ public class RequestHttpClient_GET_test{
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
 		// Prepare cookie map
-		Map<String, String[]> cookiesMap = new HashMap<String, String[]>();
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
 		cookiesMap.put("cookie1", new String[]{ "thiscookie", "anothercook" });
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
