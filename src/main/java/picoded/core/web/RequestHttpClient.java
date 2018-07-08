@@ -151,7 +151,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  Wrappers for POST Requests
+	//  Wrappers for POST form / multipart support
 	//
 	//------------------------------------------------
 
@@ -259,6 +259,71 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		return httpPostMultipart(reqUrl, //
 			convertMapObjectToStringArray(paramMap), // 
 			filesMap, //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
+	}
+
+	//------------------------------------------------
+	//
+	//  Post JSON
+	//
+	//------------------------------------------------
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp postJSON(//
+		String reqUrl, //
+		Object params //
+	) {
+		return postJSON(reqUrl, params, null, null);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp postJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap //
+	) {
+		return postJSON(reqUrl, params, cookiesMap, null);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp postJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	) {
+		return httpPostJSON( //
+			reqUrl, //
+			params, //
 			convertMapObjectToStringArray(cookiesMap), //
 			convertMapObjectToStringArray(headersMap) //
 		);

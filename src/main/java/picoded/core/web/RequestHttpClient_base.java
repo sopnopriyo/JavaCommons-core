@@ -398,7 +398,7 @@ class RequestHttpClient_base {
 	) {
 		try{
 			String jsonString = ConvertJSON.fromObject(params);
-			return httpPostJSON_string(
+			return httpPostJSON(
 					reqUrl,
 					jsonString,
 					cookiesMap,
@@ -419,7 +419,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp httpPostJSON_string(//
+	public ResponseHttp httpPostJSON(//
 		String reqUrl, //
 		String jsonString, //
 		Map<String, String[]> cookiesMap, //

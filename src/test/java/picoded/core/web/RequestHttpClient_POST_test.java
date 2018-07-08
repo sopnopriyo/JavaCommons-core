@@ -328,7 +328,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using httpPostJSON_string()
+	 * using httpPostJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -349,7 +349,7 @@ public class RequestHttpClient_POST_test{
 				+ "]}";
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				json,
 				null,
@@ -365,7 +365,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using httpPostJSON_string()
+	 * using httpPostJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -379,7 +379,7 @@ public class RequestHttpClient_POST_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -404,7 +404,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using httpPostJSON_string()
+	 * using httpPostJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -418,7 +418,7 @@ public class RequestHttpClient_POST_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -693,7 +693,7 @@ public class RequestHttpClient_POST_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.httpPostJSON_string(
+	// 	responseHttp = requestHttpClient.httpPostJSON(
 	// 			httpbinURL,
 	// 			"",
 	// 			null,
