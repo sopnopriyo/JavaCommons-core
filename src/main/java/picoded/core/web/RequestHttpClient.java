@@ -525,7 +525,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @return ResponseHttp object
 	 */
 	public ResponseHttp delete(String reqUrl){
-		return deleteForm(reqUrl, null, null, null);
+		return delete(reqUrl, null, null, null);
 	}
 
 	/**
@@ -535,8 +535,8 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public ResponseHttp deleteForm(String reqUrl, Map<String, Object> paramMap){
-		return deleteForm(reqUrl, paramMap, null, null);
+	public ResponseHttp delete(String reqUrl, Map<String, Object> paramMap){
+		return delete(reqUrl, paramMap, null, null);
 	}
 
 	/**
@@ -548,14 +548,18 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public ResponseHttp deleteForm(
+	public ResponseHttp delete(
 		String reqUrl, //
 		Map<String, Object> paramMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpDeleteForm(reqUrl, reformedParamMap, cookiesMap, headersMap);
+		return httpDelete( //
+			reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
 	}
 
 	/**
@@ -588,11 +592,81 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpDeleteMultipart(reqUrl, reformedParamMap, filesMap, cookiesMap, headersMap);
+		return httpDeleteMultipart( //
+			reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			filesMap, //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
+	}
+
+	//------------------------------------------------
+	//
+	//  PUT JSON
+	//
+	//------------------------------------------------
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteJSON(//
+		String reqUrl, //
+		Object params //
+	) {
+		return deleteJSON(reqUrl, params, null, null);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap //
+	) {
+		return deleteJSON(reqUrl, params, cookiesMap, null);
+	}
+
+	/**
+	 * Performs POST request : with json parameters as Map<String, String[]>
+	 *
+	 * @param   Request URL to call
+	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp deleteJSON(//
+		String reqUrl, //
+		Object params, //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
+	) {
+		return httpDeleteJSON( //
+			reqUrl, //
+			params, //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
 	}
 
 }

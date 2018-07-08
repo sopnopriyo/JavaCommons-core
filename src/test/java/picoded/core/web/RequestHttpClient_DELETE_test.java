@@ -68,7 +68,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the delete request body
 	 * is correctly sent via DELETE to the server
-	 * using httpDeleteForm()
+	 * using httpDelete()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -82,7 +82,7 @@ public class RequestHttpClient_DELETE_test{
 		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDelete(
 				mockWebServer.url("/").toString(),
 				deleteBodyParams,
 				null,
@@ -100,7 +100,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via DELETE to the server
-	 * using httpDeleteForm()
+	 * using httpDelete()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -114,7 +114,7 @@ public class RequestHttpClient_DELETE_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDelete(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -139,7 +139,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via DELETE to the server
-	 * using httpDeleteForm()
+	 * using httpDelete()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -153,7 +153,7 @@ public class RequestHttpClient_DELETE_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
+		ResponseHttp responseHttp = requestHttpClient.httpDelete(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -179,7 +179,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the delete request body
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON() - Map<String, String[]>
+	 * using httpDeleteJSON() - Map<String, String[]>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -194,7 +194,7 @@ public class RequestHttpClient_DELETE_test{
 		deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				deleteBodyParams,
 				null,
@@ -212,7 +212,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the delete request body
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON() - List<String>
+	 * using httpDeleteJSON() - List<String>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -228,7 +228,7 @@ public class RequestHttpClient_DELETE_test{
 		deleteBodyParams.add("{'name':'ghi'}");
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				deleteBodyParams,
 				null,
@@ -246,7 +246,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON()
+	 * using httpDeleteJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -263,7 +263,7 @@ public class RequestHttpClient_DELETE_test{
 		Map<String, String[]> params = new HashMap<String, String[]>();
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				params,
 				null,
@@ -289,7 +289,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON()
+	 * using httpDeleteJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -306,7 +306,7 @@ public class RequestHttpClient_DELETE_test{
 		Map<String, String[]> params = new HashMap<String, String[]>();
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				params,
 				cookiesMap,
@@ -332,7 +332,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the delete request body
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON_string()
+	 * using httpDeleteJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -353,7 +353,7 @@ public class RequestHttpClient_DELETE_test{
 				+ "]}";
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				json,
 				null,
@@ -370,7 +370,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON_string()
+	 * using httpDeleteJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -384,7 +384,7 @@ public class RequestHttpClient_DELETE_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -410,7 +410,7 @@ public class RequestHttpClient_DELETE_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via DELETE to the server
-	 * using deleteJSON_string()
+	 * using httpDeleteJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -424,7 +424,7 @@ public class RequestHttpClient_DELETE_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpDeleteJSON(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -687,7 +687,7 @@ public class RequestHttpClient_DELETE_test{
 	// 	deleteBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	ResponseHttp responseHttp = requestHttpClient.httpDeleteForm(
+	// 	ResponseHttp responseHttp = requestHttpClient.httpDelete(
 	// 			httpbinURL,
 	// 			deleteBodyParams,
 	// 			null,
@@ -696,7 +696,7 @@ public class RequestHttpClient_DELETE_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.deleteJSON(
+	// 	responseHttp = requestHttpClient.httpDeleteJSON(
 	// 			httpbinURL,
 	// 			deleteBodyParams,
 	// 			null,
@@ -705,7 +705,7 @@ public class RequestHttpClient_DELETE_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.deleteJSON_string(
+	// 	responseHttp = requestHttpClient.httpDeleteJSON(
 	// 			httpbinURL,
 	// 			"",
 	// 			null,
@@ -753,7 +753,7 @@ public class RequestHttpClient_DELETE_test{
 		deleteBodyParams.put("fourth_value", null);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.delete(
 				mockWebServer.url("/").toString(),
 				deleteBodyParams,
 				null,
@@ -781,12 +781,12 @@ public class RequestHttpClient_DELETE_test{
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
 		// Prepare headers
-		Map<String, String[]> headers = new HashMap<String, String[]>();
+		Map<String, Object> headers = new HashMap<>();
 		headers.put("first",  new String[]{ "random-value", "choose-value" });
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.delete(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -820,12 +820,12 @@ public class RequestHttpClient_DELETE_test{
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
 		// Prepare cookie map
-		Map<String, String[]> cookiesMap = new HashMap<String, String[]>();
+		Map<String, Object> cookiesMap = new HashMap<>();
 		cookiesMap.put("cookie1", new String[]{ "thiscookie", "anothercook" });
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.deleteForm(
+		ResponseHttp responseHttp = requestHttpClient.delete(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -1025,7 +1025,7 @@ public class RequestHttpClient_DELETE_test{
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
 		// Prepare headers
-		Map<String, String[]> headers = new HashMap<String, String[]>();
+		Map<String, Object> headers = new HashMap<>();
 		headers.put("first",  new String[]{ "random-value", "choose-value" });
 		headers.put("second", new String[]{ "single-value" });
 
@@ -1066,7 +1066,7 @@ public class RequestHttpClient_DELETE_test{
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 
 		// Prepare cookie map
-		Map<String, String[]> cookiesMap = new HashMap<String, String[]>();
+		Map<String, Object> cookiesMap = new HashMap<>();
 		cookiesMap.put("cookie1", new String[]{ "thiscookie", "anothercook" });
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 

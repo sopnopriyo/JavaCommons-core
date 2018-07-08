@@ -483,7 +483,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp httpDeleteForm(//
+	public ResponseHttp httpDelete(//
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //
@@ -496,48 +496,23 @@ class RequestHttpClient_base {
 	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
 	 * @param   Request URL to call
-	 * @param   params     [can be null] JSON valid Java objects to add to the request body
+	 * @param   jsonObj    [can be null] JSON valid Java objects to add to the request body
 	 * @param   cookieMap  [can be null] Cookie map to send values
 	 * @param   headersMap [can be null] Headers map to send values
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp deleteJSON(
+	public ResponseHttp httpDeleteJSON(
 		String reqUrl, //
-		Object params, //
+		Object jsonObj, //
 		Map<String, String[]> cookiesMap, //
 		Map<String, String[]> headersMap //
 	) {
 		try{
-			String jsonString = ConvertJSON.fromObject(params);
-			return deleteJSON_string(
-					reqUrl,
-					jsonString,
-					cookiesMap,
-					headersMap
-			);
+			return executeJsonRequest("DELETE", reqUrl, jsonObj, cookiesMap, headersMap);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Performs DELETE request : with json string as the parameter
-	 *
-	 * @param   Request URL to call
-	 * @param   jsonString [can be null] JSON string to add to the request body
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
-	 *
-	 * @return  The ResponseHttp object
-	 **/
-	public ResponseHttp deleteJSON_string(
-		String reqUrl, //
-		String jsonString, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
-	) {
-		return executeJsonRequest("DELETE", reqUrl, jsonString, cookiesMap, headersMap);
 	}
 
 	/**
