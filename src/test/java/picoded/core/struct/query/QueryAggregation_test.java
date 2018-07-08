@@ -24,12 +24,10 @@ public class QueryAggregation_test {
 	
 	// Data set to query against
 	private List<Map<String, Object>> fullDataSet = null;
-
+	
 	// Single "row" record to generate
-	private Map<String, Object> createSingleMap(
-		String name,
-		int intVal, double doubleVal, String stringVal
-	) {
+	private Map<String, Object> createSingleMap(String name, int intVal, double doubleVal,
+		String stringVal) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("name", name);
 		ret.put("intVal", intVal);
@@ -41,28 +39,28 @@ public class QueryAggregation_test {
 	// Initializing full dataset
 	private void initialiseFullDataSet() {
 		// Skip if already initialized
-		if( fullDataSet != null ) {
+		if (fullDataSet != null) {
 			return;
 		}
 		// Initialize dataset
 		fullDataSet = new ArrayList<Map<String, Object>>();
 		fullDataSet.add(createSingleMap("bob", 0, 0.0, "0"));
-		fullDataSet.add(createSingleMap("bob",1, 1.1, "1"));
-		fullDataSet.add(createSingleMap("bob",2, 2.2, "2"));
-		fullDataSet.add(createSingleMap("bob",3, 3.3, "3"));
-		fullDataSet.add(createSingleMap("bob",4, 4.4, "4"));
-		fullDataSet.add(createSingleMap("tom",5, 5.5, "5"));
-		fullDataSet.add(createSingleMap("tom",6, 6.6, "6"));
-		fullDataSet.add(createSingleMap("tom",7, 7.7, "7"));
-		fullDataSet.add(createSingleMap("tom",8, 8.8, "8"));
-		fullDataSet.add(createSingleMap("tom",9, 9.9, "9"));
+		fullDataSet.add(createSingleMap("bob", 1, 1.1, "1"));
+		fullDataSet.add(createSingleMap("bob", 2, 2.2, "2"));
+		fullDataSet.add(createSingleMap("bob", 3, 3.3, "3"));
+		fullDataSet.add(createSingleMap("bob", 4, 4.4, "4"));
+		fullDataSet.add(createSingleMap("tom", 5, 5.5, "5"));
+		fullDataSet.add(createSingleMap("tom", 6, 6.6, "6"));
+		fullDataSet.add(createSingleMap("tom", 7, 7.7, "7"));
+		fullDataSet.add(createSingleMap("tom", 8, 8.8, "8"));
+		fullDataSet.add(createSingleMap("tom", 9, 9.9, "9"));
 	}
-
+	
 	// Reusable queries
 	Query queryAll = Query.build("name != ?", new Object[] { "any-value" });
 	Query queryBob = Query.build("name = ?", new Object[] { "bob" });
 	Query queryTom = Query.build("name = ?", new Object[] { "tom" });
-
+	
 	// Initialize full data set with reusable query
 	@Before
 	public void setup() {
@@ -85,18 +83,18 @@ public class QueryAggregation_test {
 	// COUNT
 	//
 	//------------------------------------------
-
+	
 	@Test
 	public void testCountAll() {
 		// Query sanity check
 		assertEquals(10, queryAll.search(fullDataSet).size());
-
+		
 		// Aggregation counting
 		BigDecimal res = queryAll.singleAggregation(fullDataSet, "count(*)");
 		assertNotNull(res);
 		assertEquals(10, res.intValue());
 	}
-
+	
 	@Test
 	public void testCountIntVal() {
 		BigDecimal res = queryAll.singleAggregation(fullDataSet, "count(intVal)");
@@ -123,7 +121,7 @@ public class QueryAggregation_test {
 	// SUM
 	//
 	//------------------------------------------
-
+	
 	@Test
 	public void testSumInt() {
 		BigDecimal res = queryAll.singleAggregation(fullDataSet, "sum(intVal)");
@@ -137,7 +135,7 @@ public class QueryAggregation_test {
 		assertNotNull(res);
 		assertEquals(35, res.doubleValue(), 0.0);
 	}
-
+	
 	@Test
 	public void testSumDouble() {
 		BigDecimal res = queryBob.singleAggregation(fullDataSet, "sum(doubleVal)");
@@ -150,7 +148,7 @@ public class QueryAggregation_test {
 	// MIN
 	//
 	//------------------------------------------
-
+	
 	@Test
 	public void testMinIntVal() {
 		BigDecimal res = queryTom.singleAggregation(fullDataSet, "min(intVal)");
@@ -177,7 +175,7 @@ public class QueryAggregation_test {
 	// MAX
 	//
 	//------------------------------------------
-
+	
 	@Test
 	public void testMaxIntVal() {
 		BigDecimal res = queryTom.singleAggregation(fullDataSet, "max(intVal)");
@@ -204,7 +202,7 @@ public class QueryAggregation_test {
 	// AVG
 	//
 	//------------------------------------------
-
+	
 	@Test
 	public void testAvgInt() {
 		BigDecimal res = queryAll.singleAggregation(fullDataSet, "avg(intVal)");
@@ -251,5 +249,5 @@ public class QueryAggregation_test {
 		assertEquals(4.5, ((BigDecimal) res.get(avgStringVal)).doubleValue(), 0);
 	}
 	
-	*/
+	 */
 }

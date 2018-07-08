@@ -28,7 +28,7 @@ public class ConvertJSON_test {
 	
 	String tStr;
 	String tStr2;
-
+	
 	/**
 	 * Setup the temp vars
 	 */
@@ -39,7 +39,7 @@ public class ConvertJSON_test {
 		object = new Object();
 		
 	}
-
+	
 	@After
 	public void tearDown() {
 		
@@ -48,7 +48,7 @@ public class ConvertJSON_test {
 	///
 	/// Expected exception testing
 	///
-
+	
 	/**
 	 * Invalid constructor test
 	 */
@@ -56,7 +56,7 @@ public class ConvertJSON_test {
 	public void invalidConstructor() throws Exception {
 		new ConvertJSON();
 	}
-
+	
 	/**
 	 * Inavlid map, format
 	 */
@@ -64,7 +64,7 @@ public class ConvertJSON_test {
 	public void invalidObject() {
 		ConvertJSON.fromObject(System.out);
 	}
-
+	
 	/**
 	 * Inavlid map, as list
 	 */
@@ -72,7 +72,7 @@ public class ConvertJSON_test {
 	public void invalidMapToList() {
 		ConvertJSON.toList("{}");
 	}
-
+	
 	/**
 	 * Inavlid map, as array
 	 */
@@ -80,7 +80,7 @@ public class ConvertJSON_test {
 	public void invalidMapToArray() {
 		ConvertJSON.toObjectArray("{}");
 	}
-
+	
 	/**
 	 * Inavlid map, as array
 	 */
@@ -88,7 +88,7 @@ public class ConvertJSON_test {
 	public void invalidMapToStringArray() {
 		ConvertJSON.toStringArray("{}");
 	}
-
+	
 	/**
 	 * Inavlid array as map
 	 */
@@ -96,7 +96,7 @@ public class ConvertJSON_test {
 	public void invalidArrayToMap() {
 		ConvertJSON.toMap("[]");
 	}
-
+	
 	/**
 	 * Inavlid blank json string
 	 */
@@ -114,10 +114,10 @@ public class ConvertJSON_test {
 		// Inserting values into map
 		tMap.put("Hello", "WORLD");
 		tMap.put("WORLD", "Hello");
-
+		
 		// Comapare converted String by fromMap method with expected value
 		assertEquals("{\"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}", (tStr = ConvertJSON.fromMap(tMap)));
-
+		
 		// Ensure toMap method convert back to map properly
 		assertEquals(tMap, ConvertJSON.toMap(tStr));
 	}
@@ -127,15 +127,15 @@ public class ConvertJSON_test {
 		// Inserting values into map
 		tMap.put("Hello", "WORLD");
 		tMap.put("WORLD", "Hello");
-
+		
 		// Case 1: Ensure multi line comment syntax work in conversion
 		assertEquals(
 			tMap,
 			ConvertJSON
 				.toMap("{ /* Hello folks. comment here is to break things */ \"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}"));
-
+		
 		assertEquals("{\"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}", (tStr = ConvertJSON.fromMap(tMap)));
-
+		
 		// Case 2: Test single comment syntax
 		assertEquals(
 			tMap,
@@ -149,10 +149,10 @@ public class ConvertJSON_test {
 		// Inserting values into list
 		tList.add("Hello");
 		tList.add("WORLD");
-
+		
 		// Test fromList method conversion to String value
 		assertEquals("[\"Hello\",\"WORLD\"]", (tStr = ConvertJSON.fromList(tList)));
-
+		
 		// Test toList method conversion to List object
 		assertEquals(tList, ConvertJSON.toList(tStr));
 	}
@@ -162,7 +162,7 @@ public class ConvertJSON_test {
 		// Convert String into object
 		object = ConvertJSON.toObject("{\"Hello\":\"WORLD\",\"WORLD\":\"Hello\"}");
 		assertEquals("{Hello=WORLD, WORLD=Hello}", (object).toString());
-
+		
 		// Convert String object
 		object = ConvertJSON.toObject("{\"Hello\":\"WORLD\"}");
 		assertEquals("{Hello=WORLD}", (object).toString());
@@ -174,112 +174,112 @@ public class ConvertJSON_test {
 	
 	@Test
 	public void basicToStringArrayConversion() {
-
+		
 		// Convert String into String array
 		objectArray = ConvertJSON.toStringArray("[\"Hello\",\"WORLD\",\"WORLD\",\"Hello\"]");
 		assertEquals("[Hello, WORLD, WORLD, Hello]", Arrays.deepToString(objectArray));
-
+		
 		// Convert String into String Array
 		objectArray = ConvertJSON.toStringArray("[\"Hello\",\"WORLD\"]");
 		assertEquals("[Hello, WORLD]", Arrays.deepToString(objectArray));
-
+		
 		// Convert String into String Array
 		objectArray = ConvertJSON.toStringArray("[\"Hello\"]");
 		assertEquals("[Hello]", Arrays.deepToString(objectArray));
 	}
-
+	
 	/**
 	 * Convert String into double array and vice versa
 	 */
 	@Test
 	public void basicToDoubleArrayConversion() {
-
+		
 		// Case 1: Empty String
 		objectArray = ArrayUtils.toObject(ConvertJSON.toDoubleArray("[]"));
 		assertEquals("[]", Arrays.deepToString(objectArray));
-
+		
 		// Case 2: Numeric decimal Strings
 		objectArray = ArrayUtils.toObject(ConvertJSON.toDoubleArray("[12.1, 12.9, 23.9, 4.0]"));
 		assertEquals("[12.1, 12.9, 23.9, 4.0]", Arrays.deepToString(objectArray));
-
+		
 		// Case 3: Numeric decimal Strings with negative numbers
 		objectArray = ArrayUtils.toObject(ConvertJSON.toDoubleArray("[-7.1, 22.234, 86.7, -99.02]"));
 		assertEquals("[-7.1, 22.234, 86.7, -99.02]", Arrays.deepToString(objectArray));
-
+		
 		// Case 4: Sanity Check
 		objectArray = ArrayUtils.toObject(ConvertJSON.toDoubleArray("[-1.0, 2.9]"));
 		assertEquals("[-1.0, 2.9]", Arrays.deepToString(objectArray));
 	}
-
+	
 	/**
 	 * Convert String into int array and vice versa
 	 */
 	@Test
 	public void basicToIntArrayConversion() {
-
+		
 		// Case 1: Empty String
 		objectArray = ArrayUtils.toObject(ConvertJSON.toIntArray("[]"));
 		assertEquals("[]", Arrays.deepToString(objectArray));
-
+		
 		// Case 2: Numeric Strings
 		objectArray = ArrayUtils.toObject(ConvertJSON.toIntArray("[121, 129, 239, 40]"));
 		assertEquals("[121, 129, 239, 40]", Arrays.deepToString(objectArray));
-
+		
 		// Case 3: Numeric  Strings with negative numbers
 		objectArray = ArrayUtils.toObject(ConvertJSON.toIntArray("[-71, 22234, 867, -9902]"));
 		assertEquals("[-71, 22234, 867, -9902]", Arrays.deepToString(objectArray));
-
+		
 		// Case 4: Sanity Check
 		objectArray = ArrayUtils.toObject(ConvertJSON.toIntArray("[-10, 29]"));
 		assertEquals("[-10, 29]", Arrays.deepToString(objectArray));
 	}
-
+	
 	/**
 	 * Convert String into long array and vice versa
 	 */
 	@Test
 	public void basicToLongArrayConversion() {
-
+		
 		// Case 1: Empty String
 		objectArray = ArrayUtils.toObject(ConvertJSON.toLongArray("[]"));
 		assertEquals("[]", Arrays.deepToString(objectArray));
-
+		
 		// Case 2: Numeric Strings
 		objectArray = ArrayUtils.toObject(ConvertJSON.toLongArray("[121, 129, 239, 40]"));
 		assertEquals("[121, 129, 239, 40]", Arrays.deepToString(objectArray));
-
+		
 		// Case 3: Numeric  Strings with negative numbers
 		objectArray = ArrayUtils.toObject(ConvertJSON.toLongArray("[-71, 22234, 867, -9902]"));
 		assertEquals("[-71, 22234, 867, -9902]", Arrays.deepToString(objectArray));
-
+		
 		// Case 4: Sanity Check
 		objectArray = ArrayUtils.toObject(ConvertJSON.toLongArray("[-10, 29]"));
 		assertEquals("[-10, 29]", Arrays.deepToString(objectArray));
 	}
-
+	
 	/**
 	 * Convert String into object array and vice versa
 	 */
 	@Test
 	public void basicToObjectArrayConversion() {
-
+		
 		// Case 1: Strings
 		objectArray = ConvertJSON.toObjectArray("[\"Hello\",\"WORLD\",\"WORLD\",\"Hello\"]");
 		assertEquals("[Hello, WORLD, WORLD, Hello]", Arrays.deepToString(objectArray));
-
+		
 		// Case 2
 		objectArray = ConvertJSON.toObjectArray("[\"Hello\",\"WORLD\"]");
 		assertEquals("[Hello, WORLD]", Arrays.deepToString(objectArray));
-
+		
 		// Case 3:
 		objectArray = ConvertJSON.toObjectArray("[\"Hello\"]");
 		assertEquals("[Hello]", Arrays.deepToString(objectArray));
-
+		
 		// Case 4: Mixture of objects
 		objectArray = ConvertJSON.toObjectArray("[\"Hello\", 23, -2, 0.9, \'a\']");
 		assertEquals("[Hello, 23, -2, 0.9, a]", Arrays.deepToString(objectArray));
 	}
-
+	
 	/**
 	 * Convert object array into strings
 	 */
@@ -292,7 +292,7 @@ public class ConvertJSON_test {
 		assertEquals("[]", ConvertJSON.fromArray(new Object[0]).toString());
 		assertEquals("[\"Hello\"]", ConvertJSON.fromArray(new Object[] { "Hello" }).toString());
 	}
-
+	
 	/**
 	 * Convert string array into strings
 	 */
@@ -308,7 +308,7 @@ public class ConvertJSON_test {
 		assertEquals("[\"a\",\"b\",\"c\"]", ConvertJSON.fromArray(new String[] { "a", "b", "c" })
 			.toString());
 	}
-
+	
 	/**
 	 * Convert int array into strings
 	 */
@@ -324,7 +324,7 @@ public class ConvertJSON_test {
 		assertEquals("[-7,22,86,-99]", ConvertJSON.fromArray(new int[] { -7, 22, 86, -99 })
 			.toString());
 	}
-
+	
 	/**
 	 * Convert long array into strings
 	 */
@@ -340,7 +340,7 @@ public class ConvertJSON_test {
 		assertEquals("[-7,22,86,-99]", ConvertJSON.fromArray(new long[] { -7, 22, 86, -99 })
 			.toString());
 	}
-
+	
 	/**
 	 * Convert double array into strings
 	 */
@@ -357,7 +357,7 @@ public class ConvertJSON_test {
 		assertEquals("[-7.1,22.234,86.7,-99.02]",
 			ConvertJSON.fromArray(new double[] { -7.1, 22.234, 86.7, -99.02 }).toString());
 	}
-
+	
 	/**
 	 * Test for null values
 	 * Objective: Convert null values into objects

@@ -16,12 +16,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-
 /**
  * Test suite to verify the methods inside MapOrListUtil
  */
 public class MapOrListUtil_test {
-
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void fetchObjectTest() {

@@ -16,8 +16,9 @@ public enum HttpRequestType {
 	/**
 	 * List of request types (that is supported)
 	 **/
-	GET(1 << 1), POST(1 << 2), PUT(1 << 3), DELETE(1 << 4), HEAD(1 << 5), OPTION(1 << 6), WEBSOCKET(2 << 7);
-
+	GET(1 << 1), POST(1 << 2), PUT(1 << 3), DELETE(1 << 4), HEAD(1 << 5), OPTION(1 << 6), WEBSOCKET(
+		2 << 7);
+	
 	/**
 	 * The internal value used by the Enum constructor
 	 **/

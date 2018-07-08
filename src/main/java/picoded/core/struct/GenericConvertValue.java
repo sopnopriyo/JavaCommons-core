@@ -65,7 +65,7 @@ public interface GenericConvertValue<V> {
 	 **/
 	default V getValue(V fallbck) {
 		V ret = getValue();
-		if(ret != null) {
+		if (ret != null) {
 			return ret;
 		}
 		return fallbck;
@@ -395,8 +395,7 @@ public interface GenericConvertValue<V> {
 	 *
 	 * @return The converted Map if possible, else null
 	 **/
-	default <K extends String, V> GenericConvertMap<K, V> getGenericConvertStringMap(
-		Object fallbck) {
+	default <K extends String, V> GenericConvertMap<K, V> getGenericConvertStringMap(Object fallbck) {
 		return GenericConvert.toGenericConvertStringMap(getValue(), fallbck);
 	}
 	

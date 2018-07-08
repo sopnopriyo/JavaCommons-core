@@ -14,7 +14,7 @@ import picoded.core.exception.ExceptionMessage;
  * this can be easily done in native java. Hence this class is really just for convinence
  * to facilitate quick discovery and usage of the functionality, instead of digging up stack overflow.
  **/
-public class StringConv  {
+public class StringConv {
 	/**
 	 * Invalid constructor (throws exception)
 	 **/
@@ -34,17 +34,17 @@ public class StringConv  {
 	 * @return  byte array representation of string, is null of input is null
 	 */
 	public byte[] toByteArray(String input, String charset) {
-		if(input == null) {
+		if (input == null) {
 			return null;
 		}
-
+		
 		try {
 			return input.getBytes(charset);
-		} catch(UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	/**
 	 * Convert from String to byte array, using the default UT-8 charset
 	 * 
@@ -55,7 +55,7 @@ public class StringConv  {
 	public byte[] toByteArray(String input) {
 		return toByteArray(input, "UTF-8");
 	}
-
+	
 	/**
 	 * Convert from bytearray to String
 	 * 
@@ -65,16 +65,16 @@ public class StringConv  {
 	 * @return  string representation of byte array, is null of input is null
 	 */
 	public String fromByteArray(byte[] input, String charset) {
-		if( input == null ) {
+		if (input == null) {
 			return null;
 		}
 		try {
 			return new String(input, charset);
-		} catch(UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
 	}
-
+	
 	/**
 	 * Convert from bytearray to String, using the default UT-8 charset
 	 * 
@@ -85,5 +85,5 @@ public class StringConv  {
 	public String fromByteArray(byte[] input) {
 		return fromByteArray(input, "UTF-8");
 	}
-
+	
 }

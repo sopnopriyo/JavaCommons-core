@@ -68,24 +68,24 @@ public class RequestHttp {
 	
 	// Local static client variable
 	private static volatile RequestHttpClient clientObj = null;
-
+	
 	/**
 	 * Get and return the static client object
 	 */
 	protected static RequestHttpClient client() {
 		// Thread safe get
-		if( clientObj != null ) {
+		if (clientObj != null) {
 			return clientObj;
 		}
 		// Client object not yet initialized, try to get one
 		// with a syncronized lock, initializing if needed
-		synchronized(RequestHttp.class) {
+		synchronized (RequestHttp.class) {
 			// This is to resolve race conditions,
 			// where a seperate thread setup the client obj
-			if(clientObj != null) {
+			if (clientObj != null) {
 				return clientObj;
 			}
-
+			
 			clientObj = new RequestHttpClient();
 			return clientObj;
 		}
@@ -96,19 +96,18 @@ public class RequestHttp {
 	//  Wrappers for GET Requests
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Wrapper method for GET request
 	 *
 	 * @param   Request URL to call
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp get(
-		String reqUrl //
-	){
+	public static ResponseHttp get(String reqUrl //
+	) {
 		return client().get(reqUrl);
 	}
-
+	
 	/**
 	 * Wrapper method for GET request
 	 *
@@ -116,13 +115,12 @@ public class RequestHttp {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp get(
-		String reqUrl, //
+	public static ResponseHttp get(String reqUrl, //
 		Map<String, Object> paramMap //
-	){
+	) {
 		return client().get(reqUrl, paramMap);
 	}
-
+	
 	/**
 	 * Wrapper method for GET request
 	 *
@@ -132,14 +130,13 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp get(
-		String reqUrl, //
+	public static ResponseHttp get(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap //
-	){
+	) {
 		return client().get(reqUrl, paramMap, cookiesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for GET request
 	 *
@@ -149,21 +146,20 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp get(
-		String reqUrl, //
+	public static ResponseHttp get(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
+	) {
 		return client().get(reqUrl, paramMap, cookiesMap, headersMap);
 	}
-
+	
 	//------------------------------------------------
 	//
 	//  Wrappers for POST form / multipart support
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Wrapper method for POST form request
 	 *
@@ -171,10 +167,10 @@ public class RequestHttp {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp post(String reqUrl, Map<String, Object> paramMap){
+	public static ResponseHttp post(String reqUrl, Map<String, Object> paramMap) {
 		return client().post(reqUrl, paramMap);
 	}
-
+	
 	/**
 	 * Wrapper method for POST form requests
 	 *
@@ -183,14 +179,13 @@ public class RequestHttp {
 	 * @param   cookieMap  [can be null] Cookie map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp post(
-		String reqUrl, //
+	public static ResponseHttp post(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap //
-	){
-		return client().post(reqUrl, paramMap,cookiesMap);
+	) {
+		return client().post(reqUrl, paramMap, cookiesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for POST form requests
 	 *
@@ -200,15 +195,14 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp post(
-		String reqUrl, //
+	public static ResponseHttp post(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
+	) {
 		return client().post(reqUrl, paramMap, cookiesMap, headersMap);
 	}
-
+	
 	/**
 	 * Wrapper method for POST multipart requests
 	 *
@@ -217,13 +211,12 @@ public class RequestHttp {
 	 * @param   filesMap   [can be null] Files to add to the request body
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp postMultipart(
-		String reqUrl, //
+	public static ResponseHttp postMultipart(String reqUrl, //
 		Map<String, Object> paramMap //
-	){
+	) {
 		return client().postMultipart(reqUrl, paramMap);
 	}
-
+	
 	/**
 	 * Wrapper method for POST multipart requests
 	 *
@@ -232,14 +225,13 @@ public class RequestHttp {
 	 * @param   filesMap   [can be null] Files to add to the request body
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp postMultipart(
-		String reqUrl, //
+	public static ResponseHttp postMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap //
-	){
+	) {
 		return client().postMultipart(reqUrl, paramMap, filesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for POST multipart requests
 	 *
@@ -250,22 +242,21 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp postMultipart(
-		String reqUrl, //
+	public static ResponseHttp postMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
+	) {
 		return client().postMultipart(reqUrl, paramMap, filesMap, cookiesMap, headersMap);
 	}
-
+	
 	//------------------------------------------------
 	//
 	//  Post JSON
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -282,7 +273,7 @@ public class RequestHttp {
 	) {
 		return client().postJSON(reqUrl, params);
 	}
-
+	
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -300,7 +291,7 @@ public class RequestHttp {
 	) {
 		return client().postJSON(reqUrl, params, cookiesMap);
 	}
-
+	
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -317,15 +308,15 @@ public class RequestHttp {
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
 	) {
-		return client().postJSON( reqUrl, params, cookiesMap, headersMap);
+		return client().postJSON(reqUrl, params, cookiesMap, headersMap);
 	}
-
+	
 	//------------------------------------------------
 	//
 	//  Wrappers for PUT form / multipart support
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Wrapper method for PUT form requests
 	 *
@@ -333,10 +324,10 @@ public class RequestHttp {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp put(String reqUrl, Map<String, Object> paramMap){
+	public static ResponseHttp put(String reqUrl, Map<String, Object> paramMap) {
 		return client().put(reqUrl, paramMap);
 	}
-
+	
 	/**
 	 * Wrapper method for PUT form requests
 	 *
@@ -346,14 +337,13 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp put(
-		String reqUrl, //
+	public static ResponseHttp put(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap //
-	){
+	) {
 		return client().put(reqUrl, paramMap, cookiesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for PUT form requests
 	 *
@@ -363,15 +353,14 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp put(
-		String reqUrl, //
+	public static ResponseHttp put(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
+	) {
 		return client().put(reqUrl, paramMap, cookiesMap, headersMap);
 	}
-
+	
 	/**
 	 * Wrapper method for PUT multipart requests
 	 *
@@ -380,14 +369,13 @@ public class RequestHttp {
 	 * @param   filesMap   [can be null] Files to add to the request body
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp putMultipart(
-		String reqUrl, //
+	public static ResponseHttp putMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap //
-	){
+	) {
 		return client().putMultipart(reqUrl, paramMap, filesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for PUT multipart requests
 	 *
@@ -398,15 +386,14 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp putMultipart(
-		String reqUrl, //
+	public static ResponseHttp putMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
 		Map<String, Object> cookiesMap //
-	){
+	) {
 		return client().putMultipart(reqUrl, paramMap, filesMap, cookiesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for PUT multipart requests
 	 *
@@ -417,22 +404,21 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp putMultipart(
-		String reqUrl, //
+	public static ResponseHttp putMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
-		return client().putMultipart( reqUrl, paramMap, filesMap, cookiesMap, headersMap);
+	) {
+		return client().putMultipart(reqUrl, paramMap, filesMap, cookiesMap, headersMap);
 	}
-
+	
 	//------------------------------------------------
 	//
 	//  PUT JSON
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -449,7 +435,7 @@ public class RequestHttp {
 	) {
 		return client().putJSON(reqUrl, params);
 	}
-
+	
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -467,7 +453,7 @@ public class RequestHttp {
 	) {
 		return client().putJSON(reqUrl, params, cookiesMap);
 	}
-
+	
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
 	 *
@@ -486,23 +472,23 @@ public class RequestHttp {
 	) {
 		return client().putJSON(reqUrl, params, cookiesMap, headersMap);
 	}
-
+	
 	//------------------------------------------------
 	//
 	//  Wrappers for DELETE Requests
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Wrapper method for DELETE form requests
 	 *
 	 * @param   Request URL to call
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp delete(String reqUrl){
+	public static ResponseHttp delete(String reqUrl) {
 		return client().delete(reqUrl);
 	}
-
+	
 	/**
 	 * Wrapper method for DELETE form requests
 	 *
@@ -510,10 +496,10 @@ public class RequestHttp {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp delete(String reqUrl, Map<String, Object> paramMap){
+	public static ResponseHttp delete(String reqUrl, Map<String, Object> paramMap) {
 		return client().delete(reqUrl, paramMap);
 	}
-
+	
 	/**
 	 * Wrapper method for DELETE form requests
 	 *
@@ -523,15 +509,14 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp delete(
-		String reqUrl, //
+	public static ResponseHttp delete(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
-		return client().delete( reqUrl, paramMap, cookiesMap, headersMap);
+	) {
+		return client().delete(reqUrl, paramMap, cookiesMap, headersMap);
 	}
-
+	
 	/**
 	 * Wrapper method for DELETE multipart requests
 	 *
@@ -540,14 +525,13 @@ public class RequestHttp {
 	 * @param   filesMap   [can be null] Files to add to the request body
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp deleteMultipart(
-		String reqUrl, //
+	public static ResponseHttp deleteMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap //
-	){
+	) {
 		return client().deleteMultipart(reqUrl, paramMap, filesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for DELETE multipart requests
 	 *
@@ -558,22 +542,21 @@ public class RequestHttp {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp deleteMultipart(
-		String reqUrl, //
+	public static ResponseHttp deleteMultipart(String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
-	){
+	) {
 		return client().deleteMultipart(reqUrl, paramMap, filesMap, cookiesMap, headersMap);
 	}
-
+	
 	//------------------------------------------------
 	//
 	//  DELETE JSON
 	//
 	//------------------------------------------------
-
+	
 	/**
 	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
@@ -590,7 +573,7 @@ public class RequestHttp {
 	) {
 		return client().deleteJSON(reqUrl, params);
 	}
-
+	
 	/**
 	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
@@ -608,7 +591,7 @@ public class RequestHttp {
 	) {
 		return client().deleteJSON(reqUrl, params, cookiesMap, null);
 	}
-
+	
 	/**
 	 * Performs DELETE request : with json parameters as Map<String, String[]>
 	 *
@@ -627,5 +610,5 @@ public class RequestHttp {
 	) {
 		return client().deleteJSON(reqUrl, params, cookiesMap, headersMap);
 	}
-
+	
 }

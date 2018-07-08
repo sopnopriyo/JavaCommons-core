@@ -30,7 +30,7 @@ public class FileUtil_test {
 	public static File testDir = new File(testDirStr);
 	
 	public static String baseOutputDirStr = "./test/tmp/FileUtil/";
-	public static File baseOutputDir = new File(baseOutputDirStr); 
+	public static File baseOutputDir = new File(baseOutputDirStr);
 	
 	// Setup as a randomised sub folder in setUp();
 	public String outputDirStr = null;
@@ -183,25 +183,25 @@ public class FileUtil_test {
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"));
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
 	// 		"./test/tmp/"));
-		
+	
 	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
 	// 		true);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
 	// 		"./test/tmp/"), true);
-		
+	
 	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, false);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
 	// 		false);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
 	// 		"./test/tmp/"), false);
-		
+	
 	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true, false);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
 	// 		true, false);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
 	// 		"./test/tmp/"), true, false);
-		
+	
 	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, false, false);
 	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
 	// 		false, false);

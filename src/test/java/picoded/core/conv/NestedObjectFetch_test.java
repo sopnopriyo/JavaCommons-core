@@ -37,20 +37,14 @@ public class NestedObjectFetch_test {
 	
 	@Test
 	public void splitObjectPath_test() {
-		assertEquals(
-			new String[] { "enter", "into", "the", "breach", "0" }, 
-			NestedObjectFetch.splitObjectPath("enter[into].the.breach[0]")
-		);
-		assertEquals(
-			new String[] { "target", "1", "fire", "0" }, 
-			NestedObjectFetch.splitObjectPath("target[1].fire[0]")
-		);
-		assertEquals(
-			new String[] { "titan", "hull", "level" }, 
-			NestedObjectFetch.splitObjectPath("titan['hull']['level']")
-		);
+		assertEquals(new String[] { "enter", "into", "the", "breach", "0" },
+			NestedObjectFetch.splitObjectPath("enter[into].the.breach[0]"));
+		assertEquals(new String[] { "target", "1", "fire", "0" },
+			NestedObjectFetch.splitObjectPath("target[1].fire[0]"));
+		assertEquals(new String[] { "titan", "hull", "level" },
+			NestedObjectFetch.splitObjectPath("titan['hull']['level']"));
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Fetch Object testing
@@ -65,7 +59,7 @@ public class NestedObjectFetch_test {
 		assertEquals("haha", NestedObjectFetch.fetchObject(base, "a.0"));
 		assertEquals("haha", NestedObjectFetch.fetchObject(base, "a[0]"));
 	}
-
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void fetchObjectTest() {

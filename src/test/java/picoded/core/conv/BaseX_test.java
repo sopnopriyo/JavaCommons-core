@@ -92,7 +92,7 @@ public class BaseX_test {
 		assertArrayEquals(byteArr, baseObj.decode(encodedString, byteLen));
 		
 	}
-
+	
 	/**
 	 * perform multiple calls of encoding and decoding
 	 */
@@ -200,7 +200,7 @@ public class BaseX_test {
 		baseObj.getClass().getDeclaredConstructor(String.class).newInstance("i");
 	}
 	
-	 /**
+	/**
 	 * Intentionally recreates the class object with a null char string - which is always invalid
 	 *
 	 * Note: (expected=IllegalArgumentException.class), was recasted as InvocationTargetException
@@ -247,7 +247,7 @@ public class BaseX_test {
 		// Decode with strict check, and insufficent bytes (throws an error)
 		baseObj.decode(encoded, lotsOfBits.length - 5, false);
 	}
-
+	
 	/**
 	 * Safely decoding
 	 */
@@ -263,7 +263,7 @@ public class BaseX_test {
 		// Decode with strict check, and insufficent bytes (throws an error)
 		baseObj.decode(encoded, lotsOfBits.length - 5, false);
 	}
-
+	
 	/**
 	 * Safely decoding blanks
 	 */

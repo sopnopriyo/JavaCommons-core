@@ -30,7 +30,7 @@ public class NestedObjectFetch {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected NestedObjectFetch() {
-		throw new IllegalAccessError( ExceptionMessage.staticClassConstructor );
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	//--------------------------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ public class NestedObjectFetch {
 		//  Quick sanity checks, and full path matching
 		//
 		//-----------------------------------------------------------------------
-
+		
 		// Invalid base -> null, 
 		// or not ( map OR list ) -> fallback
 		//
@@ -108,7 +108,7 @@ public class NestedObjectFetch {
 		
 		// Return object variable is initialized for reuse
 		Object ret = null;
-
+		
 		// Full objectPath fetching found -> if found it is returned =)
 		//
 		// For example the following base `{ "a.b.c" : "hello" }` matches
@@ -138,11 +138,11 @@ public class NestedObjectFetch {
 		//  Split path matching
 		//
 		//-----------------------------------------------------------------------
-
+		
 		// Get the split pathing of the objectPath
 		String[] splitPath = splitObjectPath(objectPath);
 		int splitPathLength = splitPath.length;
-
+		
 		//
 		// For each possible interpration of the split path, 
 		// attempt to fetch the target object, using the longest path first
@@ -160,33 +160,33 @@ public class NestedObjectFetch {
 		// `this.is.1.annoying`, `annoying`, `deep.search`
 		// `this.is.1.annoying`, `annoying`, `deep`, `search`
 		//
-		for(int idx=splitPathLength; idx >=0; --idx) {
-
+		for (int idx = splitPathLength; idx >= 0; --idx) {
+			
 			// The prefix text to use, to get the nested map/list
 			// to attempt to get the subsequent objects
 			String[] prefixArray = ArrayConv.subarray(splitPath, 0, idx);
 			String prefixStr = String.join(".", prefixArray);
-
+			
 			// The nested base to use, if found
 			Object nestedBase = MapOrListUtil.getValue(base, prefixStr);
-			if( nestedBase == null ) {
+			if (nestedBase == null) {
 				// No nested base found, skips
 				continue;
 			}
-
+			
 			// The suffix text, to try to extract from the nested base object
 			String[] suffixArray = ArrayConv.subarray(splitPath, idx, splitPathLength);
 			String suffixStr = String.join(".", suffixArray);
-
+			
 			// Recursively attempts to fetch a suffix nested object, till its found
 			ret = fetchObject(nestedBase, suffixStr, null);
-
+			
 			// Return if result was found
-			if( ret != null ) {
+			if (ret != null) {
 				return ret;
 			}
 		}
-
+		
 		//-----------------------------------------------------------------------
 		//
 		//  Common mistakes workarounds 
@@ -196,30 +196,31 @@ public class NestedObjectFetch {
 		// Try again with trimmed object path
 		// ` why ` -> `why`
 		String objectPathTrim = objectPath.trim();
-		if(!objectPath.equals(objectPathTrim)) {
+		if (!objectPath.equals(objectPathTrim)) {
 			return fetchObject(base, objectPathTrim, fallback);
 		}
-
+		
 		// Trim off usesless starting ".dots", and try again
 		// `.doh` -> `doh`
-		if(objectPath.startsWith(".")) {
+		if (objectPath.startsWith(".")) {
 			return fetchObject(base, objectPath.substring(1), fallback);
 		}
-
+		
 		// Trim off usesless wrapping brackets
 		// `[wrap][it]` -> `wrap[it]`
-		if(objectPath.startsWith("[")) {
-			int closingBracket = objectPath.indexOf("]",1);
-			String unwrappedPath = objectPath.substring(1,closingBracket)+objectPath.substring(closingBracket+1);
+		if (objectPath.startsWith("[")) {
+			int closingBracket = objectPath.indexOf("]", 1);
+			String unwrappedPath = objectPath.substring(1, closingBracket)
+				+ objectPath.substring(closingBracket + 1);
 			return fetchObject(base, unwrappedPath, fallback);
 		}
-
+		
 		//-----------------------------------------------------------------------
 		//
 		//  Final fallback
 		//
 		//-----------------------------------------------------------------------
-
+		
 		// All else failed, including full key fetch -> fallback
 		return fallback;
 	}
@@ -235,7 +236,7 @@ public class NestedObjectFetch {
 	public static Object fetchObject(Object base, String objectPath) {
 		return fetchObject(base, objectPath, null);
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Key name splitting, used inside NestedObjectFetch
@@ -311,7 +312,7 @@ public class NestedObjectFetch {
 		// Left and right string parts to recursively process
 		String leftPart;
 		String rightPart;
-
+		
 		// Begins left/right part splitting and processing
 		if (leftBracketIndex == 0) {
 			//

@@ -14,7 +14,7 @@ import picoded.core.conv.*;
  **/
 @SuppressWarnings("serial")
 public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
-
+	
 	/**
 	 * "Serializable" classes should have a version id
 	 **/
@@ -26,13 +26,13 @@ public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
 	public ArrayListMap() {
 		super();
 	}
-
+	
 	//------------------------------------------------------------------------
 	//
 	//  Inner Array Setup
 	//
 	//------------------------------------------------------------------------
-
+	
 	/**
 	 * Gets the sublist stored for a key.
 	 * If it does not exists, it is initiated.
@@ -57,7 +57,7 @@ public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
 	//  Appending to array
 	//
 	//------------------------------------------------------------------------
-
+	
 	/**
 	 * Adds to the sublist associated to the key value
 	 *
@@ -130,7 +130,7 @@ public class ArrayListMap<K, V> extends GenericConvertHashMap<K, ArrayList<V>> {
 	public String toString() {
 		return GenericConvert.toString(this);
 	}
-
+	
 	/**
 	 * Returns a new map, with all the internal List<V> objects converted to V[] Array
 	 *

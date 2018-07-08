@@ -26,7 +26,7 @@ class RequestHttpClient_response implements ResponseHttp {
 	
 	/// OkHttp2 response object
 	protected Response response = null;
-
+	
 	/**
 	 * Constructor with response object
 	 * 
@@ -35,7 +35,7 @@ class RequestHttpClient_response implements ResponseHttp {
 	protected RequestHttpClient_response(Response inResponse) {
 		response = inResponse;
 	}
-
+	
 	/**
 	 * Gets the response content
 	 *
@@ -45,7 +45,7 @@ class RequestHttpClient_response implements ResponseHttp {
 	public InputStream inputStream() {
 		return response.body().byteStream();
 	}
-
+	
 	/**
 	 * Gets the response content as a string
 	 *
@@ -59,7 +59,7 @@ class RequestHttpClient_response implements ResponseHttp {
 			throw new RuntimeException(io);
 		}
 	}
-
+	
 	/**
 	 * Gets the response code
 	 * Refer to https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
@@ -70,7 +70,7 @@ class RequestHttpClient_response implements ResponseHttp {
 	public int statusCode() {
 		return response.code();
 	};
-
+	
 	/**
 	 * Gets the header map.
 	 *
@@ -83,7 +83,7 @@ class RequestHttpClient_response implements ResponseHttp {
 		// Convert List<String> values into String[]
 		return MapValueConv.listToArray(headers, EmptyArray.STRING);
 	};
-
+	
 	/**
 	 * Gets the cookies map.
 	 *
@@ -98,22 +98,22 @@ class RequestHttpClient_response implements ResponseHttp {
 		//        There may be a need to implement the tedious extraction of cookie
 		//        headers from the response.headers() ourselves. (This is unconfirmed.)
 		List<Cookie> cookies = Cookie.parseAll(response.request().url(), response.headers());
-
+		
 		// Extract the cookies from list and put them in Map<String, String[]> format
 		Map<String, String[]> cookies_array = new HashMap<String, String[]>();
-		for(Cookie cookie : cookies){
+		for (Cookie cookie : cookies) {
 			cookies_array.put(cookie.name(), new String[] { cookie.value() });
 		}
-
+		
 		// Return the extracted cookies
 		return cookies_array;
 	};
-
+	
 	/**
 	 * Gets the method of the request
 	 */
 	@Override
-	public String method(){
+	public String method() {
 		return response.request().method();
 	}
 }

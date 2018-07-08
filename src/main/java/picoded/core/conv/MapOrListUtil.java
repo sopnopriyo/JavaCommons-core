@@ -29,12 +29,12 @@ public class MapOrListUtil {
 	 * @return true if object is either a map or list 
 	 */
 	public static boolean isValid(Object in) {
-		if(in instanceof Map || in instanceof List) {
+		if (in instanceof Map || in instanceof List) {
 			return true;
 		}
 		return false;
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Map / List set value utility functions
@@ -117,7 +117,8 @@ public class MapOrListUtil {
 		
 		// Q_Q all failed, time to bail
 		//------------------------------------------------
-		throw new RuntimeException("Unexpected object to set value on (it is neither a map, nor list)");
+		throw new RuntimeException(
+			"Unexpected object to set value on (it is neither a map, nor list)");
 	}
 	
 	/**

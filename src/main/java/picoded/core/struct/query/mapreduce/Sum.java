@@ -13,9 +13,9 @@ public class Sum extends MapReduceBase {
 	 */
 	public void map(BigDecimal val, Object rawVal) {
 		// Add up those value if its provided
-		if( val != null ) {
+		if (val != null) {
 			// Initialize the res variable (if needed)
-			if( res == null ) {
+			if (res == null) {
 				res = val;
 			} else {
 				res = res.add(val);

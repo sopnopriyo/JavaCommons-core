@@ -25,7 +25,7 @@ public class ArrayListMap_test {
 	public void tearDown() {
 		arrayListMap = null;
 	}
-
+	
 	///
 	/// Testing against one append at a time
 	///
@@ -75,7 +75,7 @@ public class ArrayListMap_test {
 		Map<String, String[]> cObj = arrayListMap.toMapArray(dataArr);
 		assertArrayEquals(dataArr, cObj.get("hello"));
 	}
-
+	
 	@Test
 	public void notnullObjectTest() {
 		assertNotNull(arrayListMap);
@@ -92,5 +92,5 @@ public class ArrayListMap_test {
 		arrayListMap.append("key", "val");
 		assertNotNull(arrayListMap.toString());
 	}
-
+	
 }

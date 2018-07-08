@@ -67,7 +67,7 @@ public interface ResponseHttp {
 			return ProxyGenericConvertMap.ensure(rMap);
 		}
 	};
-
+	
 	/**
 	 * Gets the response code
 	 * Refer to https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
@@ -77,7 +77,7 @@ public interface ResponseHttp {
 	public default int statusCode() {
 		return -1;
 	};
-
+	
 	/**
 	 * Gets the header map.
 	 *
@@ -86,7 +86,7 @@ public interface ResponseHttp {
 	public default Map<String, String[]> headersMap() {
 		return null;
 	};
-
+	
 	/**
 	 * Gets the cookies map.
 	 *
@@ -95,12 +95,12 @@ public interface ResponseHttp {
 	public default Map<String, String[]> cookiesMap() {
 		return null;
 	};
-
+	
 	/**
 	 * Gets the method of the request
 	 */
-	public default String method(){
+	public default String method() {
 		return "";
 	}
-
+	
 }

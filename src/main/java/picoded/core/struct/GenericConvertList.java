@@ -29,7 +29,7 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 	// basic GET and FETCH
 	//
 	//--------------------------------------------------------------------------------------------------
-
+	
 	// Silent varient of get without OUT OF BOUND exception
 	//--------------------------------------------------------------------------------------------------
 	
@@ -79,7 +79,7 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 	// GET operations with conversion
 	//
 	//--------------------------------------------------------------------------------------------------
-
+	
 	// to string conversion
 	//--------------------------------------------------------------------------------------------------
 	
@@ -490,13 +490,13 @@ public interface GenericConvertList<E> extends UnsupportedDefaultList<E> {
 	default <V> GenericConvertList<V> getGenericConvertList(int index) {
 		return GenericConvert.toGenericConvertList(getSubtle(index));
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// FETCH operations with conversion
 	//
 	//--------------------------------------------------------------------------------------------------
-
+	
 	// to string conversion
 	//--------------------------------------------------------------------------------------------------
 	

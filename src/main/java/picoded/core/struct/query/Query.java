@@ -314,13 +314,13 @@ public interface Query extends Predicate<Object> {
 	//--------------------------------------------------------------------
 	// Query searching
 	//--------------------------------------------------------------------
-
+	
 	/**
 	 * Searches using the query, and returns the resulting set
 	 **/
 	default <V> List<V> search(Collection<V> list) {
 		List<V> ret = new ArrayList<V>();
-		for (V val :list) {
+		for (V val : list) {
 			if (test(val)) {
 				ret.add(val);
 			}
@@ -378,7 +378,7 @@ public interface Query extends Predicate<Object> {
 	//--------------------------------------------------------------------
 	// Aggregation on search
 	//--------------------------------------------------------------------
-
+	
 	/**
 	 * Searches using the query, and perform the stated aggregation
 	 * 
@@ -388,17 +388,17 @@ public interface Query extends Predicate<Object> {
 	 * @return  BigDecimal[] array of the aggregation result
 	 **/
 	default BigDecimal[] aggregation(Object collectionObj, Aggregation aggregationObj) {
-
+		
 		// 1. Perform the relevent search query, based on its collection type
 		Collection<Object> aggregationData = null;
-		if( collectionObj instanceof Map ) {
-			aggregationData = search( (Map<String,Object>)collectionObj );
-		} else if( collectionObj instanceof Collection ) {
-			aggregationData = search( (Collection<Object>)collectionObj );
-		} else if( collectionObj instanceof Object[]) {
-			aggregationData = search( Arrays.asList( (Object[]) collectionObj ));
+		if (collectionObj instanceof Map) {
+			aggregationData = search((Map<String, Object>) collectionObj);
+		} else if (collectionObj instanceof Collection) {
+			aggregationData = search((Collection<Object>) collectionObj);
+		} else if (collectionObj instanceof Object[]) {
+			aggregationData = search(Arrays.asList((Object[]) collectionObj));
 		}
-
+		
 		// 2. Perform the aggregation computation
 		return aggregationObj.compute(aggregationData);
 	}

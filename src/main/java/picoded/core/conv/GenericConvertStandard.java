@@ -136,10 +136,10 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 			}
 			return toString(fallbck, null);
 		}
-
+		
 		// GenericConvertValue optimization
-		if( input instanceof GenericConvertValue ) {
-			return toString( ((GenericConvertValue)input).getString(), fallbck );
+		if (input instanceof GenericConvertValue) {
+			return toString(((GenericConvertValue) input).getString(), fallbck);
 		}
 		
 		// Output as string directly
@@ -541,7 +541,7 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 			}
 			return toBigDecimal(fallbck, null);
 		}
-
+		
 		/**
 		 * If BigDecimal instance
 		 **/
@@ -553,7 +553,7 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 		 * If Number instance
 		 **/
 		if (input instanceof Number) {
-			return new BigDecimal(  ((Number) input).toString() );
+			return new BigDecimal(((Number) input).toString());
 		}
 		
 		if (input instanceof String && ((String) input).length() > 0) {
@@ -566,7 +566,7 @@ class GenericConvertStandard extends GenericConvertPrimitive {
 				return toBigDecimal(fallbck, null);
 			}
 		}
-
+		
 		/**
 		 * Fallback
 		 **/

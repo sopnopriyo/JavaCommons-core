@@ -71,7 +71,7 @@ public class GenericConvertMap_test extends StandardHashMap_test {
 	//
 	// GET based testing
 	//
-
+	
 	@Test(expected = UnsupportedOperationException.class)
 	public void getStringTest() {
 		assertEquals("", unsupported.getString("my_key"));
@@ -573,7 +573,7 @@ public class GenericConvertMap_test extends StandardHashMap_test {
 	//
 	// FETCH based testing
 	//
-
+	
 	@Test(expected = UnsupportedOperationException.class)
 	public void fetchStringTest() {
 		assertEquals("", unsupported.fetchString("my_key"));
@@ -1071,7 +1071,7 @@ public class GenericConvertMap_test extends StandardHashMap_test {
 		proxyMap.put("my_key", strArr);
 		assertArrayEquals(strArr, proxyMap.fetchObjectArray("my_key", strArr));
 	}
-
+	
 	@Test(expected = UnsupportedOperationException.class)
 	public void fetchObjectTest() {
 		assertEquals("", unsupported.fetchObject("my_key"));

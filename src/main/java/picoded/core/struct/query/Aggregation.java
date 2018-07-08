@@ -25,23 +25,23 @@ import picoded.core.struct.query.internal.AggregationUtils;
  *
  **/
 public class Aggregation {
-
+	
 	//--------------------------------------------------------------------
 	// Protected constructor, for the aggregation class
 	//--------------------------------------------------------------------
 	
 	// The original aggregation terms
 	protected String[] termsArray = null;
-
+	
 	// Aggregation function to use
 	protected String[] funcNames = null;
-
+	
 	// Field names to extract values and compute aggregation on
 	protected String[] fieldNames = null;
-
+	
 	// Aggregation fuction mapping
 	protected Map<String, MapReduceBase> mapReduceBaseImplementation = null;
-
+	
 	/**
 	 * Protected internal constructor
 	 * 
@@ -55,16 +55,17 @@ public class Aggregation {
 		
 		// 2. Get the mapreduceBase implementation
 		mapReduceBaseImplementation = new HashMap<>(AggregationUtils.mapReduceBaseImplementation());
-
+		
 		// 3. Parse the aggregation terms
-		MutablePair<String[], String[]> info = AggregationUtils.extractAggregrationInfo(aggregationTerms);
-
+		MutablePair<String[], String[]> info = AggregationUtils
+			.extractAggregrationInfo(aggregationTerms);
+		
 		// 4. Save the terms, funcnames, and fields
 		termsArray = aggregationTerms.clone();
-		funcNames  = info.getLeft();
+		funcNames = info.getLeft();
 		fieldNames = info.getRight();
 	}
-
+	
 	//--------------------------------------------------------------------
 	// Static Aggregation builder
 	//
@@ -92,7 +93,7 @@ public class Aggregation {
 	 * 
 	 * @return  BigDecimal array of the corresponding aggregation result
 	 */
-	public BigDecimal[] compute( Collection<Object> dataSet ) {
+	public BigDecimal[] compute(Collection<Object> dataSet) {
 		// 1. Ensure input safety
 		if (dataSet == null) {
 			throw new RuntimeException("No dataSet given.");
@@ -100,15 +101,10 @@ public class Aggregation {
 		
 		// 2. Initialize MapReduceBase array implmentations
 		MapReduceBase[] mapreduceArray = AggregationUtils.prepareMapReduceBaseArray(
-			mapReduceBaseImplementation, funcNames
-		);
-
+			mapReduceBaseImplementation, funcNames);
+		
 		// 3. Compute the mapreduceArray and return the result
-		return AggregationUtils.computeMapReduceBase(
-			mapreduceArray,
-			fieldNames,
-			dataSet
-		);
+		return AggregationUtils.computeMapReduceBase(mapreduceArray, fieldNames, dataSet);
 	}
-
+	
 }

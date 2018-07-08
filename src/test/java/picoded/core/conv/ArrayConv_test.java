@@ -20,7 +20,7 @@ public class ArrayConv_test {
 	public void ArrayUtilsBooleanAdd() {
 		boolean[] ori = new boolean[] { true };
 		boolean[] added = ArrayConv.add(ori, false);
-
+		
 		// Confirm the ArrayConv.add occured
 		Assert.assertEquals(2, added.length);
 		Assert.assertEquals(true, added[0]);

@@ -33,7 +33,7 @@ import picoded.core.struct.ProxyGenericConvertMap;
 public class GenericConvert_test {
 	
 	private static final double DELTA = 1e-15;
-
+	
 	/**
 	 *  Setup the temp vars
 	 */
@@ -55,7 +55,7 @@ public class GenericConvert_test {
 	public void invalidConstructor() throws Exception {
 		new GenericConvert();
 	}
-
+	
 	/**
 	 * Test cases to assert toString functionality
 	 */
@@ -63,21 +63,21 @@ public class GenericConvert_test {
 	public void toStringTest() {
 		// Case 1: Test conversion returns non-null value back
 		assertNotNull(GenericConvert.toString(-1, null));
-
+		
 		// Case 2: Test for null values and null fallback
 		assertNull("", GenericConvert.toString(null, null));
-
+		
 		// Case 3: Test fallback kicks in
 		assertEquals("fallback", GenericConvert.toString(null, "fallback"));
-
+		
 		// Case 4: Test String conversion convert properly
 		assertEquals("inout", GenericConvert.toString("inout", null));
-
+		
 		// Case 5: Test numeric conversion to string
 		assertEquals("1", GenericConvert.toString(new Integer(1), null));
 		assertEquals("1", GenericConvert.toString(new Integer(1)));
 	}
-
+	
 	/**
 	 * Test cases to assert toBoolean functionality
 	 */
@@ -86,25 +86,25 @@ public class GenericConvert_test {
 		// Case 1: Conversion of objects will return false
 		List<String> list = new ArrayList<String>();
 		assertFalse(GenericConvert.toBoolean(list, false));
-
+		
 		// Case 2: For boolean true false test case
 		Boolean boolean1 = new Boolean(true);
 		assertTrue(GenericConvert.toBoolean(boolean1, false));
-
+		
 		boolean1 = new Boolean(false);
 		assertFalse(GenericConvert.toBoolean(boolean1, true));
-
+		
 		// Case 3: For boolean number test case
 		assertTrue(GenericConvert.toBoolean(1, true));
-
+		
 		assertFalse(toBoolean(new Boolean("1"), false));
-
+		
 		assertFalse(GenericConvert.toBoolean(0, true));
-
+		
 		// Case 4: For null test case, test fallback
 		assertFalse(GenericConvert.toBoolean(null, false));
 		assertTrue(toBoolean(null, true));
-
+		
 		// Case 5: For String value test cases
 		assertFalse(GenericConvert.toBoolean("", false));
 		assertTrue(GenericConvert.toBoolean("+", false));
@@ -127,7 +127,7 @@ public class GenericConvert_test {
 		assertTrue(toBoolean(999, false));
 		assertFalse(toBoolean("000", false));
 	}
-
+	
 	/**
 	 * toBoolean: Single parameter without fallback test
 	 */
@@ -135,7 +135,7 @@ public class GenericConvert_test {
 	public void toBooleanSingleParameterTest() {
 		assertTrue(toBoolean("true"));
 	}
-
+	
 	/**
 	 * Number Conversion test cases
 	 */
@@ -145,21 +145,21 @@ public class GenericConvert_test {
 		List<String> list = new ArrayList<String>();
 		assertNotEquals(list, GenericConvert.toNumber(list, 0).intValue());
 		assertNotEquals("$%", GenericConvert.toNumber("$%", 0).intValue());
-
+		
 		// Case 2: Convert numeric to numeric
 		assertEquals(10, GenericConvert.toNumber(10, 0).intValue());
-
+		
 		// Case 3: Fallback test
 		assertNotEquals("", GenericConvert.toNumber("", 0).intValue());
-
+		
 		// Case 4: Convert string to numeric
 		assertEquals(new BigDecimal("01111111111111111"),
 			GenericConvert.toNumber("01111111111111111", 0));
-
+		
 		assertEquals(new BigDecimal("2.1"), GenericConvert.toNumber("2.1", null));
 		assertEquals(new BigDecimal("2.2"), GenericConvert.toNumber("2.2"));
 	}
-
+	
 	/**
 	 * toNumber: Single parameter without fallback test
 	 */
@@ -167,7 +167,7 @@ public class GenericConvert_test {
 	public void toNumberSingleTest() {
 		assertEquals(new BigDecimal("1"), GenericConvert.toNumber("1"));
 	}
-
+	
 	/**
 	 * Integer conversion test
 	 */
@@ -175,19 +175,19 @@ public class GenericConvert_test {
 	public void toIntTest() {
 		// Case 1: Fallback test
 		assertEquals(1, GenericConvert.toInt(null, 1));
-
+		
 		// Case 2: Integer to integer conversion
 		assertEquals(2, GenericConvert.toInt(2, 1));
-
+		
 		// Case 3: Single parameter test
 		assertEquals(3, GenericConvert.toInt(3));
-
+		
 		// @TODO: Case 4: String to integer
-
+		
 		// @TODO: Case 5: Object to integer
-
+		
 	}
-
+	
 	/**
 	 * Long conversion test
 	 */
@@ -195,18 +195,18 @@ public class GenericConvert_test {
 	public void toLongTest() {
 		// Case 1: Fallback test
 		assertEquals(1l, GenericConvert.toLong(null, 1l));
-
+		
 		// Case 2: Long to long conversion
 		assertEquals(2l, GenericConvert.toLong(2l, 1l));
-
+		
 		// Case 3: Single parameter test
 		assertEquals(3l, GenericConvert.toLong(3l));
-
+		
 		// @TODO: Case 4: String to long
-
+		
 		// @TODO: Case 5: Object to long
 	}
-
+	
 	/**
 	 * Float conversion test
 	 */
@@ -214,15 +214,15 @@ public class GenericConvert_test {
 	public void toFloatTest() {
 		// Case 1: Fallback test
 		assertEquals(1.0f, GenericConvert.toFloat(null, 1.0f), DELTA);
-
+		
 		// Case 2: Long to long conversion
 		assertEquals(2.0f, GenericConvert.toFloat(2.0f, 1.0f), DELTA);
-
+		
 		// Case 3: Single parameter test
 		assertEquals(3.0f, GenericConvert.toFloat(3.0f), DELTA);
-
+		
 		// @TODO: Case 4: String to long
-
+		
 		// @TODO: Case 5: Object to long
 	}
 	
@@ -300,7 +300,7 @@ public class GenericConvert_test {
 	// 	biFunctionMap = myBiFunctionMap;
 	// 	assertEquals(myBiFunctionMap, biFunctionMap);
 	// }
-
+	
 	@Test
 	public void toStringArrayTest() {
 		assertNull(toStringArray(null));
