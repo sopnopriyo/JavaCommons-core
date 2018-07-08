@@ -162,8 +162,28 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @param   paramMap   [can be null] Parameters to add to the request
 	 * @return ResponseHttp object
 	 */
-	public ResponseHttp postForm(String reqUrl, Map<String, Object> paramMap){
-		return postForm(reqUrl, paramMap, null, null);
+	public ResponseHttp post(String reqUrl, Map<String, Object> paramMap){
+		return post(reqUrl, paramMap, null, null);
+	}
+
+	/**
+	 * Wrapper method for POST form requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @return ResponseHttp object
+	 */
+	public ResponseHttp post(
+		String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, Object> cookiesMap //
+	){
+		return httpPost(reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			convertMapObjectToStringArray(cookiesMap), //
+			null //
+		);
 	}
 
 	/**
@@ -175,14 +195,17 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 * @param   headersMap [can be null] Headers map to send values
 	 * @return ResponseHttp object
 	 */
-	public ResponseHttp postForm(
+	public ResponseHttp post(
 		String reqUrl, //
 		Map<String, Object> paramMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpPost(reqUrl, reformedParamMap, cookiesMap, headersMap);
+		return httpPost(reqUrl, //
+			convertMapObjectToStringArray(paramMap), //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
 	}
 
 	/**
@@ -215,11 +238,15 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
+		Map<String, Object> cookiesMap, //
+		Map<String, Object> headersMap //
 	){
-		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpPostMultipart(reqUrl, reformedParamMap, filesMap, cookiesMap, headersMap);
+		return httpPostMultipart(reqUrl, //
+			convertMapObjectToStringArray(paramMap), // 
+			filesMap, //
+			convertMapObjectToStringArray(cookiesMap), //
+			convertMapObjectToStringArray(headersMap) //
+		);
 	}
 
 	//------------------------------------------------

@@ -330,7 +330,7 @@ class RequestHttpClient_base {
 
 	//------------------------------------------------
 	//
-	//  POST request and parameter handling
+	//  POST request Form / Multipart
 	//
 	//------------------------------------------------
 
@@ -352,6 +352,33 @@ class RequestHttpClient_base {
 	) {
 		return executeFormRequest("POST", reqUrl, paramMap, cookiesMap, headersMap);
 	}
+
+	/**
+	 * Performs POST request : using multipart
+	 *
+	 * @param   Request URL to call
+	 * @param   paramsMap  [can be null] Parameters to add to the request body,
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @param   headersMap [can be null] Headers map to send values
+	 *
+	 * @return  The ResponseHttp object
+	 **/
+	public ResponseHttp httpPostMultipart(//
+		String reqUrl, //
+		Map<String, String[]> paramsMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, String[]> cookiesMap, //
+		Map<String, String[]> headersMap //
+	) {
+		return executeMultipartRequest("POST", reqUrl, paramsMap, filesMap, cookiesMap, headersMap);
+	}
+
+	//------------------------------------------------
+	//
+	//  POST JSON handling
+	//
+	//------------------------------------------------
 
 	/**
 	 * Performs POST request : with json parameters as Map<String, String[]>
@@ -399,27 +426,6 @@ class RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	) {
 		return executeJsonRequest("POST", reqUrl, jsonString, cookiesMap, headersMap);
-	}
-
-	/**
-	 * Performs POST request : using multipart
-	 *
-	 * @param   Request URL to call
-	 * @param   paramsMap  [can be null] Parameters to add to the request body,
-	 * @param   filesMap   [can be null] Files to add to the request body
-	 * @param   cookieMap  [can be null] Cookie map to send values
-	 * @param   headersMap [can be null] Headers map to send values
-	 *
-	 * @return  The ResponseHttp object
-	 **/
-	public ResponseHttp httpPostMultipart(//
-		String reqUrl, //
-		Map<String, String[]> paramsMap, //
-		Map<String, File[]> filesMap, //
-		Map<String, String[]> cookiesMap, //
-		Map<String, String[]> headersMap //
-	) {
-		return executeMultipartRequest("POST", reqUrl, paramsMap, filesMap, cookiesMap, headersMap);
 	}
 
 	//------------------------------------------------

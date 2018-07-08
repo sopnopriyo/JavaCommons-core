@@ -725,7 +725,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * using post()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -741,7 +741,7 @@ public class RequestHttpClient_POST_test{
 		postBodyParams.put("fourth_value", null);
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.post(
 				mockWebServer.url("/").toString(),
 				postBodyParams,
 				null,
@@ -760,7 +760,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * using post()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -774,7 +774,7 @@ public class RequestHttpClient_POST_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.post(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -799,7 +799,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using postForm()
+	 * using post()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -813,7 +813,7 @@ public class RequestHttpClient_POST_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postForm(
+		ResponseHttp responseHttp = requestHttpClient.post(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
