@@ -178,7 +178,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using postJSON() - Map<String, String[]>
+	 * using httpPostJSON() - Map<String, String[]>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -193,7 +193,7 @@ public class RequestHttpClient_POST_test{
 		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				postBodyParams,
 				null,
@@ -210,7 +210,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using postJSON() - List<String>
+	 * using httpPostJSON() - List<String>
 	 *
 	 * @throws InterruptedException
 	 */
@@ -226,7 +226,7 @@ public class RequestHttpClient_POST_test{
 		postBodyParams.add("{'name':'ghi'}");
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				postBodyParams,
 				null,
@@ -243,7 +243,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using postJSON()
+	 * using httpPostJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -260,7 +260,7 @@ public class RequestHttpClient_POST_test{
 		Map<String, String[]> params = new HashMap<String, String[]>();
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				params,
 				null,
@@ -285,7 +285,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using postJSON()
+	 * using httpPostJSON()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -302,7 +302,7 @@ public class RequestHttpClient_POST_test{
 		Map<String, String[]> params = new HashMap<String, String[]>();
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON(
 				mockWebServer.url("/").toString(),
 				params,
 				cookiesMap,
@@ -328,7 +328,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using postJSON_string()
+	 * using httpPostJSON_string()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -349,7 +349,7 @@ public class RequestHttpClient_POST_test{
 				+ "]}";
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON_string(
 				mockWebServer.url("/").toString(),
 				json,
 				null,
@@ -365,7 +365,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using postJSON_string()
+	 * using httpPostJSON_string()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -379,7 +379,7 @@ public class RequestHttpClient_POST_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON_string(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -404,7 +404,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using postJSON_string()
+	 * using httpPostJSON_string()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -418,7 +418,7 @@ public class RequestHttpClient_POST_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.postJSON_string(
+		ResponseHttp responseHttp = requestHttpClient.httpPostJSON_string(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -684,7 +684,7 @@ public class RequestHttpClient_POST_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.postJSON(
+	// 	responseHttp = requestHttpClient.httpPostJSON(
 	// 			httpbinURL,
 	// 			postBodyParams,
 	// 			null,
@@ -693,7 +693,7 @@ public class RequestHttpClient_POST_test{
 	// 	assertEquals(responseHttp.statusCode(), 200);
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	responseHttp = requestHttpClient.postJSON_string(
+	// 	responseHttp = requestHttpClient.httpPostJSON_string(
 	// 			httpbinURL,
 	// 			"",
 	// 			null,

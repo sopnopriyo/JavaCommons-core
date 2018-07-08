@@ -218,6 +218,21 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 	 */
 	public ResponseHttp postMultipart(
 		String reqUrl, //
+		Map<String, Object> paramMap //
+	){
+		return postMultipart(reqUrl, paramMap, null, null, null);
+	}
+
+	/**
+	 * Wrapper method for POST multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @return ResponseHttp object
+	 */
+	public ResponseHttp postMultipart(
+		String reqUrl, //
 		Map<String, Object> paramMap, //
 		Map<String, File[]> filesMap //
 	){
