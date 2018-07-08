@@ -344,7 +344,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp httpPostForm(//
+	public ResponseHttp httpPost(//
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //

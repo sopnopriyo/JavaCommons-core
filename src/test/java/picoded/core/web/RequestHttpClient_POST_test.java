@@ -68,7 +68,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the post request body
 	 * is correctly sent via POST to the server
-	 * using httpPostForm()
+	 * using httpPost()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -82,7 +82,7 @@ public class RequestHttpClient_POST_test{
 		postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPost(
 				mockWebServer.url("/").toString(),
 				postBodyParams,
 				null,
@@ -99,7 +99,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via POST to the server
-	 * using httpPostForm()
+	 * using httpPost()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -113,7 +113,7 @@ public class RequestHttpClient_POST_test{
 		headers.put("second", new String[]{ "single-value" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPost(
 				mockWebServer.url("/").toString(),
 				null,
 				null,
@@ -138,7 +138,7 @@ public class RequestHttpClient_POST_test{
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
-	 * using httpPostForm()
+	 * using httpPost()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -152,7 +152,7 @@ public class RequestHttpClient_POST_test{
 		cookiesMap.put("cookie2", new String[]{ "myname" });
 
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPostForm(
+		ResponseHttp responseHttp = requestHttpClient.httpPost(
 				mockWebServer.url("/").toString(),
 				null,
 				cookiesMap,
@@ -675,7 +675,7 @@ public class RequestHttpClient_POST_test{
 	// 	postBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	ResponseHttp responseHttp = requestHttpClient.httpPostForm(
+	// 	ResponseHttp responseHttp = requestHttpClient.httpPost(
 	// 			httpbinURL,
 	// 			postBodyParams,
 	// 			null,

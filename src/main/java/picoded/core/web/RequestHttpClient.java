@@ -182,7 +182,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		Map<String, String[]> headersMap //
 	){
 		Map<String, String[]> reformedParamMap = convertMapObjectToStringArray(paramMap);
-		return httpPostForm(reqUrl, reformedParamMap, cookiesMap, headersMap);
+		return httpPost(reqUrl, reformedParamMap, cookiesMap, headersMap);
 	}
 
 	/**
