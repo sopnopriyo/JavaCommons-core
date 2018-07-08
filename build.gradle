@@ -188,7 +188,6 @@ artifacts {
 //----------------------------------------------------------------
 
 test {
-
 	// Setup test to run on parllel threads = to number of processors by default
 	if (project.hasProperty('maxParallelForks')) {
 		maxParallelForks = project.maxParallelForks as int;
@@ -205,6 +204,17 @@ test {
 	if (project.hasProperty('forkEvery')) {
 		forkEvery = project.forkEvery as int
 	}
+}
+
+//----------------------------------------------------------------
+//
+//  Custom src-beautify
+//
+//----------------------------------------------------------------
+
+task srcBeautify(type:Exec) {
+	workingDir '.'
+	commandLine 'java','-cp','./build-util/java-formatter/java-formatter-with-dependencies.jar','Formatter','./build-util/java-formatter/code-format.opts','./src'
 }
 
 //----------------------------------------------------------------
