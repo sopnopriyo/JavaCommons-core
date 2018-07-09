@@ -713,22 +713,20 @@ class RequestHttpClient_base {
 	 * @return Map<String, String[]>
 	 */
 	protected Map<String, String[]> convertMapObjectToStringArray(Map<String, Object> mapToConvert) {
-		
-		Map<String, String[]> reformedParamMap = null;
-		
-		if (mapToConvert != null) {
-			reformedParamMap = new HashMap<String, String[]>();
-			
-			for (String key : mapToConvert.keySet()) {
-				Object value = mapToConvert.get(key);
-				if (value instanceof String) { // Convert to array of size 1
-					reformedParamMap.put(key, new String[] { value.toString() });
-				} else if (value instanceof String[]) { // Put the array back as it is
-					reformedParamMap.put(key, (String[]) value);
-				} else { // Convert using ConvertJSON as a string and put to array of size 1
-					String convertedString = ConvertJSON.fromObject(value);
-					reformedParamMap.put(key, new String[] { convertedString });
-				}
+		// Null safety check
+		if (mapToConvert == null) {
+			return null;
+		}
+		Map<String, String[]> reformedParamMap = new HashMap<String, String[]>();
+		for (String key : mapToConvert.keySet()) {
+			Object value = mapToConvert.get(key);
+			if (value instanceof String) { // Convert to array of size 1
+				reformedParamMap.put(key, new String[] { value.toString() });
+			} else if (value instanceof String[]) { // Put the array back as it is
+				reformedParamMap.put(key, (String[]) value);
+			} else { // Convert using ConvertJSON as a string and put to array of size 1
+				String convertedString = ConvertJSON.fromObject(value);
+				reformedParamMap.put(key, new String[] { convertedString });
 			}
 		}
 		

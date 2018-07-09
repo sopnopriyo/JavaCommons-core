@@ -103,8 +103,7 @@ public class RequestHttp {
 	 * @param   Request URL to call
 	 * @return ResponseHttp object
 	 */
-	public static ResponseHttp get(String reqUrl //
-	) {
+	public static ResponseHttp get(String reqUrl) {
 		return client().get(reqUrl);
 	}
 	
