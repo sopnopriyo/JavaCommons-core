@@ -403,7 +403,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	public ResponseHttp httpPutForm(//
+	public ResponseHttp httpPut(//
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
 		Map<String, String[]> cookiesMap, //

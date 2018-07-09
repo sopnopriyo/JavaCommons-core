@@ -366,7 +366,7 @@ public final class RequestHttpClient extends RequestHttpClient_base {
 		Map<String, Object> cookiesMap, //
 		Map<String, Object> headersMap //
 	) {
-		return httpPutForm( //
+		return httpPut( //
 			reqUrl, //
 			convertMapObjectToStringArray(paramMap), //
 			convertMapObjectToStringArray(cookiesMap), //

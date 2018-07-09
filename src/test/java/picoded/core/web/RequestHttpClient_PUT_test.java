@@ -68,7 +68,7 @@ public class RequestHttpClient_PUT_test {
 	/**
 	 * This test assert that the put request body
 	 * is correctly sent via PUT to the server
-	 * using httpPutForm()
+	 * using httpPut()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -82,7 +82,7 @@ public class RequestHttpClient_PUT_test {
 		putBodyParams.put("second_value", new String[] { "double-value", "another-value" });
 		
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPutForm(mockWebServer.url("/").toString(),
+		ResponseHttp responseHttp = requestHttpClient.httpPut(mockWebServer.url("/").toString(),
 			putBodyParams, null, null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -96,7 +96,7 @@ public class RequestHttpClient_PUT_test {
 	/**
 	 * This test assert that the headers
 	 * is correctly sent via PUT to the server
-	 * using httpPutForm()
+	 * using httpPut()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -110,7 +110,7 @@ public class RequestHttpClient_PUT_test {
 		headers.put("second", new String[] { "single-value" });
 		
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPutForm(mockWebServer.url("/").toString(),
+		ResponseHttp responseHttp = requestHttpClient.httpPut(mockWebServer.url("/").toString(),
 			null, null, headers);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -132,7 +132,7 @@ public class RequestHttpClient_PUT_test {
 	/**
 	 * This test assert that the cookies
 	 * is correctly sent via PUT to the server
-	 * using httpPutForm()
+	 * using httpPut()
 	 *
 	 * @throws InterruptedException
 	 */
@@ -146,7 +146,7 @@ public class RequestHttpClient_PUT_test {
 		cookiesMap.put("cookie2", new String[] { "myname" });
 		
 		// Retrieve mockResponse from server and assert the results
-		ResponseHttp responseHttp = requestHttpClient.httpPutForm(mockWebServer.url("/").toString(),
+		ResponseHttp responseHttp = requestHttpClient.httpPut(mockWebServer.url("/").toString(),
 			null, cookiesMap, null);
 		assertEquals(responseHttp.statusCode(), 200);
 		assertEquals(responseHttp.toString(), "hello, world!");
@@ -617,7 +617,7 @@ public class RequestHttpClient_PUT_test {
 	// 	putBodyParams.put("second_value", new String[]{ "double-value", "another-value" });
 	
 	// 	// Retrieve mockResponse from server and assert the results
-	// 	ResponseHttp responseHttp = requestHttpClient.httpPutForm(
+	// 	ResponseHttp responseHttp = requestHttpClient.httpPut(
 	// 			httpbinURL,
 	// 			putBodyParams,
 	// 			null,
