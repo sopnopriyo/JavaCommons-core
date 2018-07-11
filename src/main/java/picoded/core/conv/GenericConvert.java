@@ -189,7 +189,7 @@ public class GenericConvert extends GenericConvertStandard {
 	public static <V> GenericConvertList<V> toGenericConvertList(Object input) {
 		return toGenericConvertList(input, null);
 	}
-
+	
 	// //--------------------------------------------------------------------------------------------------
 	// //
 	// // NESTED object fetch (related to fully qualified keys handling)

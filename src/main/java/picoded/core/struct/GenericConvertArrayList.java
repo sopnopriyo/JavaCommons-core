@@ -1,6 +1,7 @@
 package picoded.core.struct;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import picoded.core.conv.GenericConvert;
@@ -36,7 +37,7 @@ public class GenericConvertArrayList<E> extends ArrayList<E> implements GenericC
 	/**
 	 * Consturctor
 	 **/
-	public GenericConvertArrayList(List<E> m) {
+	public GenericConvertArrayList(Collection<? extends E> m) {
 		super(m);
 	}
 	

@@ -2,9 +2,8 @@ package picoded.core.struct.query.utils;
 
 import java.util.Map;
 
-public interface CollectionQueryForIDInterface <K extends String, V extends Map<String,Object>> 
-	extends CollectionQueryInterface<V>
-{
+public interface CollectionQueryForIDInterface<K extends String, V extends Map<String, Object>>
+	extends CollectionQueryInterface<V> {
 	
 	/**
 	 * Performs a search query, and returns the respective DataObject keys.
@@ -48,7 +47,6 @@ public interface CollectionQueryForIDInterface <K extends String, V extends Map<
 	 *
 	 * @return  The String[] array
 	 **/
-	K[] query_id(String whereClause, Object[] whereValues, String orderByStr, int offset,
-		int limit);
+	K[] query_id(String whereClause, Object[] whereValues, String orderByStr, int offset, int limit);
 	
 }

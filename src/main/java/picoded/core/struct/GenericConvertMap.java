@@ -27,13 +27,12 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	static <A, B> GenericConvertMap<A, B> build(Map<A, B> inMap) {
 		return ProxyGenericConvertMap.ensure(inMap);
 	}
-
+	
 	//---------------------------------------------------------------------------------------------------
 	//
 	//  Basic get and fetch operations
 	//
 	//---------------------------------------------------------------------------------------------------
-	
 	
 	// Fallback if null, for native format
 	//---------------------------------------------------------------------------------------------------
@@ -54,7 +53,6 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 		return res;
 	}
 	
-
 	// NESTED object fetch 
 	//---------------------------------------------------------------------------------------------------
 	
@@ -94,7 +92,6 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	//  GET operations with conversions
 	//
 	//---------------------------------------------------------------------------------------------------
-	
 	
 	// to string conversion
 	//---------------------------------------------------------------------------------------------------
@@ -555,7 +552,6 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	//
 	//---------------------------------------------------------------------------------------------------
 	
-	
 	// to string conversion
 	//---------------------------------------------------------------------------------------------------
 	
@@ -1015,7 +1011,6 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	//
 	//---------------------------------------------------------------------------------------------------
 	
-
 	// Fully Qualified Name unpacking
 	//------------------------------------------------------------------------------
 	

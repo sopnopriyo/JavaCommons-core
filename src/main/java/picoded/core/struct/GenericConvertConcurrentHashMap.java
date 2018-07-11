@@ -25,7 +25,8 @@ import picoded.core.conv.GenericConvert;
  *
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  **/
-public class GenericConvertConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> implements GenericConvertMap<K, V> {
+public class GenericConvertConcurrentHashMap<K, V> extends ConcurrentHashMap<K, V> implements
+	GenericConvertMap<K, V> {
 	
 	/**
 	 * Serial version UID

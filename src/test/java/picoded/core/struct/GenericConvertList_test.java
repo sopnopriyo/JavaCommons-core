@@ -129,7 +129,7 @@ public class GenericConvertList_test extends StandardArrayList_test {
 	//
 	// GET conversion test
 	//
-
+	
 	@Test
 	public void getStringTest() {
 		proxyList.add("value");
@@ -348,11 +348,11 @@ public class GenericConvertList_test extends StandardArrayList_test {
 		proxyList.add("me");
 		assertEquals(-5l, proxyList.getLong(1, -5l));
 	}
-
+	
 	//
 	// FETCH conversion test
 	//
-
+	
 	@Test
 	public void fetchStringTest() {
 		proxyList.add("value");

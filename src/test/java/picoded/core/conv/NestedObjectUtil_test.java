@@ -25,7 +25,7 @@ import picoded.core.struct.ProxyGenericConvertMap;
  * Test suite to verify the methods inside NestedObjectUtil
  */
 public class NestedObjectUtil_test {
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Deep cloning testing
@@ -36,7 +36,7 @@ public class NestedObjectUtil_test {
 	public void DeepCopy_string_test() {
 		assertEquals("hello", NestedObjectUtil.deepCopy("hello"));
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Normalize object path testing

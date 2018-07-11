@@ -9,7 +9,7 @@ import java.util.*;
  * collections of Map<String,Object> type objects
  */
 public class QueryUtils {
-
+	
 	/**
 	 * Takes a list of values, and extract its offset of values.
 	 * 
@@ -24,10 +24,10 @@ public class QueryUtils {
 	 */
 	public static <V> List<V> offsetSubList(List<V> inList, int offset, int limit) {
 		// Parameter check
-		if( inList == null ) {
+		if (inList == null) {
 			return new ArrayList<V>();
 		}
-
+		
 		// Get sublist if needed
 		if (offset >= 1 || limit >= 1) {
 			// Get size of raw list
@@ -43,7 +43,7 @@ public class QueryUtils {
 			if (limit > -1) {
 				end = offset + limit;
 			}
-
+			
 			// Ensures the upper end does not go out of bound
 			if (end > size) {
 				end = size;
@@ -52,11 +52,11 @@ public class QueryUtils {
 			// Get and return sublist
 			return inList.subList(offset, end);
 		}
-
+		
 		// no offset occur, return the list itself
 		return inList;
 	}
-
+	
 	/**
 	 * Takes a list and sort by the orderBy string
 	 * 

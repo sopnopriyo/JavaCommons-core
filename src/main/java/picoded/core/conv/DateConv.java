@@ -24,69 +24,69 @@ import picoded.core.exception.ExceptionMessage;
  * ----------------------------------------------------------------------------------
  **/
 public class DateConv extends DateUtils {
-
-    /**
-     * Invalid constructor (throws exception)
-     **/
-    protected DateConv() {
-        throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
-    }
-
-    /**
-     * Convert a Date from String to java.util.Date Class
-     * Given a Date as a String and its pattern
-     * Then, this function will build the Java Date object out of that  DateString and pattern
-     *
-     * @param dateStr
-     * @param pattern
-     * @return
-     */
-    public static Date fromDateString(final String dateStr, final String pattern) {
-        try {
-            return DateUtils.parseDate(dateStr, new String[]{pattern});
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Convert a java.util.Date Object to String
-     * Specify the Date format and provide java.util.Date Object in the parameter
-     * This function would constructs Date String according to the format given
-     * ```
-     * // Conversion to a date string, from milliseconds timestamp
-     * DateConv.toDateString( new Date(timestamp), "YYYY-MM-DD" );
-     * ```
-     *
-     * @param date
-     * @param outputPattern
-     * @return
-     */
-    public static String toDateString(final Date date, final String outputPattern) {
-        SimpleDateFormat formatter = new SimpleDateFormat(outputPattern);
-        return formatter.format(date);
-    }
-
-    /**
-     * Convert Unix timestamp to Date in String according to the output pattern
-     *
-     * @param timestamp
-     * @param outputPattern
-     * @return
-     */
-    public static String toDateString(final long timestamp, final String outputPattern) {
-        return toDateString(new Date((long) timestamp * 1000), outputPattern);
-    }
-
-    /**
-     * Format a date String from one pattern to another
-     *
-     * @param dateStr
-     * @param inputPattern
-     * @param outputPattern
-     * @return
-     */
-    public static String reformatDate(String dateStr, String inputPattern, String outputPattern) {
-        return toDateString(fromDateString(dateStr, inputPattern), outputPattern);
-    }
+	
+	/**
+	 * Invalid constructor (throws exception)
+	 **/
+	protected DateConv() {
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
+	}
+	
+	/**
+	 * Convert a Date from String to java.util.Date Class
+	 * Given a Date as a String and its pattern
+	 * Then, this function will build the Java Date object out of that  DateString and pattern
+	 *
+	 * @param dateStr
+	 * @param pattern
+	 * @return
+	 */
+	public static Date fromDateString(final String dateStr, final String pattern) {
+		try {
+			return DateUtils.parseDate(dateStr, new String[] { pattern });
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Convert a java.util.Date Object to String
+	 * Specify the Date format and provide java.util.Date Object in the parameter
+	 * This function would constructs Date String according to the format given
+	 * ```
+	 * // Conversion to a date string, from milliseconds timestamp
+	 * DateConv.toDateString( new Date(timestamp), "YYYY-MM-DD" );
+	 * ```
+	 *
+	 * @param date
+	 * @param outputPattern
+	 * @return
+	 */
+	public static String toDateString(final Date date, final String outputPattern) {
+		SimpleDateFormat formatter = new SimpleDateFormat(outputPattern);
+		return formatter.format(date);
+	}
+	
+	/**
+	 * Convert Unix timestamp to Date in String according to the output pattern
+	 *
+	 * @param timestamp
+	 * @param outputPattern
+	 * @return
+	 */
+	public static String toDateString(final long timestamp, final String outputPattern) {
+		return toDateString(new Date((long) timestamp * 1000), outputPattern);
+	}
+	
+	/**
+	 * Format a date String from one pattern to another
+	 *
+	 * @param dateStr
+	 * @param inputPattern
+	 * @param outputPattern
+	 * @return
+	 */
+	public static String reformatDate(String dateStr, String inputPattern, String outputPattern) {
+		return toDateString(fromDateString(dateStr, inputPattern), outputPattern);
+	}
 }

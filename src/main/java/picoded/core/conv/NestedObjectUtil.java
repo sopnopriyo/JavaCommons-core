@@ -14,7 +14,7 @@ public class NestedObjectUtil {
 	 * Invalid constructor (throws exception)
 	 **/
 	protected NestedObjectUtil() {
-		throw new IllegalAccessError( ExceptionMessage.staticClassConstructor );
+		throw new IllegalAccessError(ExceptionMessage.staticClassConstructor);
 	}
 	
 	//--------------------------------------------------------------------------------------------------
@@ -40,89 +40,88 @@ public class NestedObjectUtil {
 	 * @return  datached value to return
 	 */
 	static public Object deepCopy(Object in) {
-
+		
 		// Null clones to null
-		if( in == null ) {
+		if (in == null) {
 			return null;
 		}
-
+		
 		// Array cloning
-		if( in.getClass().isArray() ) {
-
+		if (in.getClass().isArray()) {
+			
 			// Clone as a primitive array if possible, 
 			// and return the result if its valid
 			//
 			// This only support the following : 
 			// int[], long[], short[], float[], double[], byte[], char[]
 			Object ret = ArrayConv.clonePrimitiveArray(in);
-			if( ret != null ) {
+			if (ret != null) {
 				return ret;
 			}
-
+			
 			//
 			// At this point array is assumed to be an Object[]
 			// and is cloned as such.
 			//
-			Object[] source = (Object[])in;
+			Object[] source = (Object[]) in;
 			Object[] result = new Object[source.length];
-			for( int i=0; i<source.length; ++i) {
+			for (int i = 0; i < source.length; ++i) {
 				result[i] = deepCopy(source[i]);
 			}
 		}
-
+		
 		// Set conversion
-		if( in instanceof Set ) {
+		if (in instanceof Set) {
 			// Return hashset
 			HashSet<Object> ret = new HashSet<>();
-
+			
 			// For each value in original set
-			for (Object item : ((Set<Object>)in) ) {
+			for (Object item : ((Set<Object>) in)) {
 				ret.add(item);
 			}
-
+			
 			// Return the cloned set
 			return ret;
 		}
-
+		
 		// List conversion
-		if( in instanceof List ) {
+		if (in instanceof List) {
 			// Return List
 			ArrayList<Object> ret = new ArrayList<>();
-
+			
 			// For each item in list
-			for(Object item : ((List<Object>)in) ) {
+			for (Object item : ((List<Object>) in)) {
 				ret.add(item);
 			}
-
+			
 			// Return the cloned list
 			return ret;
 		}
-
+		
 		// Map conversion
-		if( in instanceof Map ) {
+		if (in instanceof Map) {
 			// Return map
-			Map<Object,Object> ret = new HashMap<>();
-
+			Map<Object, Object> ret = new HashMap<>();
+			
 			// For each item in map
-			for( Map.Entry<Object,Object> pair : ((Map<Object,Object>)in).entrySet() ) {
-				ret.put( pair.getKey(), pair.getValue() );
+			for (Map.Entry<Object, Object> pair : ((Map<Object, Object>) in).entrySet()) {
+				ret.put(pair.getKey(), pair.getValue());
 			}
-
+			
 			// Return the cloned map
 			return ret;
 		}
-
+		
 		// Final fallback using JSON conversion
 		return ConvertJSON.toObject(ConvertJSON.fromObject(in));
 	}
-
+	
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Filtered key set handling
 	//
 	//--------------------------------------------------------------------------------------------------
 	
-
 	/**
 	 * First level keySet fetching
 	 * 
@@ -130,7 +129,7 @@ public class NestedObjectUtil {
 	 * 
 	 * @return  keyset that is filtered to one "level"
 	 **/
-	public static <V> Set<String> filterKeySet(Map<String,V> inMap) {
+	public static <V> Set<String> filterKeySet(Map<String, V> inMap) {
 		return filterKeySet(inMap.keySet());
 	}
 	
@@ -157,7 +156,6 @@ public class NestedObjectUtil {
 		return ret;
 	}
 	
-
 	//--------------------------------------------------------------------------------------------------
 	//
 	// Fully Qualified Name unpacking
@@ -276,7 +274,8 @@ public class NestedObjectUtil {
 	 * @return  The normalized key
 	 **/
 	public static String normalizeObjectPath(Object base, String key) {
-		return normalizeObjectPath(base, NestedObjectFetch.splitObjectPath(key, null), null).toString();
+		return normalizeObjectPath(base, NestedObjectFetch.splitObjectPath(key, null), null)
+			.toString();
 	}
 	
 	/**

@@ -13,8 +13,8 @@ public class Min extends MapReduceBase {
 	 */
 	public void map(BigDecimal val, Object rawVal) {
 		// Only perform an action if a valid value was passed
-		if( val != null ) {
-			if( res == null ) {
+		if (val != null) {
+			if (res == null) {
 				// Initialize the res variable (if needed)
 				res = val;
 			} else {

@@ -13,8 +13,8 @@ import picoded.core.struct.query.Aggregation;
  * 
  * Ideally this should be optimized for the relevent backend.
  */
-public interface CollectionQueryInterface <V extends Map<String,Object>> {
-
+public interface CollectionQueryInterface<V extends Map<String, Object>> {
+	
 	// Query operations (to optimize on specific implementation)
 	//--------------------------------------------------------------------------
 	
@@ -54,8 +54,7 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	 *
 	 * @return  The DataObject[] array
 	 **/
-	V[] query(String whereClause, Object[] whereValues, String orderByStr,
-		int offset, int limit);
+	V[] query(String whereClause, Object[] whereValues, String orderByStr, int offset, int limit);
 	
 	/**
 	 * Performs a search query, and returns the respective DataObjects
@@ -68,7 +67,7 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	default long queryCount(String whereClause, Object[] whereValues) {
 		return query(whereClause, whereValues).length;
 	}
-
+	
 	// Aggregation operations (to optimize on specific implementation)
 	//--------------------------------------------------------------------------
 	
@@ -81,18 +80,15 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	 *
 	 * @return  BigDecimal[] array of the aggregation result
 	 **/
-	default BigDecimal[] aggregation(
-		String[] aggregationTerms, 
-		String   whereClause, 
-		Object[] whereValues
-	) {
+	default BigDecimal[] aggregation(String[] aggregationTerms, String whereClause,
+		Object[] whereValues) {
 		// 1. Initialize the aggregation object (fail fast)
 		Aggregation agg = Aggregation.build(aggregationTerms);
-
+		
 		// 2. Get the query result, as a collection
 		V[] resArray = query(whereClause, whereValues);
-		List<Object> resCollection = (List<Object>)(List<?>)Arrays.asList(resArray);
-
+		List<Object> resCollection = (List<Object>) (List<?>) Arrays.asList(resArray);
+		
 		// 3. compute the aggregation (in a single pass)
 		return agg.compute(resCollection);
 	}
@@ -106,12 +102,9 @@ public interface CollectionQueryInterface <V extends Map<String,Object>> {
 	 *
 	 * @return  corresponding BigDecimal result
 	 **/
-	default BigDecimal singleAggregation(
-		String   singleAggregationTerm, 
-		String   whereClause, 
-		Object[] whereValues
-	) {
-		return aggregation( new String[] { singleAggregationTerm }, whereClause, whereValues )[0];
+	default BigDecimal singleAggregation(String singleAggregationTerm, String whereClause,
+		Object[] whereValues) {
+		return aggregation(new String[] { singleAggregationTerm }, whereClause, whereValues)[0];
 	}
 	
 }
