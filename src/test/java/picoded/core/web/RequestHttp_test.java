@@ -997,10 +997,235 @@ public class RequestHttp_test {
 		assertEquals(secondHeader, serverRequestHeaders.get("second"));
 	}
 
+	//------------------------------------------------
+	//
+	//  DELETE request FORM test units
+	//
+	//------------------------------------------------
+	
+	/**
+	 * This test assert that the delete request body
+	 * is correctly sent via DELETE to the server
+	 * using httpDelete()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void deleteRequestBasic() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+	
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.delete(mockWebServer.url("/").toString());
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		assertNotNull(sentRequest);
+	}
 
+	/**
+	 * This test assert that the delete request body
+	 * is correctly sent via DELETE to the server
+	 * using httpDelete()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void deleteRequestWithParams() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare delete body Params
+		Map<String, Object> deleteBodyParams = new HashMap<String, Object>();
+		deleteBodyParams.put("first_value", new String[] { "single-value" });
+		deleteBodyParams.put("second_value", new String[] { "double-value", "another-value" });
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.delete(mockWebServer.url("/").toString(),
+			deleteBodyParams);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		
+		assertEquals("second_value=double-value&second_value=another-value&first_value=single-value",
+			sentRequest.getUtf8Body());
+	}
 
+	/**
+	 * This test assert that the headers
+	 * is correctly sent via DELETE to the server
+	 * using httpDelete()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void deleteRequestWithHeadersAndCookies() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare headers
+		Map<String, Object> headers = new HashMap<String, Object>();
+		headers.put("first", new String[] { "random-value", "choose-value" });
+		headers.put("second", new String[] { "single-value" });
+
+		// Prepare cookie map
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
+		cookiesMap.put("cookie1", new String[] { "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[] { "myname" });
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.delete(mockWebServer.url("/").toString(),
+			null, cookiesMap, headers);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's headers
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+		
+		List<String> firstHeader = new ArrayList<String>();
+		firstHeader.add("random-value");
+		firstHeader.add("choose-value");
+		assertEquals(firstHeader, serverRequestHeaders.get("first"));
+		
+		List<String> secondHeader = new ArrayList<String>();
+		secondHeader.add("single-value");
+		assertEquals(secondHeader, serverRequestHeaders.get("second"));
+
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, serverRequestHeaders.get("cookie"));
+	}
+
+	/**
+	 * This test assert that the filesMap
+	 * is correctly sent via DELETE to the server
+	 * using httpDeleteMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void deleteRequestWithMultipart() throws IOException, InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Generating random files with random content
+		Map<String, File[]> filesMap = new HashMap<String, File[]>();
+		int number = 3;
+		File[] fileArray = new File[number];
+		for (int i = 0; i < number; i++) {
+			File temp = File.createTempFile(GUID.base64(), ".tmp");
+			String randomString = GUID.base64();
+			FileOutputStream outputStream = new FileOutputStream(temp);
+			byte[] strToBytes = randomString.getBytes();
+			outputStream.write(strToBytes);
+			outputStream.close();
+			fileArray[i] = temp;
+		}
+		filesMap.put("files", fileArray);
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.deleteMultipart(mockWebServer.url("/")
+			.toString(), null, filesMap);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		
+		String body = sentRequest.getUtf8Body();
+		
+		for (File file : fileArray) {
+			// Assert that file name exists
+			assertTrue(body.indexOf(file.getName()) >= 0);
+			
+			// Assert that the content of file exists
+			String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+			assertTrue(body.indexOf(content) >= 0);
+		}
+	}
+
+	/**
+	 * This test assert that the filesMap, cookies and headers
+	 * is correctly sent via DELETE to the server
+	 * using httpDeleteMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void deleteRequestWithMultipartAndCookiesHeaders() throws IOException, InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare headers
+		Map<String, Object> headers = new HashMap<String, Object>();
+		headers.put("first", new String[] { "random-value", "choose-value" });
+		headers.put("second", new String[] { "single-value" });
+
+		// Prepare cookie map
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
+		cookiesMap.put("cookie1", new String[] { "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[] { "myname" });
+
+		// Generating random files with random content
+		Map<String, File[]> filesMap = new HashMap<String, File[]>();
+		int number = 3;
+		File[] fileArray = new File[number];
+		for (int i = 0; i < number; i++) {
+			File temp = File.createTempFile(GUID.base64(), ".tmp");
+			String randomString = GUID.base64();
+			FileOutputStream outputStream = new FileOutputStream(temp);
+			byte[] strToBytes = randomString.getBytes();
+			outputStream.write(strToBytes);
+			outputStream.close();
+			fileArray[i] = temp;
+		}
+		filesMap.put("files", fileArray);
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.deleteMultipart(mockWebServer.url("/")
+			.toString(), null, filesMap, cookiesMap, headers);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		
+		String body = sentRequest.getUtf8Body();
+		
+		for (File file : fileArray) {
+			// Assert that file name exists
+			assertTrue(body.indexOf(file.getName()) >= 0);
+			
+			// Assert that the content of file exists
+			String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+			assertTrue(body.indexOf(content) >= 0);
+		}
+
+		// Check sent request's headers
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+		
+		List<String> firstHeader = new ArrayList<String>();
+		firstHeader.add("random-value");
+		firstHeader.add("choose-value");
+		assertEquals(firstHeader, serverRequestHeaders.get("first"));
+		
+		List<String> secondHeader = new ArrayList<String>();
+		secondHeader.add("single-value");
+		assertEquals(secondHeader, serverRequestHeaders.get("second"));
+
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, serverRequestHeaders.get("cookie"));
+	}
 
 	
 
 
+
+
+
+
+
+
+	
 }
