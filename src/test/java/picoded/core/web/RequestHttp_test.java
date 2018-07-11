@@ -881,4 +881,126 @@ public class RequestHttp_test {
 		secondHeader.add("single-value");
 		assertEquals(secondHeader, serverRequestHeaders.get("second"));
 	}
+
+	/**
+	 * This test assert that the put request body
+	 * is correctly sent via PUT to the server
+	 * using httpPutJSON() - Map<String, String[]>
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void putRequestWithJson() throws InterruptedException {
+		
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare put body Params
+		Map<String, Object> putBodyParams = new HashMap<String, Object>();
+		putBodyParams.put("first_value", new String[] { "single-value" });
+		putBodyParams.put("second_value", new String[] { "double-value", "another-value" });
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.putJSON(mockWebServer.url("/").toString(),
+			putBodyParams, null);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		assertEquals(
+			"{\"second_value\":[\"double-value\",\"another-value\"],\"first_value\":[\"single-value\"]}",
+			sentRequest.getUtf8Body());
+	}
+
+	/**
+	 * This test assert that the cookies
+	 * is correctly sent via PUT to the server
+	 * using httpPutJSON()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void putRequestJsonWithCookies() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare cookie map
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
+		cookiesMap.put("cookie1", new String[] { "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[] { "myname" });
+		
+		// Empty paramBody
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.putJSON(mockWebServer.url("/").toString(),
+			params, cookiesMap);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's cookies
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
+		
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, requestHeaders.get("cookie"));
+	}
+
+
+	/**
+	 * This test assert that the headers
+	 * is correctly sent via PUT to the server
+	 * using httpPutJSON()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void putRequestJsonWithHeaders() throws InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare cookie map
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
+		cookiesMap.put("cookie1", new String[] { "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[] { "myname" });
+		
+		// Prepare headers
+		Map<String, Object> headers = new HashMap<String, Object>();
+		headers.put("first", new String[] { "random-value", "choose-value" });
+		headers.put("second", new String[] { "single-value" });
+
+		// Empty paramBody
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.putJSON(mockWebServer.url("/").toString(),
+			params, cookiesMap, headers);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's cookies
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		Map<String, List<String>> requestHeaders = sentRequest.getHeaders().toMultimap();
+		
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, requestHeaders.get("cookie"));
+
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+		
+		List<String> firstHeader = new ArrayList<String>();
+		firstHeader.add("random-value");
+		firstHeader.add("choose-value");
+		assertEquals(firstHeader, serverRequestHeaders.get("first"));
+		
+		List<String> secondHeader = new ArrayList<String>();
+		secondHeader.add("single-value");
+		assertEquals(secondHeader, serverRequestHeaders.get("second"));
+	}
+
+
+
+
+	
+
+
 }
