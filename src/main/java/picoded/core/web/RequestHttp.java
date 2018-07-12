@@ -547,6 +547,23 @@ public class RequestHttp {
 	) {
 		return client().deleteMultipart(reqUrl, paramMap, filesMap);
 	}
+
+	/**
+	 * Wrapper method for DELETE multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp deleteMultipart(String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap //
+	) {
+		return client().deleteMultipart(reqUrl, paramMap, filesMap, cookiesMap, null);
+	}
 	
 	/**
 	 * Wrapper method for DELETE multipart requests

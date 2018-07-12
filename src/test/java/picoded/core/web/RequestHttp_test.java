@@ -1212,6 +1212,65 @@ public class RequestHttp_test {
 		}
 	}
 
+		/**
+	 * This test assert that the filesMap, cookies and headers
+	 * is correctly sent via DELETE to the server
+	 * using httpDeleteMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void deleteRequestWithMultipartAndCookies_test() throws IOException, InterruptedException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare cookie map
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
+		cookiesMap.put("cookie1", new String[] { "thiscookie", "anothercook" });
+		cookiesMap.put("cookie2", new String[] { "myname" });
+
+		// Generating random files with random content
+		Map<String, File[]> filesMap = new HashMap<String, File[]>();
+		int number = 3;
+		File[] fileArray = new File[number];
+		for (int i = 0; i < number; i++) {
+			File temp = File.createTempFile(GUID.base64(), ".tmp");
+			String randomString = GUID.base64();
+			FileOutputStream outputStream = new FileOutputStream(temp);
+			byte[] strToBytes = randomString.getBytes();
+			outputStream.write(strToBytes);
+			outputStream.close();
+			fileArray[i] = temp;
+		}
+		filesMap.put("files", fileArray);
+		
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.deleteMultipart(mockWebServer.url("/")
+			.toString(), null, filesMap, cookiesMap);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's body
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+		
+		String body = sentRequest.getUtf8Body();
+		
+		for (File file : fileArray) {
+			// Assert that file name exists
+			assertTrue(body.indexOf(file.getName()) >= 0);
+			
+			// Assert that the content of file exists
+			String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+			assertTrue(body.indexOf(content) >= 0);
+		}
+
+		// Check sent request's cookies
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+	
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie1=anothercook; cookie2=myname");
+		assertEquals(cookies, serverRequestHeaders.get("cookie"));
+	}
+
 	/**
 	 * This test assert that the filesMap, cookies and headers
 	 * is correctly sent via DELETE to the server
