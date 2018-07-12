@@ -3,6 +3,7 @@ package picoded.core.file;
 // Test Case include
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,6 +69,25 @@ public class FileUtil_test {
 	// Read only test cases
 	//----------------------------------------------------------------------------------------------------
 	
+	/// Test for list Dirs
+	@Test
+	public void testListDirs() throws IOException {
+		assertNotNull(FileUtil.listDirs(new File("./test/FileUtil/")));
+		assertNotNull(FileUtil.listDirs(testDir));
+		assertNotNull(FileUtil.listDirs(outputDir));
+		List<File> folderList = FileUtil.listDirs(new File("./test/"));
+		assertTrue(folderList.contains(new File("./test/FileUtil/")));
+		assertEquals(new ArrayList<File>(), FileUtil.listDirs(null));
+	}
+
+	/// Test for list Dirs names
+	@Test
+	public void listDirNames_test() throws IOException {
+		List<String> dirNames = FileUtil.listDirNames(new File("./test/"));
+		assertTrue(dirNames.contains(new File("./test/FileUtil/").getName()));
+	}
+
+
 	/// Test for double slash safely taken
 	@Test
 	public void readDoubleSlash() throws IOException {
@@ -167,14 +187,7 @@ public class FileUtil_test {
 		
 	}
 	
-	/// Test for list Dirs
-	@Test
-	public void testListDirs() throws IOException {
-		assertNotNull(FileUtil.listDirs(new File("./test/FileUtil/")));
-		assertNotNull(FileUtil.listDirs(testDir));
-		assertNotNull(FileUtil.listDirs(outputDir));
-		assertEquals(new ArrayList<File>(), FileUtil.listDirs(null));
-	}
+	
 	
 	// /// Test for Copy Directory If Different
 	// @Test
