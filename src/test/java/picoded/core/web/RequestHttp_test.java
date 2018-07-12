@@ -187,7 +187,7 @@ public class RequestHttp_test {
 	 * is correctly sent via the POST request to the server
 	 */
 	@Test
-	public void postRequestWithRequestParams() throws InterruptedException {
+	public void postRequestWithRequestParams_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare post body Params
@@ -310,7 +310,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void basic_post_request_multipart_files_only() throws IOException, InterruptedException {
+	public void postRequestWithFiles_test() throws IOException, InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Generating random files with random content
@@ -409,15 +409,82 @@ public class RequestHttp_test {
 		}
 	}
 
-		/**
-	 * This test assert that the headers
+	/**
+	 * This test assert that the cookies
 	 * is correctly sent via POST to the server
 	 * using httpPostMultipart()
 	 *
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void postReq() throws InterruptedException, IOException {
+	public void postReqWithMultiPartCookies_test() throws InterruptedException, IOException {
+		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
+		
+		// Prepare params
+		Map<String, Object> params = new HashMap<String, Object>();
+		String first = GUID.base64();
+		String second = GUID.base64();
+		String third = GUID.base64();
+		params.put("first", first);
+		params.put("second", second);
+		params.put("third", third);
+
+		// Generating random files with random content
+		Map<String, File[]> filesMap = new HashMap<String, File[]>();
+		int number = 3;
+		File[] fileArray = new File[number];
+		for (int i = 0; i < number; i++) {
+			File temp = File.createTempFile(GUID.base64(), ".tmp");
+			String randomString = GUID.base64();
+			FileOutputStream outputStream = new FileOutputStream(temp);
+			byte[] strToBytes = randomString.getBytes();
+			outputStream.write(strToBytes);
+			outputStream.close();
+			fileArray[i] = temp;
+		}
+		filesMap.put("files", fileArray);
+
+		// Prepare cookie map
+		Map<String, Object> cookiesMap = new HashMap<String, Object>();
+		cookiesMap.put("cookie1", "thiscookie");
+		cookiesMap.put("cookie2", "myname");
+
+		// Retrieve mockResponse from server and assert the results
+		ResponseHttp responseHttp = requestHttp.postMultipart(mockWebServer.url("/")
+			.toString(), params, filesMap, cookiesMap);
+		assertEquals(responseHttp.statusCode(), 200);
+		assertEquals(responseHttp.toString(), "hello, world!");
+		
+		// Check sent request's headers
+		RecordedRequest sentRequest = mockWebServer.takeRequest();
+
+		// Assert files
+		String body = sentRequest.getUtf8Body();
+		for (File file : fileArray) {
+			// Assert that file name exists
+			assertTrue(body.indexOf(file.getName()) >= 0);
+			
+			// Assert that the content of file exists
+			String content = new String(Files.readAllBytes(Paths.get(file.getAbsolutePath())));
+			assertTrue(body.indexOf(content) >= 0);
+		}
+
+		// Assert cookies
+		Map<String, List<String>> serverRequestHeaders = sentRequest.getHeaders().toMultimap();
+		List<String> cookies = new ArrayList<String>();
+		cookies.add("cookie1=thiscookie; cookie2=myname");
+		assertEquals(cookies, serverRequestHeaders.get("cookie"));
+	}
+
+	/**
+	 * This test assert that the headers and cookies
+	 * is correctly sent via POST to the server
+	 * using httpPostMultipart()
+	 *
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void postReqWithMultiPartHeadersCookies_test() throws InterruptedException, IOException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare params
@@ -518,7 +585,7 @@ public class RequestHttp_test {
 	}
 
 	@Test
-	public void postRequestWithJsonWithCookies() throws InterruptedException {
+	public void postRequestWithJsonWithCookies_test() throws InterruptedException {
 		
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
@@ -551,7 +618,7 @@ public class RequestHttp_test {
 	}
 
 	@Test
-	public void postRequestWithJsonWithCookiesAndHeaders() throws InterruptedException {
+	public void postRequestWithJsonWithCookiesAndHeaders_test() throws InterruptedException {
 		
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
@@ -612,7 +679,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestBasic() throws InterruptedException {
+	public void putRequestBasic_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare put body Params
@@ -640,7 +707,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestWithCookies() throws InterruptedException {
+	public void putRequestWithCookies_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare cookie map
@@ -671,7 +738,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestWithHeaders() throws InterruptedException {
+	public void putRequestWithHeaders_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare headers
@@ -707,7 +774,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestWithMultiPart() throws InterruptedException, IOException {
+	public void putRequestWithMultiPart_test() throws InterruptedException, IOException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -766,7 +833,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestWithMultiPartAndCookies() throws InterruptedException, IOException {
+	public void putRequestWithMultiPartAndCookies_test() throws InterruptedException, IOException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -820,7 +887,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestWithMultiPartAndHeaders() throws InterruptedException, IOException {
+	public void putRequestWithMultiPartAndHeaders_test() throws InterruptedException, IOException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		Map<String, Object> params = new HashMap<String, Object>();
@@ -890,7 +957,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestWithJson() throws InterruptedException {
+	public void putRequestWithJson_test() throws InterruptedException {
 		
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
@@ -920,7 +987,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestJsonWithCookies() throws InterruptedException {
+	public void putRequestJsonWithCookies_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare cookie map
@@ -955,7 +1022,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void putRequestJsonWithHeaders() throws InterruptedException {
+	public void putRequestJsonWithHeaders_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare cookie map
@@ -1011,7 +1078,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteRequestBasic() throws InterruptedException {
+	public void deleteRequestBasic_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 	
 		// Retrieve mockResponse from server and assert the results
@@ -1032,7 +1099,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteRequestWithParams() throws InterruptedException {
+	public void deleteRequestWithParams_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare delete body Params
@@ -1061,7 +1128,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteRequestWithHeadersAndCookies() throws InterruptedException {
+	public void deleteRequestWithHeadersAndCookies_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare headers
@@ -1106,7 +1173,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteRequestWithMultipart() throws IOException, InterruptedException {
+	public void deleteRequestWithMultipart_test() throws IOException, InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Generating random files with random content
@@ -1153,7 +1220,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteRequestWithMultipartAndCookiesHeaders() throws IOException, InterruptedException {
+	public void deleteRequestWithMultipartAndCookiesHeaders_test() throws IOException, InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare headers
@@ -1226,7 +1293,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteRequestWithJson() throws InterruptedException {
+	public void deleteRequestWithJson_test() throws InterruptedException {
 		
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
@@ -1256,7 +1323,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteJsonWithCookies() throws InterruptedException {
+	public void deleteJsonWithCookies_test() throws InterruptedException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare cookie map
@@ -1288,7 +1355,7 @@ public class RequestHttp_test {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void deleteJsonWithCookiesAndHeaders() throws InterruptedException,IOException {
+	public void deleteJsonWithCookiesAndHeaders_test() throws InterruptedException,IOException {
 		mockWebServer.enqueue(new MockResponse().setBody("hello, world!"));
 		
 		// Prepare cookie map
