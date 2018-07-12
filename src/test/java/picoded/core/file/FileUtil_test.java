@@ -109,7 +109,7 @@ public class FileUtil_test {
 	@Test
 	public void fileCollectionToStringNames_test() throws IOException {
 		ArrayList<File> fileList = new ArrayList<File>();
-		assertEquals(0, FileUtil.fileCollectionToStringNames(fileList).size());
+		assertEquals(0, FileUtil.fileCollectionToStringNames(null).size());
 		fileList.add(testDir);
 		assertTrue(FileUtil.fileCollectionToStringNames(fileList).contains(fileList.get(0).getName()));
 	}
@@ -120,7 +120,7 @@ public class FileUtil_test {
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	
-	
+
 	/// Test for double slash safely taken
 	@Test
 	public void readDoubleSlash() throws IOException {
@@ -222,38 +222,13 @@ public class FileUtil_test {
 	
 	
 	
-	// /// Test for Copy Directory If Different
-	// @Test
-	// public void testCopyDirectoryIfDifferent() throws IOException {
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"));
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"));
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		true);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), true);
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), false);
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		true, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), true, false);
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, false, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		false, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), false, false);
-	// }
+	/// Test for Copy Directory If Different
+	@Test
+	public void testCopyDirectoryIfDifferent() throws IOException {
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir);	
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true);
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true, false);
+	}
 	
 	/// Test for Copy Directory If Different
 	@Test
