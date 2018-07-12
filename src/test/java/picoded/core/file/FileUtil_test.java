@@ -434,4 +434,15 @@ public class FileUtil_test {
 		assertTrue(FileUtil.isParent(testDir, new File(testDirStr + "jsRegex.js")));
 		assertFalse(FileUtil.isParent(testDir,  new File("./test/Conv/" + "chaosmonkey.js")));
 	}
+
+	@Test
+	public void setFilePermission_test () {
+		FileUtil.setFilePermission(testDir, 2, 2, 2, true);
+		
+		assertTrue(testDir.canRead());
+		assertTrue(testDir.canWrite());
+		assertTrue(testDir.canExecute());
+	}
+
+
 }
