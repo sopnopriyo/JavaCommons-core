@@ -2,6 +2,7 @@ package picoded.core.file;
 
 // Test Case include
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -425,5 +426,12 @@ public class FileUtil_test {
 		assertEquals(filePathsList,
 			FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt"), "/"));
 		assertEquals(filePathsList, FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt")));
+	}
+
+	@Test
+	public void isParent_test () {
+		assertFalse(FileUtil.isParent(new File(testDirStr + "jsRegex.js"), null));
+		assertTrue(FileUtil.isParent(testDir, new File(testDirStr + "jsRegex.js")));
+		assertFalse(FileUtil.isParent(testDir,  new File("./test/Conv/" + "chaosmonkey.js")));
 	}
 }
