@@ -66,12 +66,15 @@ public class FileUtil_test {
 	String test_res = null; //tmp testing variable
 	Collection<File> fileCollection = null;
 	
-	// Read only test cases
-	//----------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// File / folder search handling
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	
 	/// Test for list Dirs
 	@Test
-	public void testListDirs() throws IOException {
+	public void listDirs_test() throws IOException {
 		assertNotNull(FileUtil.listDirs(new File("./test/FileUtil/")));
 		assertNotNull(FileUtil.listDirs(testDir));
 		assertNotNull(FileUtil.listDirs(outputDir));
@@ -88,6 +91,36 @@ public class FileUtil_test {
 	}
 
 
+	/// Test for list File names
+	@Test
+	public void listFileNames_test() throws IOException {
+		List<String> fileNames = FileUtil.listFileNames(testDir, new String[]{"js"}, true);
+		assertTrue(fileNames.contains("jsRegex.js"));
+	}
+
+	/// Test for list File names without recursion
+	@Test
+	public void listFileNamesWithoutRecursion_test() throws IOException {
+		List<String> fileNames = FileUtil.listFileNames(testDir, new String[]{"js"});
+		assertTrue(fileNames.contains("jsRegex.js"));
+	}
+
+	// Takes in file collection and convert them into string names
+	@Test
+	public void fileCollectionToStringNames_test() throws IOException {
+		ArrayList<File> fileList = new ArrayList<File>();
+		assertEquals(0, FileUtil.fileCollectionToStringNames(fileList).size());
+		fileList.add(testDir);
+		assertTrue(FileUtil.fileCollectionToStringNames(fileList).contains(fileList.get(0).getName()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// File / folder search handling
+	//
+	//------------------------------------------------------------------------------------------------------------------
+	
+	
 	/// Test for double slash safely taken
 	@Test
 	public void readDoubleSlash() throws IOException {
