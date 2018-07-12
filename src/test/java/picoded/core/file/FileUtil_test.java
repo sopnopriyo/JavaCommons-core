@@ -444,7 +444,7 @@ public class FileUtil_test {
 		assertTrue(testDir.canRead());
 		assertTrue(testDir.canWrite());
 		assertTrue(testDir.canExecute());
-		FileUtil.setFilePermission(File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false); 
+		FileUtil.setFilePermission(new File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false); 
 	}
 
 
