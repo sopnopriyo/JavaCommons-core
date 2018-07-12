@@ -31,7 +31,7 @@ import org.junit.runner.RunWith;
  */
 public class ResponseHttp_test {
 
-	public class TestDefaultResponse implements ResponseHttp {
+	public class TestDefaultResponseEmpty implements ResponseHttp {
 		/**
 		 * Gets the response content as a string
 		 *
@@ -40,15 +40,26 @@ public class ResponseHttp_test {
 		public String toString() {
 			return "";
 		}
-	
 	}
+
+	public class TestDefaultResponseMap implements ResponseHttp {
+		/**
+		 * Gets the response content as a string
+		 *
+		 * @return String of the response body
+		 **/
+		public String toString() {
+			return "{}";
+		}
+	}
+
 
 	/**
 	 * Testing the empty string scenerio in the responseHttp
 	 */
     @Test
-    public final void testDefaultBehaviour() {
-		ResponseHttp testDefaultResponse = new TestDefaultResponse();
+    public final void defaultBehaviour_test() {
+		ResponseHttp testDefaultResponse = new TestDefaultResponseEmpty();
 		assertEquals("", testDefaultResponse.toString());
 		assertNull(testDefaultResponse.inputStream());
 		assertNull(testDefaultResponse.toMap());
@@ -56,5 +67,11 @@ public class ResponseHttp_test {
 		assertNull(testDefaultResponse.headersMap());
 		assertNull(testDefaultResponse.cookiesMap());
 		assertEquals("", testDefaultResponse.method());
-    }
+	}
+	
+	@Test
+	public void emptyMap_test() {
+		ResponseHttp testDefaultResponse = new TestDefaultResponseMap();
+		assertEquals("{}", String.valueOf(testDefaultResponse.toMap()));
+	}
 }
