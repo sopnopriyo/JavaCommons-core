@@ -3,6 +3,7 @@ package picoded.core.file;
 // Test Case include
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -225,9 +226,12 @@ public class FileUtil_test {
 	/// Test for Copy Directory If Different
 	@Test
 	public void testCopyDirectoryIfDifferent() throws IOException {
-		FileUtil.copyDirectory_ifDifferent(testDir, outputDir);	
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir);
+		assertNotNull(outputDir);
 		FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true);
+		assertNotNull(outputDir);
 		FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true, false);
+		assertNotNull(outputDir);
 	}
 	
 	/// Test for Copy Directory If Different
