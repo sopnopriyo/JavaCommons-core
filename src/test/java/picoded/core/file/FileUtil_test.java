@@ -428,6 +428,7 @@ public class FileUtil_test {
 		assertEquals(filePathsList, FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt")));
 	}
 
+	// Test for checking the parent directory
 	@Test
 	public void isParent_test () {
 		assertFalse(FileUtil.isParent(new File(testDirStr + "jsRegex.js"), null));
@@ -435,6 +436,7 @@ public class FileUtil_test {
 		assertFalse(FileUtil.isParent(testDir,  new File("./test/Conv/" + "chaosmonkey.js")));
 	}
 
+	// Test for checking the permission of the file
 	@Test
 	public void setFilePermission_test () {
 		FileUtil.setFilePermission(testDir, 2, 2, 2, true);
@@ -442,6 +444,7 @@ public class FileUtil_test {
 		assertTrue(testDir.canRead());
 		assertTrue(testDir.canWrite());
 		assertTrue(testDir.canExecute());
+		FileUtil.setFilePermission(File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false); 
 	}
 
 
