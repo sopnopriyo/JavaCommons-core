@@ -80,6 +80,25 @@ public class ArrayConv extends ArrayUtils {
 		// All failed, null
 		return null;
 	}
+
+	/**
+	 * This is a helper method to check strings inside array, ignoring
+	 * case sensitivity. It supports string values only.
+	 * 
+	 * @param array        String array containing the values
+	 * @param valueToCheck the value to be compared
+	 * 
+	 * @return true if found, false otherwise
+	 */
+	static public boolean containsIgnoreCase(String[] array, String valueToCheck){
+		for(String value : array){
+			if(value.equalsIgnoreCase(valueToCheck)){
+				return true;
+			}
+		}
+
+		return false;
+	}
 	
 	/**
 	 * NOTE: All these were made obselete by apache.commons.ArrayUtils.subarray()
