@@ -132,6 +132,11 @@ public class FileUtilBase_test {
 		assertEquals(expectedValue, byteCount);
 	}
 
+	@Test (expected = RuntimeException.class)
+	public void byteCountToDisplaySizeFromBigIntEx_test() {
+		String byteCount = FileUtilBase.byteCountToDisplaySize(new BigInteger(""));
+	}
+
 	@Test
 	public void byteCountToDisplaySizeFromLong_test() {
 		long value = 82982252524618L;
@@ -139,6 +144,40 @@ public class FileUtilBase_test {
 		String expectedValue = "75 TB";
 		assertEquals(expectedValue, byteCount);
 	}
+
+	// @Test (expected = RuntimeException.class)
+	// public void byteCountToDisplaySizeFromLongEx_test() {
+	// 	long value = 829822525246000000000018;
+	// 	String byteCount = FileUtilBase.byteCountToDisplaySize(value);
+	// }
+
+	@Test
+	public void touch_test() {
+		File file = new File(outputDirStr, "hhe.txt");
+		FileUtilBase.touch(file);
+		assertNotNull(FileUtilBase.openInputStream(file));
+	}
+
+	@Test (expected = RuntimeException.class)
+	public void touchEx_test() {
+		FileUtilBase.touch(null);
+	}
+
+	@Test
+	public void convertFileCollectionToFileArray_test() {
+		File file = new File(outputDirStr, "hhee.txt");
+		ArrayList<File> files = new ArrayList<File>();
+		files.add(file);
+		File[] fileArray = FileUtilBase.convertFileCollectionToFileArray(files);
+		assertNotNull(fileArray);
+	}
+
+	// @Test (expected = RuntimeException.class)
+	// public void convertFileCollectionToFileArraEx_test() {
+	// 	ArrayList<File> files = new ArrayList<File>();
+	// 	File[] fileArray = FileUtilBase.convertFileCollectionToFileArray(null);
+	// }
+
 
 
 }
