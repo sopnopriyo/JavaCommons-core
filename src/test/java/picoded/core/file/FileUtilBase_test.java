@@ -9,12 +9,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.math.BigInteger;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -87,5 +90,55 @@ public class FileUtilBase_test {
 	public void getUserDirectory_test() {
 		assertNotNull(FileUtilBase.getUserDirectory());
 	}
+
+	@Test
+	public void openInputStream_test() {
+		File file = new File(testDir, "jsRegex.js");
+		assertNotNull(FileUtilBase.openInputStream(file));
+	}
+
+	@Test(expected = Exception.class) 
+	public void openInputStreamWithException_test() {
+		File file = new File(testDir, "jsResgex.js");
+		FileUtilBase.openInputStream(file);
+	}
+
+	@Test
+	public void openOutputStream_test() {
+		File file = new File(outputDirStr, "xyz.txt");
+		assertNotNull(FileUtilBase.openOutputStream(file));
+	}
+
+	@Test (expected = RuntimeException.class)
+	public void openOutputStreamWithException_test() throws FileNotFoundException{
+		FileUtilBase.openOutputStream(outputDir);
+	}
+
+	@Test
+	public void openOutputStreamAppend_test() {
+		File file = new File(outputDirStr, "xyd.txt");
+		assertNotNull(FileUtilBase.openOutputStream(file, true));
+	}
+
+	@Test (expected = RuntimeException.class)
+	public void openOutputStreamAppendException_test() throws FileNotFoundException{
+		FileUtilBase.openOutputStream(outputDir, true);
+	}
+
+	@Test
+	public void byteCountToDisplaySizeFromBigInt_test() {
+		String byteCount = FileUtilBase.byteCountToDisplaySize(new BigInteger("8599825996872482982482982252524684268426846846846846849848418418414141841841984219848941984218942894298421984286289228927948728929829"));
+		String expectedValue = "7459160023045171927852192577984468773953346086956871620548078382502197662894449971823214090761499246629731202622063 EB";
+		assertEquals(expectedValue, byteCount);
+	}
+
+	@Test
+	public void byteCountToDisplaySizeFromLong_test() {
+		long value = 82982252524618L;
+		String byteCount = FileUtilBase.byteCountToDisplaySize(value);
+		String expectedValue = "75 TB";
+		assertEquals(expectedValue, byteCount);
+	}
+
 
 }
