@@ -2,7 +2,10 @@ package picoded.core.file;
 
 // Test Case include
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,9 +68,61 @@ public class FileUtil_test {
 	String test_res = null; //tmp testing variable
 	Collection<File> fileCollection = null;
 	
-	// Read only test cases
-	//----------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// File / folder search handling
+	//
+	//------------------------------------------------------------------------------------------------------------------
 	
+	/// Test for list Dirs
+	@Test
+	public void listDirs_test() throws IOException {
+		assertNotNull(FileUtil.listDirs(new File("./test/FileUtil/")));
+		assertNotNull(FileUtil.listDirs(testDir));
+		assertNotNull(FileUtil.listDirs(outputDir));
+		List<File> folderList = FileUtil.listDirs(new File("./test/"));
+		assertTrue(folderList.contains(new File("./test/FileUtil/")));
+		assertEquals(new ArrayList<File>(), FileUtil.listDirs(null));
+	}
+
+	/// Test for list Dirs names
+	@Test
+	public void listDirNames_test() throws IOException {
+		List<String> dirNames = FileUtil.listDirNames(new File("./test/"));
+		assertTrue(dirNames.contains(new File("./test/FileUtil/").getName()));
+	}
+
+
+	/// Test for list File names
+	@Test
+	public void listFileNames_test() throws IOException {
+		List<String> fileNames = FileUtil.listFileNames(testDir, new String[]{"js"}, true);
+		assertTrue(fileNames.contains("jsRegex.js"));
+	}
+
+	/// Test for list File names without recursion
+	@Test
+	public void listFileNamesWithoutRecursion_test() throws IOException {
+		List<String> fileNames = FileUtil.listFileNames(testDir, new String[]{"js"});
+		assertTrue(fileNames.contains("jsRegex.js"));
+	}
+
+	// Takes in file collection and convert them into string names
+	@Test
+	public void fileCollectionToStringNames_test() throws IOException {
+		ArrayList<File> fileList = new ArrayList<File>();
+		assertEquals(0, FileUtil.fileCollectionToStringNames(null).size());
+		fileList.add(testDir);
+		assertTrue(FileUtil.fileCollectionToStringNames(fileList).contains(fileList.get(0).getName()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	//
+	// File / folder search handling
+	//
+	//------------------------------------------------------------------------------------------------------------------
+	
+
 	/// Test for double slash safely taken
 	@Test
 	public void readDoubleSlash() throws IOException {
@@ -167,47 +222,18 @@ public class FileUtil_test {
 		
 	}
 	
-	/// Test for list Dirs
+	
+	
+	/// Test for Copy Directory If Different
 	@Test
-	public void testListDirs() throws IOException {
-		assertNotNull(FileUtil.listDirs(new File("./test/FileUtil/")));
-		assertNotNull(FileUtil.listDirs(testDir));
-		assertNotNull(FileUtil.listDirs(outputDir));
-		assertEquals(new ArrayList<File>(), FileUtil.listDirs(null));
+	public void testCopyDirectoryIfDifferent() throws IOException {
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir);
+		assertNotNull(outputDir);
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true);
+		assertNotNull(outputDir);
+		FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true, false);
+		assertNotNull(outputDir);
 	}
-	
-	// /// Test for Copy Directory If Different
-	// @Test
-	// public void testCopyDirectoryIfDifferent() throws IOException {
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"));
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"));
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		true);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), true);
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), false);
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, true, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		true, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), true, false);
-	
-	// 	FileUtil.copyDirectory_ifDifferent(testDir, outputDir, false, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/"), new File("./test/tmp/"),
-	// 		false, false);
-	// 	FileUtil.copyDirectory_ifDifferent(new File("./test/files/file/ConfigFile/"), new File(
-	// 		"./test/tmp/"), false, false);
-	// }
 	
 	/// Test for Copy Directory If Different
 	@Test
@@ -401,4 +427,25 @@ public class FileUtil_test {
 			FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt"), "/"));
 		assertEquals(filePathsList, FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt")));
 	}
+
+	// Test for checking the parent directory
+	@Test
+	public void isParent_test () {
+		assertFalse(FileUtil.isParent(new File(testDirStr + "jsRegex.js"), null));
+		assertTrue(FileUtil.isParent(testDir, new File(testDirStr + "jsRegex.js")));
+		assertFalse(FileUtil.isParent(testDir,  new File("./test/Conv/" + "chaosmonkey.js")));
+	}
+
+	// Test for checking the permission of the file
+	@Test
+	public void setFilePermission_test () {
+		FileUtil.setFilePermission(testDir, 2, 2, 2, true);
+		
+		assertTrue(testDir.canRead());
+		assertTrue(testDir.canWrite());
+		assertTrue(testDir.canExecute());
+		FileUtil.setFilePermission(new File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false); 
+	}
+
+
 }
