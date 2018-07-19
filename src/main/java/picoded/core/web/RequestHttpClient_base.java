@@ -550,14 +550,18 @@ class RequestHttpClient_base {
 		// Initialize the request builder with url and set up its headers
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
-		
-		if (paramMap != null) {
-			// Create the form with the paramMap
-			RequestBody requestBody = buildFormBody(paramMap);
-			
-			// Attach RequestBody to the RequestBuilder
-			reqBuilder.method(method, requestBody);
+
+		// This is to ensure that the reqBuilder is able to build the
+		// appropriate method to the request
+		if(paramMap == null){
+			paramMap = new HashMap<>();
 		}
+
+		// Create the form with the paramMap
+		RequestBody requestBody = buildFormBody(paramMap);
+
+		// Attach RequestBody to the RequestBuilder
+		reqBuilder.method(method, requestBody);
 		
 		return executeRequestBuilder(reqBuilder);
 	}
