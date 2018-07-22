@@ -68,6 +68,9 @@ dependencies {
 
 	// http client support
 	api 'com.squareup.okhttp3:okhttp:3.10.0'
+	
+	// Servlet API support
+	api 'javax.servlet:javax.servlet-api:4.0.1'
 
 	// This dependencies is used internally, and not exposed to consumers on their own compile classpath.
 	//-------------------------------------------------------------------------------------------------------------------
