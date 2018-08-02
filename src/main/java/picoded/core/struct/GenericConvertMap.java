@@ -1018,7 +1018,7 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	 * @return  Unmodifiable copy of the current map
 	 */
 	default GenericConvertMap<K,V> unmodifiableMap() {
-		return ProxyGenericConvertMap.ensure( Collections.umodifiableMap(this) );
+		return ProxyGenericConvertMap.ensure( Collections.unmodifiableMap(this) );
 	}
 	
 	//---------------------------------------------------------------------------------------------------
