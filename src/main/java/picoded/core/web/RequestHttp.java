@@ -72,7 +72,7 @@ public class RequestHttp {
 	/**
 	 * Get and return the static client object
 	 */
-	protected static RequestHttpClient client() {
+	public static RequestHttpClient client() {
 		// Thread safe get
 		if (clientObj != null) {
 			return clientObj;
