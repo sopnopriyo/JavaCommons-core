@@ -569,7 +569,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	private ResponseHttp executeFormRequest(//
+	public ResponseHttp executeFormRequest(//
 		String method, //
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
@@ -606,7 +606,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	private ResponseHttp executeJsonRequest( //
+	public ResponseHttp executeJsonRequest( //
 		String method, //
 		String reqUrl, //
 		Object jsonObj, //
@@ -645,7 +645,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	private ResponseHttp executeMultipartRequest( //
+	public ResponseHttp executeMultipartRequest( //
 		String method, //
 		String reqUrl, //
 		Map<String, String[]> paramsMap, //
