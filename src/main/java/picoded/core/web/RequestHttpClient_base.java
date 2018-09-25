@@ -115,6 +115,10 @@ class RequestHttpClient_base {
 		
 		// Write timeout settings
 		builder.connectTimeout(config.getLong("writeTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
+
+		// Set redirect handling
+		builder.followRedirects(config.getBoolean("followRedirects", true));
+		builder.followSslRedirects(config.getBoolean("followSslRedirects", true));
 		
 		//
 		// Return OkHttpClient.Builder

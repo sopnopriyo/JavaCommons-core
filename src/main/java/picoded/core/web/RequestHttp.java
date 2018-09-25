@@ -86,6 +86,7 @@ public class RequestHttp {
 				return clientObj;
 			}
 			
+			// Initialize the client object
 			clientObj = new RequestHttpClient();
 			return clientObj;
 		}
