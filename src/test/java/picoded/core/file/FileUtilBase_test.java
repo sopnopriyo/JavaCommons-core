@@ -50,8 +50,10 @@ public class FileUtilBase_test {
 	
 	@BeforeClass
 	public static void baseSetup() throws IOException {
-		FileUtil.deleteDirectory(baseOutputDir);
-		baseOutputDir.mkdirs();
+		if( baseOutputDir.exists() ) {
+			FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)
+		}
+		baseOutputDir.mkdirs(); // Remake directory
 	}
 	
 	@Before
