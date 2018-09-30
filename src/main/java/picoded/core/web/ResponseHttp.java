@@ -120,7 +120,7 @@ public interface ResponseHttp extends AutoCloseable {
 		try {
 			close();
 		} catch (Exception e) {
-			throw new RuntimeErrorException(e);
+			throw new RuntimeException(e);
 		}
 	}
 }
