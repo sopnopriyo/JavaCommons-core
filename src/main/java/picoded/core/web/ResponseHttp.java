@@ -112,4 +112,15 @@ public interface ResponseHttp extends AutoCloseable {
 	public default void close() throws Exception {
 		return;
 	}
+	
+	/**
+	 * Silent varient of the close, with error is surpressed as RuntimeException
+	 */
+	public default void close_withRuntimeException() {
+		try {
+			close();
+		} catch (Exception e) {
+			throw new RuntimeErrorException(e);
+		}
+	}
 }
