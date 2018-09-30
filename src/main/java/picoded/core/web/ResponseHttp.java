@@ -8,7 +8,7 @@ import picoded.core.conv.ConvertJSON;
 import picoded.core.struct.GenericConvertMap;
 import picoded.core.struct.ProxyGenericConvertMap;
 
-public interface ResponseHttp {
+public interface ResponseHttp extends AutoCloseable {
 	
 	//	///////////////////////////////////////////////////
 	//	// Async Http Request wait handling
@@ -34,7 +34,10 @@ public interface ResponseHttp {
 	///////////////////////////////////////////////////
 	
 	/**
-	 * Gets the response content
+	 * Gets the response content InputStream.
+	 * 
+	 * NOTE : As this class is autoclosable, and will close the inputstream on GC,
+	 * ensure that the ResponseHttp object is "kept alive", while manipulating the InputStream
 	 *
 	 * @return InputStream of the response body
 	 **/
@@ -103,4 +106,10 @@ public interface ResponseHttp {
 		return "";
 	}
 	
+	/**
+	 * Finish handling of result, close the connection
+	 */
+	public default void close() throws Exception {
+		return;
+	}
 }

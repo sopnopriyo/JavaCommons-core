@@ -36,25 +36,62 @@ class RequestHttpClient_response implements ResponseHttp {
 		response = inResponse;
 	}
 	
+	/** Cached response body object */
+	protected ResponseBody _body = null;	
+
+	/** @return the responseBody object */
+	protected ResponseBody getResponseBody() {
+		if( _body != null ) {
+			return _body;
+		}
+		_body = response.body();
+		return _body;
+	}
+
+	/// Flag indicating close operation was performed
+	protected boolean _close = false;
+
+	/** Closes the response body */
+	public void close() throws Exception {
+		// Skip if previously closed
+		if(_close) {
+			return;
+		}
+		_close = true;
+		getResponseBody().close();
+	}
+
 	/**
-	 * Gets the response content
+	 * Gets the response content, note if using this .close() must be called manually
 	 *
 	 * @return InputStream of the response body
 	 **/
 	@Override
 	public InputStream inputStream() {
-		return response.body().byteStream();
+		return getResponseBody().byteStream();
 	}
 	
+	/** Cached response string */
+	protected String _responseString = null;	
+
 	/**
-	 * Gets the response content as a string
+	 * Gets the response content as a string, and closes the connection
 	 *
 	 * @return String of the response body
 	 **/
 	@Override
 	public String toString() {
 		try {
-			return response.body().string();
+			if( _responseString != null ) {
+				return _responseString;
+			}
+			_responseString = getResponseBody().string();
+			try {
+				close();
+			} catch(Exception e) {
+				throw new RuntimeException(e);
+			}
+			return _responseString;
 		} catch (IOException io) {
 			throw new RuntimeException(io);
 		}
