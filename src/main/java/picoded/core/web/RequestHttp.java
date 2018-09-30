@@ -231,7 +231,7 @@ public class RequestHttp {
 	) {
 		return client().postMultipart(reqUrl, paramMap, filesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for POST multipart requests
 	 *
@@ -548,7 +548,7 @@ public class RequestHttp {
 	) {
 		return client().deleteMultipart(reqUrl, paramMap, filesMap);
 	}
-
+	
 	/**
 	 * Wrapper method for DELETE multipart requests
 	 *

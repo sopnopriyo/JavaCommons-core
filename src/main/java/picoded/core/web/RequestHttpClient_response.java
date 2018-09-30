@@ -37,30 +37,30 @@ class RequestHttpClient_response implements ResponseHttp {
 	}
 	
 	/** Cached response body object */
-	protected ResponseBody _body = null;	
-
+	protected ResponseBody _body = null;
+	
 	/** @return the responseBody object */
 	protected ResponseBody getResponseBody() {
-		if( _body != null ) {
+		if (_body != null) {
 			return _body;
 		}
 		_body = response.body();
 		return _body;
 	}
-
+	
 	/// Flag indicating close operation was performed
 	protected boolean _close = false;
-
+	
 	/** Closes the response body */
 	public void close() throws Exception {
 		// Skip if previously closed
-		if(_close) {
+		if (_close) {
 			return;
 		}
 		_close = true;
 		getResponseBody().close();
 	}
-
+	
 	/**
 	 * Gets the response content, note if using this .close() must be called manually
 	 *
@@ -72,8 +72,8 @@ class RequestHttpClient_response implements ResponseHttp {
 	}
 	
 	/** Cached response string */
-	protected String _responseString = null;	
-
+	protected String _responseString = null;
+	
 	/**
 	 * Gets the response content as a string, and closes the connection
 	 *
@@ -82,13 +82,13 @@ class RequestHttpClient_response implements ResponseHttp {
 	@Override
 	public String toString() {
 		try {
-			if( _responseString != null ) {
+			if (_responseString != null) {
 				return _responseString;
 			}
 			_responseString = getResponseBody().string();
 			try {
 				close();
-			} catch(Exception e) {
+			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
 			return _responseString;

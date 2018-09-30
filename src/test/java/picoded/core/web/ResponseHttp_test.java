@@ -30,7 +30,7 @@ import org.junit.runner.RunWith;
  * Test the default behaviour of ResponseHttp functionality
  */
 public class ResponseHttp_test {
-
+	
 	public class TestDefaultResponseEmpty implements ResponseHttp {
 		/**
 		 * Gets the response content as a string
@@ -41,7 +41,7 @@ public class ResponseHttp_test {
 			return "";
 		}
 	}
-
+	
 	public class TestDefaultResponseMap implements ResponseHttp {
 		/**
 		 * Gets the response content as a string
@@ -52,13 +52,12 @@ public class ResponseHttp_test {
 			return "{}";
 		}
 	}
-
-
+	
 	/**
 	 * Testing the empty string scenerio in the responseHttp
 	 */
-    @Test
-    public final void defaultBehaviour_test() {
+	@Test
+	public final void defaultBehaviour_test() {
 		ResponseHttp testDefaultResponse = new TestDefaultResponseEmpty();
 		assertEquals("", testDefaultResponse.toString());
 		assertNull(testDefaultResponse.inputStream());

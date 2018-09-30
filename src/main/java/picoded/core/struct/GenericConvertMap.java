@@ -1011,14 +1011,14 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	//  Unmodifiable copy
 	//
 	//---------------------------------------------------------------------------------------------------
-
+	
 	/**
 	 * Creates an unmodifiableMap view of the current map
 	 * 
 	 * @return  Unmodifiable copy of the current map
 	 */
-	default GenericConvertMap<K,V> unmodifiableMap() {
-		return ProxyGenericConvertMap.ensure( Collections.unmodifiableMap(this) );
+	default GenericConvertMap<K, V> unmodifiableMap() {
+		return ProxyGenericConvertMap.ensure(Collections.unmodifiableMap(this));
 	}
 	
 	//---------------------------------------------------------------------------------------------------

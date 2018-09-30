@@ -9,13 +9,13 @@ import picoded.core.common.SystemSetupInterface;
  * Making the collection compliant with the SystemSetupInterface
  */
 public interface AbstractSystemSetupInterfaceCollection extends SystemSetupInterface {
-
+	
 	/**
 	 * [TO OVERWRITE] : SystemSetupInterface collection used by subsequent  
 	 * subcalls via AbstractSystemSetupInterfaceCollection
 	 **/
 	Collection<SystemSetupInterface> systemSetupInterfaceCollection();
-
+	
 	//--------------------------------------------------------------------------
 	//
 	// Backend system setup / teardown / maintenance

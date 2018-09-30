@@ -115,7 +115,7 @@ class RequestHttpClient_base {
 		
 		// Write timeout settings
 		builder.connectTimeout(config.getLong("writeTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
-
+		
 		// Set redirect handling
 		builder.followRedirects(config.getBoolean("followRedirects", true));
 		builder.followSslRedirects(config.getBoolean("followSslRedirects", true));
@@ -223,10 +223,10 @@ class RequestHttpClient_base {
 		Map<String, String[]> cookieMap, //
 		Map<String, String[]> headerMap //
 	) {
-
+		
 		// Check if username and password exists in url for Basic Authorization
 		reqBuilder = setUpBasicAuthorization(reqBuilder, reqUrl);
-
+		
 		// Add the cookie if its valid
 		//-------------------------------------------
 		
@@ -261,23 +261,24 @@ class RequestHttpClient_base {
 		// Return with built header
 		return reqBuilder;
 	}
-
-	protected static Request.Builder setUpBasicAuthorization(Request.Builder reqBuilder, String reqUrl){
-		String filterURL  = reqUrl.replaceAll("https://", "").replaceAll("http://","");
-		int firstColon    = filterURL.indexOf(":");
-		int lastAdd       = filterURL.lastIndexOf("@");
-
-		if(firstColon == -1 || lastAdd == -1) {
+	
+	protected static Request.Builder setUpBasicAuthorization(Request.Builder reqBuilder,
+		String reqUrl) {
+		String filterURL = reqUrl.replaceAll("https://", "").replaceAll("http://", "");
+		int firstColon = filterURL.indexOf(":");
+		int lastAdd = filterURL.lastIndexOf("@");
+		
+		if (firstColon == -1 || lastAdd == -1) {
 			return reqBuilder;
 		}
-
-		String user       = filterURL.substring(0, firstColon);
-		String password   = filterURL.substring(firstColon+1, lastAdd);
-
-		String authString = user+":"+password;
+		
+		String user = filterURL.substring(0, firstColon);
+		String password = filterURL.substring(firstColon + 1, lastAdd);
+		
+		String authString = user + ":" + password;
 		byte[] authString64 = Base64.encodeBase64(authString.getBytes());
-		String authStringEnc = "Basic "+new String(authString64);
-
+		String authStringEnc = "Basic " + new String(authString64);
+		
 		return reqBuilder.addHeader("Authorization", authStringEnc);
 	}
 	
@@ -579,16 +580,16 @@ class RequestHttpClient_base {
 		// Initialize the request builder with url and set up its headers
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
 		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
-
+		
 		// This is to ensure that the reqBuilder is able to build the
 		// appropriate method to the request
-		if(paramMap == null){
+		if (paramMap == null) {
 			paramMap = new HashMap<>();
 		}
-
+		
 		// Create the form with the paramMap
 		RequestBody requestBody = buildFormBody(paramMap);
-
+		
 		// Attach RequestBody to the RequestBuilder
 		reqBuilder.method(method, requestBody);
 		
@@ -626,7 +627,7 @@ class RequestHttpClient_base {
 		} else {
 			jsonString = ConvertJSON.fromObject(jsonObj);
 		}
-
+		
 		// Perform the json request
 		RequestBody body = RequestBody.create(MEDIATYPE_JSON, jsonString);
 		reqBuilder = reqBuilder.method(method, body);

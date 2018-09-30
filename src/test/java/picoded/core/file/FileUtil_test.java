@@ -47,7 +47,7 @@ public class FileUtil_test {
 	
 	@BeforeClass
 	public static void baseSetup() throws IOException {
-		if( baseOutputDir.exists() ) {
+		if (baseOutputDir.exists()) {
 			FileUtil.deleteDirectory(baseOutputDir); // Delete and clear directory (if it exists)
 		}
 		baseOutputDir.mkdirs();
@@ -86,29 +86,28 @@ public class FileUtil_test {
 		assertTrue(folderList.contains(new File("./test/FileUtil/")));
 		assertEquals(new ArrayList<File>(), FileUtil.listDirs(null));
 	}
-
+	
 	/// Test for list Dirs names
 	@Test
 	public void listDirNames_test() throws IOException {
 		List<String> dirNames = FileUtil.listDirNames(new File("./test/"));
 		assertTrue(dirNames.contains(new File("./test/FileUtil/").getName()));
 	}
-
-
+	
 	/// Test for list File names
 	@Test
 	public void listFileNames_test() throws IOException {
-		List<String> fileNames = FileUtil.listFileNames(testDir, new String[]{"js"}, true);
+		List<String> fileNames = FileUtil.listFileNames(testDir, new String[] { "js" }, true);
 		assertTrue(fileNames.contains("jsRegex.js"));
 	}
-
+	
 	/// Test for list File names without recursion
 	@Test
 	public void listFileNamesWithoutRecursion_test() throws IOException {
-		List<String> fileNames = FileUtil.listFileNames(testDir, new String[]{"js"});
+		List<String> fileNames = FileUtil.listFileNames(testDir, new String[] { "js" });
 		assertTrue(fileNames.contains("jsRegex.js"));
 	}
-
+	
 	// Takes in file collection and convert them into string names
 	@Test
 	public void fileCollectionToStringNames_test() throws IOException {
@@ -117,14 +116,13 @@ public class FileUtil_test {
 		fileList.add(testDir);
 		assertTrue(FileUtil.fileCollectionToStringNames(fileList).contains(fileList.get(0).getName()));
 	}
-
+	
 	//------------------------------------------------------------------------------------------------------------------
 	//
 	// File / folder search handling
 	//
 	//------------------------------------------------------------------------------------------------------------------
 	
-
 	/// Test for double slash safely taken
 	@Test
 	public void readDoubleSlash() throws IOException {
@@ -223,8 +221,6 @@ public class FileUtil_test {
 		FileUtil.writeStringToFile_ifDifferant(outFile, test_jsRegex);
 		
 	}
-	
-	
 	
 	/// Test for Copy Directory If Different
 	@Test
@@ -429,25 +425,24 @@ public class FileUtil_test {
 			FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt"), "/"));
 		assertEquals(filePathsList, FileUtil.getFilePaths(new File(testDirStr + "doubleSlash.txt")));
 	}
-
+	
 	// Test for checking the parent directory
 	@Test
-	public void isParent_test () {
+	public void isParent_test() {
 		assertFalse(FileUtil.isParent(new File(testDirStr + "jsRegex.js"), null));
 		assertTrue(FileUtil.isParent(testDir, new File(testDirStr + "jsRegex.js")));
-		assertFalse(FileUtil.isParent(testDir,  new File("./test/Conv/" + "chaosmonkey.js")));
+		assertFalse(FileUtil.isParent(testDir, new File("./test/Conv/" + "chaosmonkey.js")));
 	}
-
+	
 	// Test for checking the permission of the file
 	@Test
-	public void setFilePermission_test () {
+	public void setFilePermission_test() {
 		FileUtil.setFilePermission(testDir, 2, 2, 2, true);
 		
 		assertTrue(testDir.canRead());
 		assertTrue(testDir.canWrite());
 		assertTrue(testDir.canExecute());
-		FileUtil.setFilePermission(new File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false); 
+		FileUtil.setFilePermission(new File("./test/Conv/" + "chaosmonkey.js"), 0, 0, 0, false);
 	}
-
-
+	
 }
