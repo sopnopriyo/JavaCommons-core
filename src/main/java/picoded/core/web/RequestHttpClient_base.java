@@ -111,10 +111,10 @@ class RequestHttpClient_base {
 		builder.connectTimeout(config.getLong("connectTimeout", 10 * 1000), TimeUnit.MILLISECONDS);
 		
 		// Read timeout settings
-		builder.connectTimeout(config.getLong("readTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
+		builder.readTimeout(config.getLong("readTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
 		
 		// Write timeout settings
-		builder.connectTimeout(config.getLong("writeTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
+		builder.writeTimeout(config.getLong("writeTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
 		
 		// Set redirect handling
 		builder.followRedirects(config.getBoolean("followRedirects", true));
