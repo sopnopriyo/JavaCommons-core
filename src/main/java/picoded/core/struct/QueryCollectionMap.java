@@ -1,5 +1,6 @@
 package picoded.core.struct;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,9 +10,13 @@ import picoded.core.struct.query.Query;
 import picoded.core.struct.query.QueryUtils;
 
 /**
- * Query interface for a collection of maps
+ * Query and aggregation interface for a collection of maps
  */
 public interface QueryCollectionMap<V extends Map> extends Collection<V> {
+
+	//
+	// Query command support
+	//
 
 	/**
 	 * Performs a search query, and returns the respective value list.
@@ -25,6 +30,7 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	 *
 	 * @return  filtered and sorted Value list
 	 **/
+	@SuppressWarnings("unchecked")
 	default List<V> query(Query queryClause, String orderByStr, int offset, int limit) {
 		// Get the collection as a filteredlist
 		List<V> queryList = null;
@@ -69,4 +75,63 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 		return query(queryObj, orderByStr, offset, limit);
 	}
 	
+	//
+	// Aggregation command support
+	//
+
+	/**
+	 * Performs a query, and aggregate the result accordingly
+	 * 
+	 * Note : When extending this class, with custom aggregation handlers (like hazelcast), you should only replace this function.
+	 *
+	 * @param aggregationTerms to aggregate data with
+	 * @param queryClause to filter the collection with, can be null
+	 * 
+	 * @return Aggregation result to the corresponding terms
+	 */
+	@SuppressWarnings("unchecked")
+	default BigDecimal[] aggregate(String[] aggregationTerms, Query queryClause) {
+		// Aggregate everything directly, if no query is passed
+		if( queryClause == null ) {
+			return QueryUtils.aggregate((Collection<Object>)(Object)(this), aggregationTerms);
+		}
+
+		// Aggregate with query results
+		List<V> queryList = query(queryClause, null, -1, -1);
+		return QueryUtils.aggregate((Collection<Object>)(Object)(queryList), aggregationTerms);
+	}
+
+	/**
+	 * Performs a query, and aggregate the result accordingly
+	 * 
+	 * @param   aggregationTerms to aggregate data with
+	 * @param   where query statement
+	 * @param   where clause values array
+	 * 
+	 * @return Aggregation result to the corresponding terms
+	 */
+	default BigDecimal[] aggregate(String[] aggregationTerms, String whereClause, Object[] whereValues) {
+		// Query object to use
+		Query queryObj = null;
+
+		// Where clause to convert to query object
+		if( whereClause != null ) {
+			queryObj = Query.build(whereClause, whereValues);
+		}
+		
+		// Aggregation with query (where applicable)
+		return aggregate(aggregationTerms, queryObj);
+	}
+
+	/**
+	 * Performs a query, and aggregate the result accordingly
+	 * 
+	 * @param aggregationTerms to aggregate data with
+	 * 
+	 * @return Aggregation result to the corresponding terms
+	 */
+	default BigDecimal[] aggregate(String[] aggregationTerms) {
+		return aggregate(aggregationTerms, null);
+	}
+
 }

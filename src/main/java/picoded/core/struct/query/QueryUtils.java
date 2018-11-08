@@ -1,9 +1,10 @@
 package picoded.core.struct.query;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
- * Utility of query functions, used to query a collection and sort its results
+ * Collection of query utility functions, used to query a collection and sort its results
  * 
  * As per everything else in the query library. This is meant to search and sort
  * collections of Map<String,Object> type objects
@@ -111,7 +112,7 @@ public class QueryUtils {
 	}
 
 	/**
-	 * Utility funciton, used to sort and limit the result of a list
+	 * Sort and limit the result of a list
 	 *
 	 * @param   list of DataObject to sort and return. Null returns a blank list
 	 * @param   query string to sort the order by, use null to ignore
@@ -123,6 +124,19 @@ public class QueryUtils {
 	public static <V> List<V> sortAndOffsetList(List<V> list, String orderByStr, int offset, int limit) {
 		List<V> sortedList = sortList(list, orderByStr);
 		return offsetList(sortedList, offset, limit);
-
 	}
+
+	/**
+	 * Utility funciton, used to sort and limit the result of a list
+	 *
+	 * @param   collection for aggregation
+	 * @param   aggregationTerms for aggregation
+	 *
+	 * @return  big decimal array which represents the aggregation terms
+	 **/
+	public static BigDecimal[] aggregate(Collection<Object> collection, String[] aggregationTerms) {
+		Aggregation aggregator = new Aggregation(aggregationTerms);
+		return aggregator.compute(collection);
+	}
+
 }
