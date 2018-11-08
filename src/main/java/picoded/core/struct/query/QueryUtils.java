@@ -22,17 +22,22 @@ public class QueryUtils {
 	 * 
 	 * @return  sublist of the result chosen (if any)
 	 */
-	public static <V> List<V> offsetSubList(List<V> inList, int offset, int limit) {
-		// Parameter check
+	public static <V> List<V> offsetList(List<V> inList, int offset, int limit) {
+		// Parameter checks
 		if (inList == null) {
 			return new ArrayList<V>();
+		} 
+
+		// Get size of raw list
+		int size = inList.size();
+
+		// Return a blank list (there is nothing to offset)
+		if( size == 0 ) {
+			return inList;
 		}
 		
 		// Get sublist if needed
 		if (offset >= 1 || limit >= 1) {
-			// Get size of raw list
-			int size = inList.size();
-			
 			// Out of bound, return blank
 			if (offset >= size) {
 				return new ArrayList<V>();
@@ -48,6 +53,11 @@ public class QueryUtils {
 			if (end > size) {
 				end = size;
 			}
+
+			// Return blank list if equals sizing
+			if (offset == end) {
+				return new ArrayList<V>();
+			}
 			
 			// Get and return sublist
 			return inList.subList(offset, end);
@@ -60,12 +70,59 @@ public class QueryUtils {
 	/**
 	 * Takes a list and sort by the orderBy string
 	 * 
-	 * @param  inList   list to sort, and return
-	 * @param  orderBy  order by string to apply
+	 * @param  inList      list to sort, and returns it sorted. Returns null if null.
+	 * @param  orderByStr  order by string to apply
 	 * 
-	 * @return  list of result
+	 * @return  inList sorted if modifiable, else a new list sorted
 	 */
-	public static <V> List<V> sort(List<V> inList, String orderBy) {
-		return null;
+	public static <V> List<V> sortList(List<V> inList, String orderByStr) {
+		// Return null, if inlist is null
+		if( inList == null ) {
+			return null;
+		}
+
+		// Sorting the order, if needed
+		if ( orderByStr != null && (orderByStr = orderByStr.trim()).length() > 0) {
+			// Creates the order by sorting, with _oid
+			OrderBy<V> sorter = new OrderBy<V>(orderByStr);
+			
+			// // Let recast the list if it
+			// // might not be modifiable (so that we can modify it)
+			// // @NOTE : To benchmark and consider if this check 
+			// //         is worth the performance improvements?
+			// if(!(inList instanceof ArrayList)) {
+			// 	inList = new ArrayList<V>(inList);
+			// }
+
+			// Lets try to sort the list
+			try {
+				Collections.sort(inList, sorter);
+			} catch(UnsupportedOperationException e) {
+				// Ok sorting failed, lets try again as array list
+				// As it might have been read only
+				inList = new ArrayList<V>(inList);
+				Collections.sort(inList, sorter);
+			}
+		}
+		
+		// Either : Nothing changed, lets keep it
+		// or the list got sorted, and lets return it
+		return inList;
+	}
+
+	/**
+	 * Utility funciton, used to sort and limit the result of a list
+	 *
+	 * @param   list of DataObject to sort and return. Null returns a blank list
+	 * @param   query string to sort the order by, use null to ignore
+	 * @param   offset of the result to display, use -1 to ignore
+	 * @param   number of objects to return max
+	 *
+	 * @return  list to return
+	 **/
+	public static <V> List<V> sortAndOffsetList(List<V> list, String orderByStr, int offset, int limit) {
+		List<V> sortedList = sortList(list, orderByStr);
+		return offsetList(sortedList, offset, limit);
+
 	}
 }

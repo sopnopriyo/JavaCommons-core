@@ -11,4 +11,4 @@ JavaCommons.core consist of the following submodules
 **file :** File accessor utils, and configuration file accessor
 **security :** Encryption utility library
 **struct :** Common reusuable data structure and interfaces
-**web :** Request HTTP interface for web requests
+**web :** RequestHTTP interface for web requests
