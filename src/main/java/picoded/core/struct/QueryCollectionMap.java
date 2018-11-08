@@ -23,7 +23,7 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	 * @param   offset of the result to display, use -1 to ignore
 	 * @param   number of objects to return max, use -1 to ignore
 	 *
-	 * @return  The DataObject[] array
+	 * @return  filtered and sorted Value list
 	 **/
 	default List<V> query(Query queryClause, String orderByStr, int offset, int limit) {
 		// Get the collection as a filteredlist
@@ -54,7 +54,7 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	 * @param   offset of the result to display, use -1 to ignore
 	 * @param   number of objects to return max, use -1 to ignore
 	 *
-	 * @return  The DataObject[] array
+	 * @return  filtered and sorted Value list
 	 **/
 	default List<V> query(String whereClause, Object[] whereValues, String orderByStr, int offset, int limit) {
 		// Query object to use
