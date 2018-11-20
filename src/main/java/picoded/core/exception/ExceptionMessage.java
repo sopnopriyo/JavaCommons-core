@@ -37,4 +37,13 @@ public class ExceptionMessage {
 	 * ```
 	 **/
 	public static String functionNotImplemented = "function not (yet?) implemented";
+
+	/**
+	 * Null argument exception, used when arguments are expected NOT to be null.
+	 * 
+	 * ```
+	 * throw new IllegalArgumentException(ExceptionMessage.unexpectedNullArgument);
+	 * ```
+	 */
+	public static String unexpectedNullArgument = "Unexpected NULL Argument";
 }
