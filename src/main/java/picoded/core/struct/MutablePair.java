@@ -94,4 +94,12 @@ public class MutablePair<L, R> extends org.apache.commons.lang3.tuple.MutablePai
 		return null;
 	}
 	
+	/**
+	 * Returns the number of elements in this list. (always size 2 for MutablePair)
+	 *
+	 * @return  the number of elements in this list
+	 **/
+	public int size() {
+		return 2;
+	}
 }
