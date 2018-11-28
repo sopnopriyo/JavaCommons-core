@@ -12,12 +12,12 @@ import picoded.core.struct.query.QueryUtils;
 /**
  * Query and aggregation interface for a collection of maps
  */
-public interface QueryCollectionMap<V extends Map> extends Collection<V> {
-
+public interface QueryMapCollection<V extends Map> extends Collection<V> {
+	
 	//
 	// Query command support
 	//
-
+	
 	/**
 	 * Performs a search query, and returns the respective value list.
 	 * 
@@ -34,11 +34,11 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	default List<V> query(Query queryClause, String orderByStr, int offset, int limit) {
 		// Get the collection as a filteredlist
 		List<V> queryList = null;
-
+		
 		// If query object is null, just convert it
-		if( queryClause == null ) {
-			if( this instanceof List ) {
-				queryList = (List<V>)(this);
+		if (queryClause == null) {
+			if (this instanceof List) {
+				queryList = (List<V>) (this);
 			} else {
 				queryList = new ArrayList<V>(this);
 			}
@@ -62,15 +62,16 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	 *
 	 * @return  filtered and sorted Value list
 	 **/
-	default List<V> query(String whereClause, Object[] whereValues, String orderByStr, int offset, int limit) {
+	default List<V> query(String whereClause, Object[] whereValues, String orderByStr, int offset,
+		int limit) {
 		// Query object to use
 		Query queryObj = null;
-
+		
 		// Where clause to convert to query object
-		if( whereClause != null ) {
+		if (whereClause != null) {
 			queryObj = Query.build(whereClause, whereValues);
 		}
-
+		
 		// Query function to call, and return
 		return query(queryObj, orderByStr, offset, limit);
 	}
@@ -78,7 +79,7 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	//
 	// Aggregation command support
 	//
-
+	
 	/**
 	 * Performs a query, and aggregate the result accordingly
 	 * 
@@ -92,15 +93,15 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	@SuppressWarnings("unchecked")
 	default BigDecimal[] aggregate(String[] aggregationTerms, Query queryClause) {
 		// Aggregate everything directly, if no query is passed
-		if( queryClause == null ) {
-			return QueryUtils.aggregate((Collection<Object>)(Object)(this), aggregationTerms);
+		if (queryClause == null) {
+			return QueryUtils.aggregate((Collection<Object>) (Object) (this), aggregationTerms);
 		}
-
+		
 		// Aggregate with query results
 		List<V> queryList = query(queryClause, null, -1, -1);
-		return QueryUtils.aggregate((Collection<Object>)(Object)(queryList), aggregationTerms);
+		return QueryUtils.aggregate((Collection<Object>) (Object) (queryList), aggregationTerms);
 	}
-
+	
 	/**
 	 * Performs a query, and aggregate the result accordingly
 	 * 
@@ -110,19 +111,20 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	 * 
 	 * @return Aggregation result to the corresponding terms
 	 */
-	default BigDecimal[] aggregate(String[] aggregationTerms, String whereClause, Object[] whereValues) {
+	default BigDecimal[] aggregate(String[] aggregationTerms, String whereClause,
+		Object[] whereValues) {
 		// Query object to use
 		Query queryObj = null;
-
+		
 		// Where clause to convert to query object
-		if( whereClause != null ) {
+		if (whereClause != null) {
 			queryObj = Query.build(whereClause, whereValues);
 		}
 		
 		// Aggregation with query (where applicable)
 		return aggregate(aggregationTerms, queryObj);
 	}
-
+	
 	/**
 	 * Performs a query, and aggregate the result accordingly
 	 * 
@@ -133,5 +135,5 @@ public interface QueryCollectionMap<V extends Map> extends Collection<V> {
 	default BigDecimal[] aggregate(String[] aggregationTerms) {
 		return aggregate(aggregationTerms, null);
 	}
-
+	
 }

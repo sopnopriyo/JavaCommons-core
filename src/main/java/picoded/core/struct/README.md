@@ -26,6 +26,8 @@ Most of the subsequent usage of the Map / List classes should use this as the de
 ## Utility interfaces (not generic convert based)
 Interfaces which function independently from GenericConvert implementation.
 
++ `QueryMapCollection` utility interface to provide query commands for a collection consisting of map
++ ``
 
 ---
 
@@ -35,14 +37,14 @@ Class implmentation which applies `GenericConvertMap` interface, into a working 
 + `GenericConvertHashMap` for `java.util.HashMap`
 + `GenericConvertConcurrentHashMap` for `java.util.concurrent.ConcurrentHashMap`
 + `CaseInsensitiveHashMap` for a (lowercase) case insensitive varient of `java.util.HashMap`
-+ `ProxyGenericConvertMap`
++ `ProxyGenericConvertMap` proxies request to a compliant `Map` object, while providing the full `GenericConvertMap` interface
 
 ## GenericConvert List Classes
 Class implementation which applies `GenericConvertList` interface, into a working list implementation
 
 + `GenericConvertArrayList` for `java.util.ArrayList`
 + `MutablePair` for `org.apache.commons.lang3.tuple.MutablePair` and provides an easy to use "data pair", which can be accessed as a list of size 2
-+ `ProxyGenericConvertList`
++ `ProxyGenericConvertList` proxies request to a compliant `List` object, while providing the full `GenericConvertList` interface 
 
 ---
 

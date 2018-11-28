@@ -27,13 +27,13 @@ public class QueryUtils {
 		// Parameter checks
 		if (inList == null) {
 			return new ArrayList<V>();
-		} 
-
+		}
+		
 		// Get size of raw list
 		int size = inList.size();
-
+		
 		// Return a blank list (there is nothing to offset)
-		if( size == 0 ) {
+		if (size == 0) {
 			return inList;
 		}
 		
@@ -54,7 +54,7 @@ public class QueryUtils {
 			if (end > size) {
 				end = size;
 			}
-
+			
 			// Return blank list if equals sizing
 			if (offset == end) {
 				return new ArrayList<V>();
@@ -78,12 +78,12 @@ public class QueryUtils {
 	 */
 	public static <V> List<V> sortList(List<V> inList, String orderByStr) {
 		// Return null, if inlist is null
-		if( inList == null ) {
+		if (inList == null) {
 			return null;
 		}
-
+		
 		// Sorting the order, if needed
-		if ( orderByStr != null && (orderByStr = orderByStr.trim()).length() > 0) {
+		if (orderByStr != null && (orderByStr = orderByStr.trim()).length() > 0) {
 			// Creates the order by sorting, with _oid
 			OrderBy<V> sorter = new OrderBy<V>(orderByStr);
 			
@@ -94,11 +94,11 @@ public class QueryUtils {
 			// if(!(inList instanceof ArrayList)) {
 			// 	inList = new ArrayList<V>(inList);
 			// }
-
+			
 			// Lets try to sort the list
 			try {
 				Collections.sort(inList, sorter);
-			} catch(UnsupportedOperationException e) {
+			} catch (UnsupportedOperationException e) {
 				// Ok sorting failed, lets try again as array list
 				// As it might have been read only
 				inList = new ArrayList<V>(inList);
@@ -110,7 +110,7 @@ public class QueryUtils {
 		// or the list got sorted, and lets return it
 		return inList;
 	}
-
+	
 	/**
 	 * Sort and limit the result of a list
 	 *
@@ -121,11 +121,12 @@ public class QueryUtils {
 	 *
 	 * @return  list to return
 	 **/
-	public static <V> List<V> sortAndOffsetList(List<V> list, String orderByStr, int offset, int limit) {
+	public static <V> List<V> sortAndOffsetList(List<V> list, String orderByStr, int offset,
+		int limit) {
 		List<V> sortedList = sortList(list, orderByStr);
 		return offsetList(sortedList, offset, limit);
 	}
-
+	
 	/**
 	 * Utility funciton, used to sort and limit the result of a list
 	 *
@@ -138,5 +139,5 @@ public class QueryUtils {
 		Aggregation aggregator = new Aggregation(aggregationTerms);
 		return aggregator.compute(collection);
 	}
-
+	
 }

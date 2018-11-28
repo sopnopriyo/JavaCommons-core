@@ -37,7 +37,7 @@ public class ExceptionMessage {
 	 * ```
 	 **/
 	public static String functionNotImplemented = "function not (yet?) implemented";
-
+	
 	/**
 	 * Null argument exception, used when arguments are expected NOT to be null.
 	 * 
