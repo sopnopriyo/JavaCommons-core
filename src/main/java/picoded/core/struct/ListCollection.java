@@ -14,7 +14,18 @@ import picoded.core.struct.template.UnsupportedDefaultMap;
  *
  * ```
  * public class CustomListMap extends GenericConvertHashMap<String,List<V>> implements ListCollection<String, V> {
- *     // ... class definition here ...
+ *    // ... additional class definition here ...
+ *    public List<V> fetchSubList(String key) {
+ *       List<V> ret = get(key);
+ *       
+ *       if (ret == null) {
+ *          ret = new ArrayList<V>();
+ *          put(key, ret);
+ *       }
+ *       	
+ *       return ret;
+ *    }
+ *    // ... additional class definition here ...
  * }
  *
  * public class CustomListMap extends GenericConvertArrayList<List<V>> implements ListCollection<int, V> {
@@ -44,7 +55,7 @@ public interface ListCollection<K, V> {
 	
 	//------------------------------------------------------------------------
 	//
-	//  Appending to array
+	//  Appending to list
 	//
 	//------------------------------------------------------------------------
 	
@@ -90,8 +101,8 @@ public interface ListCollection<K, V> {
 	 * Adds to the sublist associated to the key value,
 	 * only if it does not exists (no duplicates)
 	 *
-	 * @param  the key used
-	 * @param  the value to store
+	 * @param  key used
+	 * @param  value to store
 	 **/
 	default void appendIfNotExists(K key, V val) {
 		List<V> subList = fetchSubList(key);
@@ -100,6 +111,46 @@ public interface ListCollection<K, V> {
 		}
 	}
 	
+	//------------------------------------------------------------------------
+	//
+	//  Get from list
+	//
+	//------------------------------------------------------------------------
+	
+	/**
+	 * Gets the value in the nested list
+	 * 
+	 * @param  key used
+	 * @param  idx positon of value stored
+	 * @param  fallbck value to use in replacement of null
+	 *
+	 * @return value stored inside list, null/fallback if value nor list exists
+	 */
+	default V getListValue(K key, int idx, V fallbck) {
+		List<V> sublist = fetchSubList(key);
+		if( sublist == null ) {
+			return fallbck;
+		}
+
+		if( sublist.size() > idx ) {
+			return sublist.get(idx);
+		}
+		return fallbck;
+	}
+	
+	/**
+	 * Gets the value in the nested list
+	 * 
+	 * @param  key used
+	 * @param  idx positon of value stored
+	 *
+	 * @return value stored inside list, null if value nor list exists
+	 */
+	default V getListValue(K key, int idx) {
+		return getListValue(key, idx, null);
+	}
+	
+
 	// /**
 	//  * Returns the map object, type casted
 	//  * Following native Map/List standard
