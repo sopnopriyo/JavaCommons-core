@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.fasterxml.jackson.databind.MapperFeature;
 
 // Picoded libraries used
 import picoded.core.exception.ExceptionMessage;
@@ -98,7 +99,12 @@ public class ConvertJSON {
 		 * Allow single quotes in JSON
 		 **/
 		cm.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-		
+
+		/**
+		 * Ignore transient fields
+		 */
+		cm.configure(MapperFeature.PROPAGATE_TRANSIENT_MARKER, true);
+
 		/**
 		 * Actual map builder
 		 **/
