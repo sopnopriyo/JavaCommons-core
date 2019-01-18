@@ -72,6 +72,9 @@ dependencies {
 	// Servlet API support
 	api 'javax.servlet:javax.servlet-api:4.0.1'
 
+	// Email broadcaster
+	api 'javax.mail:javax.mail-api:1.6.2'
+
 	// This dependencies is used internally, and not exposed to consumers on their own compile classpath.
 	//-------------------------------------------------------------------------------------------------------------------
 	// implementation 'com.google.guava:guava:23.0'
