@@ -171,7 +171,11 @@ public class ConfigFileSet implements GenericConvertMap<String, Object> {
 					// Takes in a JS / JSON file, and map it accordingly
 					//
 					String jsString = FileUtil.readFileToString(inFile);
-					map.put(filePrefix, ConvertJSON.toObject(jsString));
+					Object jsonObj = ConvertJSON.toObject(jsString);
+					if (jsonObj == null) {
+						throw new RuntimeException("Failed ot pass JSON config : " + inFile.getPath());
+					}
+					map.put(filePrefix, jsonObj);
 				} else if ( //
 				fileExtension.equalsIgnoreCase("html") //
 				) {

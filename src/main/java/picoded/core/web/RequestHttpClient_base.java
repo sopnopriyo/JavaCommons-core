@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.codec.binary.Base64;
 
 import okhttp3.*;
 import picoded.core.conv.NestedObjectUtil;
@@ -110,10 +111,14 @@ class RequestHttpClient_base {
 		builder.connectTimeout(config.getLong("connectTimeout", 10 * 1000), TimeUnit.MILLISECONDS);
 		
 		// Read timeout settings
-		builder.connectTimeout(config.getLong("readTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
+		builder.readTimeout(config.getLong("readTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
 		
 		// Write timeout settings
-		builder.connectTimeout(config.getLong("writeTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
+		builder.writeTimeout(config.getLong("writeTimeout", 30 * 1000), TimeUnit.MILLISECONDS);
+		
+		// Set redirect handling
+		builder.followRedirects(config.getBoolean("followRedirects", true));
+		builder.followSslRedirects(config.getBoolean("followSslRedirects", true));
 		
 		//
 		// Return OkHttpClient.Builder
@@ -213,10 +218,15 @@ class RequestHttpClient_base {
 	 * @param headerMap  to add into the request builder
 	 */
 	protected static Request.Builder setupRequestHeaders( //
+		String reqUrl, //
 		Request.Builder reqBuilder, //
 		Map<String, String[]> cookieMap, //
 		Map<String, String[]> headerMap //
 	) {
+		
+		// Check if username and password exists in url for Basic Authorization
+		reqBuilder = setUpBasicAuthorization(reqBuilder, reqUrl);
+		
 		// Add the cookie if its valid
 		//-------------------------------------------
 		
@@ -250,6 +260,26 @@ class RequestHttpClient_base {
 		
 		// Return with built header
 		return reqBuilder;
+	}
+	
+	protected static Request.Builder setUpBasicAuthorization(Request.Builder reqBuilder,
+		String reqUrl) {
+		String filterURL = reqUrl.replaceAll("https://", "").replaceAll("http://", "");
+		int firstColon = filterURL.indexOf(":");
+		int lastAdd = filterURL.lastIndexOf("@");
+		
+		if (firstColon == -1 || lastAdd == -1) {
+			return reqBuilder;
+		}
+		
+		String user = filterURL.substring(0, firstColon);
+		String password = filterURL.substring(firstColon + 1, lastAdd);
+		
+		String authString = user + ":" + password;
+		byte[] authString64 = Base64.encodeBase64(authString.getBytes());
+		String authStringEnc = "Basic " + new String(authString64);
+		
+		return reqBuilder.addHeader("Authorization", authStringEnc);
 	}
 	
 	//------------------------------------------------
@@ -314,7 +344,7 @@ class RequestHttpClient_base {
 		
 		// Build the request
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
-		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		return executeRequestBuilder(reqBuilder);
 	}
 	
@@ -540,7 +570,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	private ResponseHttp executeFormRequest(//
+	public ResponseHttp executeFormRequest(//
 		String method, //
 		String reqUrl, //
 		Map<String, String[]> paramMap, //
@@ -549,15 +579,19 @@ class RequestHttpClient_base {
 	) {
 		// Initialize the request builder with url and set up its headers
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
-		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		
-		if (paramMap != null) {
-			// Create the form with the paramMap
-			RequestBody requestBody = buildFormBody(paramMap);
-			
-			// Attach RequestBody to the RequestBuilder
-			reqBuilder.method(method, requestBody);
+		// This is to ensure that the reqBuilder is able to build the
+		// appropriate method to the request
+		if (paramMap == null) {
+			paramMap = new HashMap<>();
 		}
+		
+		// Create the form with the paramMap
+		RequestBody requestBody = buildFormBody(paramMap);
+		
+		// Attach RequestBody to the RequestBuilder
+		reqBuilder.method(method, requestBody);
 		
 		return executeRequestBuilder(reqBuilder);
 	}
@@ -573,7 +607,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	private ResponseHttp executeJsonRequest( //
+	public ResponseHttp executeJsonRequest( //
 		String method, //
 		String reqUrl, //
 		Object jsonObj, //
@@ -582,7 +616,7 @@ class RequestHttpClient_base {
 	) {
 		// Initialize the request builder with url and set up its headers
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
-		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		
 		// Normalize json object to jsonString
 		String jsonString = null;
@@ -612,7 +646,7 @@ class RequestHttpClient_base {
 	 *
 	 * @return  The ResponseHttp object
 	 **/
-	private ResponseHttp executeMultipartRequest( //
+	public ResponseHttp executeMultipartRequest( //
 		String method, //
 		String reqUrl, //
 		Map<String, String[]> paramsMap, //
@@ -622,7 +656,7 @@ class RequestHttpClient_base {
 	) {
 		// Initialize the request builder with url and set up its headers
 		Request.Builder reqBuilder = new Request.Builder().url(reqUrl);
-		reqBuilder = setupRequestHeaders(reqBuilder, cookiesMap, headersMap);
+		reqBuilder = setupRequestHeaders(reqUrl, reqBuilder, cookiesMap, headersMap);
 		
 		if ((paramsMap != null && paramsMap.size() > 0) || (filesMap != null && filesMap.size() > 0)) {
 			// Form multipart with the paramsMap and filesMap

@@ -3,9 +3,7 @@ package picoded.core.struct;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiFunction;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.Collections;
 
 import picoded.core.conv.GenericConvert;
 import picoded.core.conv.NestedObjectUtil;
@@ -1003,6 +1001,21 @@ public interface GenericConvertMap<K, V> extends UnsupportedDefaultMap<K, V> {
 	 **/
 	default Object[] fetchObjectArray(String key) {
 		return GenericConvert.toObjectArray(fetchObject(key));
+	}
+	
+	//---------------------------------------------------------------------------------------------------
+	//
+	//  Unmodifiable copy
+	//
+	//---------------------------------------------------------------------------------------------------
+	
+	/**
+	 * Creates an unmodifiableMap view of the current map
+	 * 
+	 * @return  Unmodifiable copy of the current map
+	 */
+	default GenericConvertMap<K, V> unmodifiableMap() {
+		return ProxyGenericConvertMap.ensure(Collections.unmodifiableMap(this));
 	}
 	
 	//---------------------------------------------------------------------------------------------------

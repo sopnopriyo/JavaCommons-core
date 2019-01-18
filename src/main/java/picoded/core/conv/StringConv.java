@@ -33,7 +33,7 @@ public class StringConv {
 	 * 
 	 * @return  byte array representation of string, is null of input is null
 	 */
-	public byte[] toByteArray(String input, String charset) {
+	public static byte[] toByteArray(String input, String charset) {
 		if (input == null) {
 			return null;
 		}
@@ -52,7 +52,7 @@ public class StringConv {
 	 * 
 	 * @return  byte array representation of string
 	 */
-	public byte[] toByteArray(String input) {
+	public static byte[] toByteArray(String input) {
 		return toByteArray(input, "UTF-8");
 	}
 	
@@ -64,7 +64,7 @@ public class StringConv {
 	 * 
 	 * @return  string representation of byte array, is null of input is null
 	 */
-	public String fromByteArray(byte[] input, String charset) {
+	public static String fromByteArray(byte[] input, String charset) {
 		if (input == null) {
 			return null;
 		}
@@ -82,7 +82,7 @@ public class StringConv {
 	 * 
 	 * @return  string representation of byte array, is null of input is null
 	 */
-	public String fromByteArray(byte[] input) {
+	public static String fromByteArray(byte[] input) {
 		return fromByteArray(input, "UTF-8");
 	}
 	

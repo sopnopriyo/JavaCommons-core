@@ -3,16 +3,14 @@ package picoded.core.struct;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiFunction;
-import java.util.Set;
-import java.util.HashSet;
 
 import picoded.core.conv.GenericConvert;
-import picoded.core.conv.NestedObjectUtil;
 import picoded.core.exception.ExceptionMessage;
-import picoded.core.struct.template.UnsupportedDefaultMap;
 
 /**
+ * [EXPERIMENTAL]
+ * This class is considered experimental, and maybe deprecated in the future, avoid use unless you have a strong use case. 
+ *
  * Generic convert support for a value boxing / holder / wrapper
  * 
  * This is used primarily to provide some underlying value the full GenericConvert interface convinence

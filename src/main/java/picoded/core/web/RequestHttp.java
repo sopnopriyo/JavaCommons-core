@@ -72,7 +72,7 @@ public class RequestHttp {
 	/**
 	 * Get and return the static client object
 	 */
-	protected static RequestHttpClient client() {
+	public static RequestHttpClient client() {
 		// Thread safe get
 		if (clientObj != null) {
 			return clientObj;
@@ -86,6 +86,7 @@ public class RequestHttp {
 				return clientObj;
 			}
 			
+			// Initialize the client object
 			clientObj = new RequestHttpClient();
 			return clientObj;
 		}
@@ -229,6 +230,23 @@ public class RequestHttp {
 		Map<String, File[]> filesMap //
 	) {
 		return client().postMultipart(reqUrl, paramMap, filesMap);
+	}
+	
+	/**
+	 * Wrapper method for POST multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp postMultipart(String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap //
+	) {
+		return client().postMultipart(reqUrl, paramMap, filesMap, cookiesMap, null);
 	}
 	
 	/**
@@ -529,6 +547,23 @@ public class RequestHttp {
 		Map<String, File[]> filesMap //
 	) {
 		return client().deleteMultipart(reqUrl, paramMap, filesMap);
+	}
+	
+	/**
+	 * Wrapper method for DELETE multipart requests
+	 *
+	 * @param   Request URL to call
+	 * @param   paramMap   [can be null] Parameters to add to the request
+	 * @param   filesMap   [can be null] Files to add to the request body
+	 * @param   cookieMap  [can be null] Cookie map to send values
+	 * @return ResponseHttp object
+	 */
+	public static ResponseHttp deleteMultipart(String reqUrl, //
+		Map<String, Object> paramMap, //
+		Map<String, File[]> filesMap, //
+		Map<String, Object> cookiesMap //
+	) {
+		return client().deleteMultipart(reqUrl, paramMap, filesMap, cookiesMap, null);
 	}
 	
 	/**
